@@ -1,0 +1,9 @@
+# Deterministic VM resources are validated byte-for-byte by manifest hashes.
+# Catalogs/templates use LF; synchronized official GlobalScript sources use CRLF.
+resources/vm/4.4.0/** text eol=lf
+resources/vm/4.4.0/global-script/** text eol=crlf
+
+# Unpacked VM solution payloads are binary even when they have no extension.
+resources/vm/4.4.0/script-base/SolutionFile/GlobalScript_0 -text
+resources/vm/4.4.0/script-base/SolutionFile/MoudleFrame -text
+resources/vm/4.4.0/script-base/SolutionFile/UiParamData/** -text

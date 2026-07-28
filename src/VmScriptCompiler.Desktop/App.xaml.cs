@@ -1,6 +1,8 @@
 using System.Windows;
 using System.IO;
 using System.Text.Json;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace VmScriptCompiler.Desktop;
 
@@ -9,6 +11,22 @@ public partial class App : System.Windows.Application
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
+        if (e.Args.Contains("--ui-snapshot", StringComparer.Ordinal))
+        {
+            try
+            {
+                var file = Environment.GetEnvironmentVariable("VM_SCRIPT_DESKTOP_SNAPSHOT")
+                    ?? Path.Combine(Path.GetTempPath(), "vm-script-desktop.png");
+                RenderUiSnapshot(file);
+                Shutdown(0);
+            }
+            catch (Exception ex)
+            {
+                File.WriteAllText(Path.Combine(Path.GetTempPath(), "vm-script-desktop-snapshot-error.txt"), ex.ToString());
+                Shutdown(1);
+            }
+            return;
+        }
         if (e.Args.Contains("--agent-smoke-test", StringComparer.Ordinal))
         {
             try
@@ -47,6 +65,35 @@ public partial class App : System.Windows.Application
             return;
         }
         new MainWindow().Show();
+    }
+
+    private static void RenderUiSnapshot(string file)
+    {
+        var window = new MainWindow { Width = 1420, Height = 900 };
+        var requestedTab = Environment.GetEnvironmentVariable("VM_SCRIPT_DESKTOP_SNAPSHOT_TAB");
+        var previewConversation = string.Equals(
+            Environment.GetEnvironmentVariable("VM_SCRIPT_DESKTOP_SNAPSHOT_PREVIEW"),
+            "conversation",
+            StringComparison.OrdinalIgnoreCase);
+        window.PrepareUiSnapshot(requestedTab, previewConversation);
+        if (window.Content is not FrameworkElement root)
+            throw new InvalidOperationException("Desktop window has no renderable root.");
+        var size = new System.Windows.Size(window.Width, window.Height);
+        root.Measure(size);
+        root.Arrange(new System.Windows.Rect(size));
+        root.UpdateLayout();
+        var bitmap = new RenderTargetBitmap(
+            (int)window.Width,
+            (int)window.Height,
+            96,
+            96,
+            PixelFormats.Pbgra32);
+        bitmap.Render(root);
+        var encoder = new PngBitmapEncoder();
+        encoder.Frames.Add(BitmapFrame.Create(bitmap));
+        Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(file))!);
+        using var stream = File.Create(file);
+        encoder.Save(stream);
     }
 
     private static async Task RunAgentSmokeTestAsync()

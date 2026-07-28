@@ -177,8 +177,16 @@ try {
     if (-not $desktopState.Contains('EncryptedApiKey') -or -not $desktopState.Contains('ProtectedData.Protect') -or -not $desktopState.Contains('DataProtectionScope.CurrentUser')) {
         throw 'Desktop API key is not protected with current-user DPAPI.'
     }
-    if (-not $desktop.Contains('SettingsApiKeyBox') -or -not $desktop.Contains('MaxWidth="1100"') -or -not $desktop.Contains('Background="#FF090909"')) {
+    if (-not $desktop.Contains('SettingsApiKeyBox') -or
+        -not $desktop.Contains('Width="900" MaxWidth="900"') -or
+        -not $desktop.Contains('Background="#FF0D0D0D"')) {
         throw 'Desktop encrypted-key form, wide composer, or dark theme is missing.'
+    }
+    foreach ($fragment in @('SidebarColumn', 'ToggleSidebar_Click', 'WorkspacePhaseText', 'PromptText_PreviewKeyDown', 'Suggestion_Click', 'ArtifactEmptyPanel', 'SendButton')) {
+        if (-not $desktop.Contains($fragment)) { throw "Codex-aligned Desktop interaction is missing: $fragment" }
+    }
+    foreach ($fragment in @('ToolCardVisual', 'FriendlyPhase(', 'PrepareUiSnapshot(')) {
+        if (-not $desktopCode.Contains($fragment)) { throw "Codex-aligned Desktop runtime behavior is missing: $fragment" }
     }
 
     [pscustomobject]@{ ok=$true; multiProcedureCreate=$true; shellReferences=$true; canonicalShellReferenceSlot=$true; shellReferenceTraceability=$true; csharpDependencyPrecompiled=$true; desktopWorkingDirectoryIsolated=$true; bitmapImageDataCompatibility=$true; installedDllInspected=$true; vmSdkClassified=$true; operatorSdkClassified=$true; externalDllPackaged=$true; sharedDllDeduplicated=$true; guardedDllNameCollision=$true; dllDeploymentReported=$true; normalizedAssemblyVersion=$true; guardedDllVersion=$true; pythonDependencyProbed=$true; initPlacement=$true; guardedUnknownReference=$true; guardedSourceConflict=$true; guardedErrorPolicy=$true; simpleDesktop=$true; codexStyleWorkspace=$true; darkTheme=$true; wideComposer=$true; recentConversations=$true; artifactIndex=$true; desktopConfiguration=$true; encryptedApiKey=$true; visibleFriendlyStatus=$true; uiThreadSnapshot=$true } | ConvertTo-Json

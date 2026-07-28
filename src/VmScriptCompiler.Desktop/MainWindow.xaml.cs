@@ -4,6 +4,7 @@ using System.IO;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using VmScriptCompiler.Core;
 using Brushes = System.Windows.Media.Brushes;
@@ -21,9 +22,11 @@ public partial class MainWindow : Window
     private CancellationTokenSource? _runCancellation;
     private IReadOnlyList<ArtifactRecord> _artifacts = [];
     private TextBlock? _streamingAssistant;
+    private readonly Dictionary<string, ToolCardVisual> _activeTools = new(StringComparer.Ordinal);
     private string? _lastSolution;
     private string? _lastReport;
     private string? _lastDependencyDirectory;
+    private string _conversationTitle = "新任务";
     private bool _selectingSession;
 
     public MainWindow()
@@ -36,6 +39,34 @@ public partial class MainWindow : Window
         _settings = _stateStore.LoadSettings(defaultOutput);
         OutputPathText.Text = _settings.OutputDirectory;
         LoadSettingsForm();
+        SetWorkspace(ComposerTab, "新任务");
+    }
+
+    internal void PrepareUiSnapshot(string? requestedTab, bool conversationPreview)
+    {
+        switch (requestedTab?.ToLowerInvariant())
+        {
+            case "artifacts":
+                SetWorkspace(ArtifactsTab, "结果产物");
+                ApplyArtifactFilter();
+                break;
+            case "settings":
+                SetWorkspace(SettingsTab, "设置");
+                break;
+            default:
+                _conversationTitle = conversationPreview ? "创建 C# 求和脚本并设置默认值" : "新任务";
+                SetWorkspace(ComposerTab, _conversationTitle);
+                break;
+        }
+        if (!conversationPreview || WorkspaceTabs.SelectedItem != ComposerTab) return;
+        WelcomePanel.Visibility = Visibility.Collapsed;
+        AppendUserMessage("创建一个 C# 脚本，输入 A 和 B，输出 Sum，并设置默认值。");
+        AppendAssistantDelta("我会先确认 VM 4.4 环境和端口能力，再建立 Requirement 并交给确定性编译器生成方案。");
+        _streamingAssistant = null;
+        AppendToolStatus("vm_detect_environment", false, false);
+        AppendToolStatus("vm_detect_environment", true, false);
+        AppendToolStatus("vm_validate_requirement", false, false);
+        WorkspacePhaseText.Text = "校验需求";
     }
 
     private async void Window_Loaded(object sender, RoutedEventArgs e)
@@ -48,6 +79,7 @@ public partial class MainWindow : Window
     private async Task StartAgentAsync()
     {
         AgentStatusText.Text = "Agent 正在启动…";
+        AgentStatusDot.Fill = new SolidColorBrush(Color.FromRgb(206, 155, 69));
         AiStatusText.Text = "正在初始化 Pi Runtime…";
         try
         {
@@ -64,6 +96,7 @@ public partial class MainWindow : Window
                 _settings.OutputDirectory,
                 Path.Combine(_stateStore.StateDirectory, "agent")));
             AgentStatusText.Text = "Agent 已连接";
+            AgentStatusDot.Fill = new SolidColorBrush(Color.FromRgb(80, 182, 122));
             AiStatusText.Text = $"Pi · {_settings.AiProvider} · {_settings.AiModel}";
             RenderSnapshot(result);
             await RefreshHistoryAsync();
@@ -71,12 +104,41 @@ public partial class MainWindow : Window
         catch (Exception error)
         {
             AgentStatusText.Text = "Agent 未连接";
+            AgentStatusDot.Fill = new SolidColorBrush(Color.FromRgb(227, 107, 107));
             AiStatusText.Text = "请在“配置”中填写 API 地址、模型和 Key";
             ShowFriendlyError(error);
         }
     }
 
     private async void ReconnectAgent_Click(object sender, RoutedEventArgs e) => await StartAgentAsync();
+
+    private void PromptText_TextChanged(object sender, TextChangedEventArgs e)
+        => PromptPlaceholder.Visibility = string.IsNullOrEmpty(PromptText.Text)
+            ? Visibility.Visible
+            : Visibility.Collapsed;
+
+    private void PromptText_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+    {
+        if (e.Key != Key.Enter || Keyboard.Modifiers.HasFlag(ModifierKeys.Shift)) return;
+        e.Handled = true;
+        if (GenerateButton.IsEnabled) Generate_Click(GenerateButton, new RoutedEventArgs());
+    }
+
+    private void Suggestion_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not System.Windows.Controls.Button { Tag: string prompt }) return;
+        PromptText.Text = prompt;
+        PromptText.Focus();
+        PromptText.CaretIndex = PromptText.Text.Length;
+    }
+
+    private void ToggleSidebar_Click(object sender, RoutedEventArgs e)
+    {
+        var collapse = SidebarColumn.Width.Value > 0;
+        SidebarColumn.Width = collapse ? new GridLength(0) : new GridLength(252);
+        SidebarPanel.Visibility = collapse ? Visibility.Collapsed : Visibility.Visible;
+        ExpandSidebarButton.Visibility = collapse ? Visibility.Visible : Visibility.Collapsed;
+    }
 
     private async void Generate_Click(object sender, RoutedEventArgs e)
     {
@@ -107,12 +169,18 @@ public partial class MainWindow : Window
         }
 
         AppendUserMessage(text);
+        if (_conversationTitle == "新任务")
+        {
+            _conversationTitle = CompactTitle(text);
+            WorkspaceTitleText.Text = _conversationTitle;
+        }
         PromptText.Clear();
         WelcomePanel.Visibility = Visibility.Collapsed;
         FriendlyStatus.Text = "Agent 正在检查、规划和验证…";
         FriendlyStatus.Foreground = Brushes.DarkGray;
         FriendlyStatus.Visibility = Visibility.Visible;
         SuccessPanel.Visibility = Visibility.Collapsed;
+        WorkspacePhaseText.Text = "处理中";
         GenerateButton.IsEnabled = false;
         StopButton.Visibility = Visibility.Visible;
         _runCancellation = new CancellationTokenSource();
@@ -178,7 +246,9 @@ public partial class MainWindow : Window
         var envelopeType = String(envelope, "type");
         if (envelopeType == "domain" && envelope.TryGetProperty("state", out var state))
         {
-            SidebarStatusText.Text = $"阶段：{String(state, "phase")} · Requirement r{Int(state, "requirementRevision")}";
+            var phase = String(state, "phase") ?? "draft";
+            WorkspacePhaseText.Text = FriendlyPhase(phase);
+            SidebarStatusText.Text = $"阶段：{phase} · Requirement r{Int(state, "requirementRevision")}";
             return;
         }
         if (envelopeType != "pi" || !envelope.TryGetProperty("event", out var piEvent)) return;
@@ -208,12 +278,37 @@ public partial class MainWindow : Window
 
     private void AppendUserMessage(string text)
     {
-        var block = new TextBlock { Text = text, TextWrapping = TextWrapping.Wrap, FontSize = 14 };
-        MessagesPanel.Children.Add(new Border
+        var content = new TextBlock
         {
-            Child = block, Padding = new Thickness(14), Margin = new Thickness(70, 0, 0, 12),
-            Background = new SolidColorBrush(Color.FromRgb(28, 28, 28)), CornerRadius = new CornerRadius(10)
+            Text = text,
+            TextWrapping = TextWrapping.Wrap,
+            FontSize = 14,
+            LineHeight = 22
+        };
+        var bubble = new Border
+        {
+            Child = content,
+            Padding = new Thickness(14, 10, 14, 10),
+            Background = new SolidColorBrush(Color.FromRgb(38, 38, 38)),
+            CornerRadius = new CornerRadius(11),
+            MaxWidth = 650,
+            HorizontalAlignment = System.Windows.HorizontalAlignment.Right
+        };
+        var container = new StackPanel
+        {
+            Margin = new Thickness(90, 0, 6, 22),
+            HorizontalAlignment = System.Windows.HorizontalAlignment.Right
+        };
+        container.Children.Add(new TextBlock
+        {
+            Text = "你",
+            Margin = new Thickness(0, 0, 2, 6),
+            HorizontalAlignment = System.Windows.HorizontalAlignment.Right,
+            Foreground = new SolidColorBrush(Color.FromRgb(137, 137, 137)),
+            FontSize = 11
         });
+        container.Children.Add(bubble);
+        MessagesPanel.Children.Add(container);
         ScrollTranscript();
     }
 
@@ -221,14 +316,45 @@ public partial class MainWindow : Window
     {
         if (_streamingAssistant is null)
         {
-            _streamingAssistant = new TextBlock { TextWrapping = TextWrapping.Wrap, FontSize = 14 };
-            MessagesPanel.Children.Add(new Border
+            _streamingAssistant = new TextBlock
             {
-                Child = _streamingAssistant, Padding = new Thickness(14), Margin = new Thickness(0, 0, 70, 12),
-                Background = new SolidColorBrush(Color.FromRgb(16, 16, 16)),
-                BorderBrush = new SolidColorBrush(Color.FromRgb(48, 48, 48)),
-                BorderThickness = new Thickness(1), CornerRadius = new CornerRadius(10)
+                TextWrapping = TextWrapping.Wrap,
+                FontSize = 14,
+                LineHeight = 22
+            };
+            var container = new StackPanel { Margin = new Thickness(6, 0, 54, 22) };
+            var header = new StackPanel
+            {
+                Orientation = System.Windows.Controls.Orientation.Horizontal,
+                Margin = new Thickness(0, 0, 0, 7)
+            };
+            header.Children.Add(new Border
+            {
+                Width = 22,
+                Height = 22,
+                Margin = new Thickness(0, 0, 8, 0),
+                Background = new SolidColorBrush(Color.FromRgb(239, 239, 239)),
+                CornerRadius = new CornerRadius(6),
+                Child = new TextBlock
+                {
+                    Text = "VM",
+                    Foreground = new SolidColorBrush(Color.FromRgb(17, 17, 17)),
+                    FontSize = 8,
+                    FontWeight = FontWeights.Bold,
+                    HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center
+                }
             });
+            header.Children.Add(new TextBlock
+            {
+                Text = "VM Script Agent",
+                VerticalAlignment = VerticalAlignment.Center,
+                FontSize = 11.5,
+                FontWeight = FontWeights.SemiBold
+            });
+            container.Children.Add(header);
+            container.Children.Add(_streamingAssistant);
+            MessagesPanel.Children.Add(container);
         }
         _streamingAssistant.Text += delta;
         ScrollTranscript();
@@ -236,25 +362,78 @@ public partial class MainWindow : Window
 
     private void AppendToolStatus(string name, bool completed, bool error)
     {
-        var label = completed ? (error ? "失败" : "完成") : "执行中";
-        var block = new TextBlock
+        if (!completed)
         {
-            Text = $"◆ {FriendlyToolName(name)} · {label}",
-            Foreground = error ? Brushes.IndianRed : Brushes.DarkGray,
-            FontSize = 12
-        };
-        MessagesPanel.Children.Add(new Border
+            var status = new TextBlock
+            {
+                Text = "运行中",
+                Foreground = new SolidColorBrush(Color.FromRgb(165, 165, 165)),
+                FontSize = 11,
+                VerticalAlignment = VerticalAlignment.Center
+            };
+            var icon = new TextBlock
+            {
+                Text = "◌",
+                Width = 24,
+                Foreground = new SolidColorBrush(Color.FromRgb(143, 175, 224)),
+                FontSize = 15,
+                VerticalAlignment = VerticalAlignment.Center
+            };
+            var grid = new Grid();
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            grid.Children.Add(icon);
+            var title = new TextBlock
+            {
+                Text = FriendlyToolName(name),
+                FontSize = 12,
+                FontWeight = FontWeights.SemiBold,
+                VerticalAlignment = VerticalAlignment.Center
+            };
+            Grid.SetColumn(title, 1);
+            Grid.SetColumn(status, 2);
+            grid.Children.Add(title);
+            grid.Children.Add(status);
+            var card = new Border
+            {
+                Child = grid,
+                Padding = new Thickness(12, 9, 12, 9),
+                Margin = new Thickness(38, 0, 84, 8),
+                Background = new SolidColorBrush(Color.FromRgb(23, 23, 23)),
+                BorderBrush = new SolidColorBrush(Color.FromRgb(43, 43, 43)),
+                BorderThickness = new Thickness(1),
+                CornerRadius = new CornerRadius(8)
+            };
+            _activeTools[name] = new ToolCardVisual(card, icon, status);
+            MessagesPanel.Children.Add(card);
+            return;
+        }
+
+        if (!_activeTools.Remove(name, out var visual))
         {
-            Child = block, Padding = new Thickness(11, 7, 11, 7), Margin = new Thickness(24, 0, 90, 8),
-            Background = new SolidColorBrush(Color.FromRgb(18, 18, 18)), CornerRadius = new CornerRadius(7)
-        });
+            AppendToolStatus(name, false, false);
+            _activeTools.Remove(name, out visual);
+        }
+        if (visual is null) return;
+        visual.Icon.Text = error ? "×" : "✓";
+        visual.Icon.Foreground = error
+            ? new SolidColorBrush(Color.FromRgb(227, 107, 107))
+            : new SolidColorBrush(Color.FromRgb(80, 182, 122));
+        visual.Status.Text = error ? "失败" : "完成";
+        visual.Status.Foreground = visual.Icon.Foreground;
+        visual.Card.Background = new SolidColorBrush(Color.FromRgb(20, 20, 20));
     }
 
     private void AppendSystemStatus(string text)
     {
         MessagesPanel.Children.Add(new TextBlock
         {
-            Text = text, Foreground = Brushes.DarkGray, FontSize = 12, Margin = new Thickness(24, 2, 0, 8)
+            Text = text,
+            Foreground = new SolidColorBrush(Color.FromRgb(116, 116, 116)),
+            FontSize = 11.5,
+            Margin = new Thickness(40, 2, 40, 10),
+            TextWrapping = TextWrapping.Wrap
         });
     }
 
@@ -276,10 +455,13 @@ public partial class MainWindow : Window
     private void RenderSnapshot(JsonElement snapshot)
     {
         if (!snapshot.TryGetProperty("state", out var state)) return;
-        SidebarStatusText.Text = $"阶段：{String(state, "phase")} · Requirement r{Int(state, "requirementRevision")}";
+        var phase = String(state, "phase") ?? "draft";
+        WorkspacePhaseText.Text = FriendlyPhase(phase);
+        SidebarStatusText.Text = $"阶段：{phase} · Requirement r{Int(state, "requirementRevision")}";
         ReadArtifacts(state);
         if (!snapshot.TryGetProperty("messages", out var messages) || messages.ValueKind != JsonValueKind.Array) return;
         MessagesPanel.Children.Clear();
+        _activeTools.Clear();
         WelcomePanel.Visibility = messages.GetArrayLength() == 0 ? Visibility.Visible : Visibility.Collapsed;
         foreach (var message in messages.EnumerateArray())
         {
@@ -316,7 +498,8 @@ public partial class MainWindow : Window
 
     private async void NewConversation_Click(object sender, RoutedEventArgs e)
     {
-        WorkspaceTabs.SelectedItem = ComposerTab;
+        _conversationTitle = "新任务";
+        SetWorkspace(ComposerTab, "新任务");
         if (_agent is null || !_agent.IsRunning) await StartAgentAsync();
         if (_agent is null || !_agent.IsRunning) return;
         try
@@ -330,6 +513,7 @@ public partial class MainWindow : Window
             SuccessPanel.Visibility = Visibility.Collapsed;
             FriendlyStatus.Visibility = Visibility.Collapsed;
             _lastSolution = _lastReport = _lastDependencyDirectory = null;
+            WorkspacePhaseText.Text = "draft";
             RenderSnapshot(snapshot);
             await RefreshHistoryAsync();
             PromptText.Focus();
@@ -362,7 +546,8 @@ public partial class MainWindow : Window
             _agent is null || !_agent.IsRunning) return;
         try
         {
-            WorkspaceTabs.SelectedItem = ComposerTab;
+            _conversationTitle = item.DisplayTitle;
+            SetWorkspace(ComposerTab, item.DisplayTitle);
             var snapshot = await _agent.ResumeSessionAsync(item.Path);
             RenderSnapshot(snapshot);
         }
@@ -409,8 +594,41 @@ public partial class MainWindow : Window
     }
 
     private async void Detect_Click(object sender, RoutedEventArgs e) => await DetectEnvironmentAsync();
-    private void ShowArtifacts_Click(object sender, RoutedEventArgs e) { WorkspaceTabs.SelectedItem = ArtifactsTab; ApplyArtifactFilter(); }
-    private void ShowSettings_Click(object sender, RoutedEventArgs e) { LoadSettingsForm(); WorkspaceTabs.SelectedItem = SettingsTab; }
+    private void ShowComposer_Click(object sender, RoutedEventArgs e) => SetWorkspace(ComposerTab, _conversationTitle);
+    private void ShowArtifacts_Click(object sender, RoutedEventArgs e)
+    {
+        SetWorkspace(ArtifactsTab, "结果产物");
+        ApplyArtifactFilter();
+    }
+    private void ShowSettings_Click(object sender, RoutedEventArgs e)
+    {
+        LoadSettingsForm();
+        SetWorkspace(SettingsTab, "设置");
+    }
+
+    private void ShowDeveloperTools_Click(object sender, RoutedEventArgs e)
+    {
+        AdvancedDeterministicTools.Visibility = Visibility.Visible;
+        AdvancedDeterministicTools.IsExpanded = true;
+        SetWorkspace(ComposerTab, _conversationTitle);
+        AdvancedDeterministicTools.BringIntoView();
+    }
+
+    private void SetWorkspace(TabItem tab, string title)
+    {
+        if (WorkspaceTabs is null) return;
+        WorkspaceTabs.SelectedItem = tab;
+        WorkspaceTitleText.Text = string.IsNullOrWhiteSpace(title) ? "新任务" : title;
+        ChatNavButton.Background = tab == ComposerTab
+            ? new SolidColorBrush(Color.FromRgb(41, 41, 41))
+            : Brushes.Transparent;
+        ArtifactsNavButton.Background = tab == ArtifactsTab
+            ? new SolidColorBrush(Color.FromRgb(41, 41, 41))
+            : Brushes.Transparent;
+        SettingsNavButton.Background = tab == SettingsTab
+            ? new SolidColorBrush(Color.FromRgb(41, 41, 41))
+            : Brushes.Transparent;
+    }
 
     private void BrowseSpec_Click(object sender, RoutedEventArgs e)
     {
@@ -465,6 +683,7 @@ public partial class MainWindow : Window
         var query = ArtifactSearchText.Text.Trim();
         var filtered = string.IsNullOrWhiteSpace(query) ? _artifacts : _artifacts.Where(x => x.SearchText.Contains(query, StringComparison.OrdinalIgnoreCase)).ToArray();
         ArtifactList.ItemsSource = filtered;
+        ArtifactEmptyPanel.Visibility = filtered.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
         ArtifactSummaryText.Text = $"已索引 {_artifacts.Count} 个产物，当前显示 {filtered.Count} 个";
     }
 
@@ -522,6 +741,7 @@ public partial class MainWindow : Window
         };
         _stateStore.SaveSettings(_settings);
         OutputPathText.Text = _settings.OutputDirectory;
+        await RefreshArtifactIndexAsync();
         SettingsStatusText.Text = "配置已加密保存，正在重启 Agent…";
         SettingsStatusText.Foreground = Brushes.DarkGray;
         await StartAgentAsync();
@@ -589,6 +809,25 @@ public partial class MainWindow : Window
         return index >= 0 ? text[(index + marker.Length)..].Trim() : text;
     }
 
+    private static string CompactTitle(string text)
+    {
+        var compact = string.Join(" ", text.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries));
+        return compact.Length > 34 ? compact[..34] + "…" : compact;
+    }
+
+    private static string FriendlyPhase(string phase) => phase switch
+    {
+        "draft" => "草稿",
+        "requirement-validating" => "校验需求",
+        "planned" => "已规划",
+        "building" => "正在构建",
+        "built" => "已构建",
+        "offline-validated" => "离线验证通过",
+        "user-validated" => "VM 验证通过",
+        "blocked" => "需要处理",
+        _ => phase
+    };
+
     private static string? String(JsonElement value, string name)
         => value.ValueKind == JsonValueKind.Object && value.TryGetProperty(name, out var property) && property.ValueKind == JsonValueKind.String ? property.GetString() : null;
     private static int Int(JsonElement value, string name)
@@ -614,6 +853,7 @@ public partial class MainWindow : Window
         return new BuildPresentation(result.TaskDirectory, result.SolutionFile, result.ReportFile, Directory.Exists(dependency) ? dependency : null);
     }
 
+    private sealed record ToolCardVisual(Border Card, TextBlock Icon, TextBlock Status);
     private sealed record BuildPresentation(string TaskDirectory, string SolutionFile, string ReportFile, string? DependencyDirectory);
     private sealed record AgentSessionItem(string Path, string Id, DateTime Modified, string FirstMessage, string? Name)
     {
