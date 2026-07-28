@@ -163,7 +163,7 @@ try {
         if (-not $desktop.Contains($label)) { throw "Codex-style Desktop workspace is missing: $label" }
     }
     $desktopCode = Get-Content -Raw (Join-Path $root 'src\VmScriptCompiler.Desktop\MainWindow.xaml.cs') -Encoding UTF8
-    foreach ($fragment in @('AgentProcessClient','_agent.PromptAsync(','new AgentConnectionOptions(','_lastDependencyDirectory','Path.Combine(path, "dependencies")')) {
+    foreach ($fragment in @('AgentProcessClient','_agent.PromptAsync(','new AgentConnectionOptions(','_lastDependencyDirectory','Path.Combine(path, "dependencies")','agent.Terminate()')) {
         if (-not $desktopCode.Contains($fragment)) { throw "Desktop UI snapshot/provider flow is missing: $fragment" }
     }
     if ($desktopCode.Contains('Environment.SetEnvironmentVariable')) { throw 'Desktop must not persist or mutate process-wide AI credentials.' }

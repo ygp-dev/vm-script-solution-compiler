@@ -761,7 +761,14 @@ public partial class MainWindow : Window
         try
         {
             _stateStore.SaveSettings(_settings);
-            _agent?.DisposeAsync().AsTask().GetAwaiter().GetResult();
+            _runCancellation?.Cancel();
+            var agent = Interlocked.Exchange(ref _agent, null);
+            if (agent is not null)
+            {
+                agent.EventReceived -= Agent_EventReceived;
+                agent.DiagnosticReceived -= Agent_DiagnosticReceived;
+                agent.Terminate();
+            }
         }
         catch { }
     }

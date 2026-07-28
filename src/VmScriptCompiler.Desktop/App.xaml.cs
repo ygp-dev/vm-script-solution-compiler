@@ -1,4 +1,5 @@
 using System.Windows;
+using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 using System.Windows.Media;
@@ -38,6 +39,28 @@ public partial class App : System.Windows.Application
             {
                 var result = Environment.GetEnvironmentVariable("VM_SCRIPT_DESKTOP_SMOKE_RESULT")
                     ?? Path.Combine(Path.GetTempPath(), "vm-script-desktop-agent-smoke-error.txt");
+                File.WriteAllText(result, JsonSerializer.Serialize(new
+                {
+                    ok = false,
+                    error = ex is AgentClientException agent ? agent.Code : "UNEXPECTED_ERROR",
+                    message = ex.Message,
+                    detail = ex.ToString()
+                }));
+                Shutdown(1);
+            }
+            return;
+        }
+        if (e.Args.Contains("--agent-close-smoke-test", StringComparer.Ordinal))
+        {
+            try
+            {
+                Task.Run(RunAgentCloseSmokeTestAsync).GetAwaiter().GetResult();
+                Shutdown(0);
+            }
+            catch (Exception ex)
+            {
+                var result = Environment.GetEnvironmentVariable("VM_SCRIPT_DESKTOP_CLOSE_SMOKE_RESULT")
+                    ?? Path.Combine(Path.GetTempPath(), "vm-script-desktop-close-smoke-error.txt");
                 File.WriteAllText(result, JsonSerializer.Serialize(new
                 {
                     ok = false,
@@ -145,5 +168,50 @@ public partial class App : System.Windows.Application
             solution,
             tools = tools.OrderBy(x => x).ToArray()
         }));
+    }
+
+    private static async Task RunAgentCloseSmokeTestAsync()
+    {
+        var root = Path.Combine(Path.GetTempPath(), "vm-script-desktop-close-" + Guid.NewGuid().ToString("N"));
+        var resultFile = Environment.GetEnvironmentVariable("VM_SCRIPT_DESKTOP_CLOSE_SMOKE_RESULT")
+            ?? Path.Combine(root, "result.json");
+        Directory.CreateDirectory(root);
+        var client = new AgentProcessClient();
+        await client.StartAsync(new AgentConnectionOptions(
+            "openai-responses",
+            "https://example.invalid/v1",
+            "close-smoke",
+            "close-smoke",
+            "high",
+            Path.Combine(root, "outputs"),
+            Path.Combine(root, "data")));
+        var processId = client.ProcessId ?? throw new InvalidOperationException("Agent process did not start.");
+        var timer = Stopwatch.StartNew();
+        client.Terminate();
+        timer.Stop();
+        await Task.Delay(150);
+        var childAlive = IsProcessAlive(processId);
+        if (timer.Elapsed > TimeSpan.FromSeconds(1) || childAlive)
+            throw new InvalidOperationException(
+                $"Immediate shutdown exceeded its limit. elapsedMs={timer.Elapsed.TotalMilliseconds:F0}; childAlive={childAlive}");
+        File.WriteAllText(resultFile, JsonSerializer.Serialize(new
+        {
+            ok = true,
+            elapsedMs = Math.Round(timer.Elapsed.TotalMilliseconds),
+            childAlive
+        }));
+    }
+
+    private static bool IsProcessAlive(int processId)
+    {
+        try
+        {
+            using var process = Process.GetProcessById(processId);
+            return !process.HasExited;
+        }
+        catch (ArgumentException)
+        {
+            return false;
+        }
     }
 }

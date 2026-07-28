@@ -42,6 +42,7 @@ internal sealed class AgentProcessClient : IAsyncDisposable
     public event EventHandler<string>? DiagnosticReceived;
 
     public bool IsRunning => _process is { HasExited: false };
+    internal int? ProcessId => _process is { HasExited: false } process ? process.Id : null;
 
     public async Task<JsonElement> StartAsync(AgentConnectionOptions options, CancellationToken cancellationToken = default)
     {
@@ -136,11 +137,33 @@ internal sealed class AgentProcessClient : IAsyncDisposable
         _disposing = true;
         if (IsRunning)
         {
-            try { await SendAsync("shutdown", new { }, new CancellationTokenSource(TimeSpan.FromSeconds(3)).Token); }
+            using var shutdown = new CancellationTokenSource(TimeSpan.FromSeconds(2));
+            try { await SendAsync("shutdown", new { }, shutdown.Token); }
             catch { }
         }
         await DisposeProcessAsync();
         _writeLock.Dispose();
+    }
+
+    public void Terminate()
+    {
+        _disposing = true;
+        var process = _process;
+        _process = null;
+        FailAll(new OperationCanceledException("Desktop is closing."));
+        if (process is null) return;
+        try { process.StandardInput.Close(); }
+        catch { }
+        try
+        {
+            if (!process.HasExited) process.Kill(entireProcessTree: true);
+        }
+        catch { }
+        if (_stdoutTask is not null) _ = Ignore(_stdoutTask);
+        if (_stderrTask is not null) _ = Ignore(_stderrTask);
+        process.Dispose();
+        _stdoutTask = null;
+        _stderrTask = null;
     }
 
     private async Task<JsonElement> SendAsync(string command, object arguments, CancellationToken cancellationToken)
@@ -239,12 +262,20 @@ internal sealed class AgentProcessClient : IAsyncDisposable
             if (!process.HasExited)
             {
                 process.StandardInput.Close();
-                if (!process.WaitForExit(3000)) process.Kill(true);
+                try
+                {
+                    await process.WaitForExitAsync().WaitAsync(TimeSpan.FromSeconds(2));
+                }
+                catch (TimeoutException)
+                {
+                    process.Kill(entireProcessTree: true);
+                    await process.WaitForExitAsync().WaitAsync(TimeSpan.FromSeconds(1));
+                }
             }
         }
         catch { }
-        if (_stdoutTask is not null) await Ignore(_stdoutTask);
-        if (_stderrTask is not null) await Ignore(_stderrTask);
+        if (_stdoutTask is not null) await IgnoreWithinAsync(_stdoutTask, TimeSpan.FromSeconds(1)).ConfigureAwait(false);
+        if (_stderrTask is not null) await IgnoreWithinAsync(_stderrTask, TimeSpan.FromSeconds(1)).ConfigureAwait(false);
         process.Dispose();
         _stdoutTask = null;
         _stderrTask = null;
@@ -254,6 +285,12 @@ internal sealed class AgentProcessClient : IAsyncDisposable
     {
         try { await task; }
         catch { }
+    }
+
+    private static async Task IgnoreWithinAsync(Task task, TimeSpan timeout)
+    {
+        try { await Ignore(task).WaitAsync(timeout).ConfigureAwait(false); }
+        catch (TimeoutException) { }
     }
 
     private string NextId() => "desktop-" + Interlocked.Increment(ref _sequence);
