@@ -1,0 +1,5 @@
+1、第一步先给GlobalCameraModuleCs.dll复制到C:\Program Files\VisionMaster4.3.0\Applications\Module(sp)\x64\Logic\ShellModule\DLL 目录下
+2、导入prc流程，导入后相机管理中删除全局相机2
+3、单独运行流程1，相机连接时不会发数据，相机不连接时会发送“NG2”
+4、NG2”可以在9发送数据内配置
+5、配置完成后复制这3个模块到生产1中，然后连接下

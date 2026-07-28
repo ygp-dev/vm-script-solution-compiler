@@ -1,0 +1,8 @@
+[
+  {"fullPath": "流程1.Python默认值验证", "name": "PyShellModule", "displayName": "Python默认值验证", "moduleId": 0, "paramCount": 0},
+  {"fullPath": "流程1", "name": "IMVSProcessControl", "displayName": "流程1", "moduleId": 10000, "paramCount": 0},
+  {"fullPath": "GlobalVarBinding", "name": "GlobalVarBinding", "displayName": "GlobalVarBinding", "moduleId": -1, "paramCount": 0},
+  {"fullPath": "ModuleParamBinding", "name": "ModuleParamBinding", "displayName": "ModuleParamBinding", "moduleId": -1, "paramCount": 0},
+  {"fullPath": "RunningPolicy", "name": "RunningPolicy", "displayName": "RunningPolicy", "moduleId": -1, "paramCount": 0},
+  {"fullPath": "procedure", "name": "procedure", "displayName": "procedure", "moduleId": 10999, "paramCount": 0}
+]

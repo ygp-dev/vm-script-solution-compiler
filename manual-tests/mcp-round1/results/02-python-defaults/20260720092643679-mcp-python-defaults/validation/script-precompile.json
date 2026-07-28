@@ -1,0 +1,14 @@
+{
+  "ok": true,
+  "scripts": [
+    {
+      "id": "python-defaults",
+      "carrier": "python-module",
+      "compiler": "C:\\Program Files\\VisionMaster4.4.0\\Applications\\ModuleProxy\\x64\\python.exe",
+      "dependencies": [],
+      "exitCode": 0,
+      "standardOutput": "",
+      "standardError": ""
+    }
+  ]
+}

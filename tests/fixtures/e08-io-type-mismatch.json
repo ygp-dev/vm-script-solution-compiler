@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "1.0",
+  "task": { "name": "io-mismatch", "mode": "create", "vmVersion": "4.4.0" },
+  "scripts": [{
+    "id": "bad-io", "carrier": "csharp-module", "name": "错误IO", "procedure": "流程1",
+    "execution": { "mode": "once" },
+    "inputs": [{ "name": "A", "type": "float", "default": "not-a-number" }], "outputs": [], "operations": [], "dependencies": []
+  }]
+}

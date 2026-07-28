@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "1.0",
+  "task": { "name": "runtime-direct-sol-proof", "mode": "create", "vmVersion": "4.4.0" },
+  "scripts": [
+    {
+      "id": "proof-csharp",
+      "carrier": "csharp-module",
+      "name": "SOL直写CSharp端口",
+      "procedure": "流程1",
+      "execution": { "mode": "once", "order": 0 },
+      "inputs": [
+        { "name": "SolGeneratedCSharpA", "type": "float", "default": 1.25, "required": true },
+        { "name": "SolGeneratedCSharpB", "type": "float", "default": 2.5, "required": true }
+      ],
+      "outputs": [
+        { "name": "SolGeneratedCSharpSum", "type": "float", "default": 0 }
+      ],
+      "operations": [],
+      "dependencies": []
+    },
+    {
+      "id": "proof-python",
+      "carrier": "python-module",
+      "name": "SOL直写Python端口",
+      "procedure": "流程1",
+      "source": "# coding: utf-8\nfrom ioHelper import *\n\ndef Process(data) -> int:\n    moduleVar = IoHelper(data, INIT_MODULE_VAR)\n    globalVar = IoHelper(data, INIT_GLOBAL_VAR)\n    localVar = IoHelper(data, INIT_LOCAL_VAR)\n    try:\n        a = moduleVar.SolGeneratedPythonA\n        b = moduleVar.SolGeneratedPythonB\n        if a is None:\n            a = 101\n        if b is None:\n            b = 202\n        moduleVar.SolGeneratedPythonSum = int(a) + int(b)\n    except BaseException as error:\n        PrintMsg(error)\n        return -1\n    return 0\n",
+      "execution": { "mode": "once", "order": 1 },
+      "inputs": [
+        { "name": "SolGeneratedPythonA", "type": "int", "default": 101, "required": true },
+        { "name": "SolGeneratedPythonB", "type": "int", "default": 202, "required": true }
+      ],
+      "outputs": [
+        { "name": "SolGeneratedPythonSum", "type": "int", "default": 0 }
+      ],
+      "operations": [],
+      "dependencies": []
+    }
+  ]
+}

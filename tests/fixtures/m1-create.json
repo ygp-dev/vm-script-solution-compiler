@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "1.0",
+  "task": { "name": "m1-script-base", "mode": "create", "vmVersion": "4.4.0" },
+  "scripts": [
+    {
+      "id": "placeholder-shell",
+      "carrier": "csharp-module",
+      "name": "M1 placeholder",
+      "procedure": "流程0",
+      "execution": { "mode": "once", "order": 0 },
+      "inputs": [], "outputs": []
+    }
+  ]
+}

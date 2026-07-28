@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0",
+  "task": { "name": "m8-classic-clear-patch", "mode": "patch", "vmVersion": "4.4.0" },
+  "scripts": [
+    {
+      "id": "clear-calibration", "carrier": "csharp-module", "name": "IR清理标定点", "procedure": "流程1_标定点位清空",
+      "execution": { "mode": "once" },
+      "inputs": [{ "name": "ClearTrigger", "type": "int", "default": 0 }], "outputs": [],
+      "operations": [
+        {
+          "kind": "setModuleValue", "module": "N点标定1", "parameter": "Clear", "value": "",
+          "condition": { "kind": "binary", "operator": "equal", "left": { "kind": "input", "name": "ClearTrigger" }, "right": 1 }
+        }
+      ],
+      "dependencies": []
+    }
+  ],
+  "connections": []
+}

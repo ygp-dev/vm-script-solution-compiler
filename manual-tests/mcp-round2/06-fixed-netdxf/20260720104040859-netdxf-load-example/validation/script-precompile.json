@@ -1,0 +1,16 @@
+{
+  "ok": true,
+  "scripts": [
+    {
+      "id": "netdxf-load",
+      "carrier": "csharp-module",
+      "compiler": "Framework64 csc",
+      "dependencies": [
+        "netDxf.dll"
+      ],
+      "exitCode": 0,
+      "standardOutput": "",
+      "standardError": ""
+    }
+  ]
+}

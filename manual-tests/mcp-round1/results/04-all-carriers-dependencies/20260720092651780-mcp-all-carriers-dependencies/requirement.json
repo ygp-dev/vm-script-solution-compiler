@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "1.0",
+  "task": { "name": "mcp-all-carriers-dependencies", "mode": "create", "vmVersion": "4.4.0" },
+  "scripts": [
+    {
+      "id": "global-log", "carrier": "global-csharp", "name": "全局脚本验证",
+      "execution": { "mode": "once", "order": 0 }, "inputs": [], "outputs": [],
+      "operations": [{ "kind": "log", "value": "MCP GlobalScript OK" }], "dependencies": []
+    },
+    {
+      "id": "drawing-dependency", "carrier": "csharp-module", "name": "CSharp依赖验证", "procedure": "流程1",
+      "source": "using System;\nusing System.Drawing;\nusing Script.Methods;\npublic partial class UserScript : ScriptMethods, IProcessMethods\n{\n    private Color color;\n    public void Init() { color = Color.Lime; }\n    public bool Process() { ColorName = color.Name; return true; }\n}\n",
+      "execution": { "mode": "once", "order": 1 }, "inputs": [],
+      "outputs": [{ "name": "ColorName", "type": "string", "default": "" }], "operations": [],
+      "dependencies": [{ "kind": "dotnet-assembly", "name": "System.Drawing.dll", "role": "system", "architecture": "anycpu", "referenceType": 0 }]
+    },
+    {
+      "id": "python-json", "carrier": "python-module", "name": "Python依赖验证", "procedure": "流程1",
+      "source": "# coding: utf-8\nimport json\nfrom ioHelper import *\ndef Process(data) -> int:\n    moduleVar = IoHelper(data, INIT_MODULE_VAR)\n    globalVar = IoHelper(data, INIT_GLOBAL_VAR)\n    localVar = IoHelper(data, INIT_LOCAL_VAR)\n    moduleVar.JsonText = json.dumps({'ok': True})\n    return 0\n",
+      "execution": { "mode": "once", "order": 2 }, "inputs": [],
+      "outputs": [{ "name": "JsonText", "type": "string", "default": "" }], "operations": [],
+      "dependencies": [{ "kind": "python-package", "name": "json", "architecture": "pure-python" }]
+    }
+  ],
+  "connections": []
+}

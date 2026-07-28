@@ -1,0 +1,9 @@
+1、环境配置 确认VM版本
+2、打开方案，脚本上ctrl+M
+3、将dll目录下的dll，复制到C:\Program Files\VisionMaster4.4.0\Applications\Module(sp)\x64\Logic\ShellModule\DLL 路径
+4、原始dxf
+5、脚本会输出原始dxf点集下的图片，图片可选4种模式。纯点集就用-2
+6、points 就是dxf中所有点集，outPoints为根据输入计算出来的点位
+7、输入设置中的Base开头为基准点 Run开头的为运行点
+8、调试部分看视频，默认基准点和运行点一样的时候点集就是dxf本身，x+100 点集整体+100  Y+1200 整体+1200
+9、角度变化，设置45°，以基准点为中心旋转45°

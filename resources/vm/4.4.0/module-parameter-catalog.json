@@ -1,0 +1,15 @@
+{
+  "version": "1.0.0",
+  "vmVersion": "4.4.0",
+  "modules": {
+    "IMVSNPointCalibModu": {
+      "setValueActions": ["Clear"],
+      "evidence": ["knowledge/reference-solutions/scripts/基础/流程1_标定点位清空_清理标定点.cs"]
+    },
+    "SaveImage": {
+      "setValueParameters": ["OriginImgPath", "RenderImgPath"],
+      "evidence": ["knowledge/reference-solutions/scripts/基础/流程2_自定义图像输出文件名_脚本1.cs"]
+    }
+  },
+  "policy": "Patch module parameters must be present in parsed algoriParams, generated module IO/built-ins, or this evidence catalog. Unknown names are blocked."
+}

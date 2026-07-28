@@ -1,0 +1,86 @@
+{
+  "version": "1.2.0",
+  "vmVersion": "4.4.0",
+  "carriers": {
+    "csharp-module": {
+      "contract": "public partial class UserScript : ScriptMethods, IProcessMethods",
+      "entryPoints": ["void Init()", "bool Process()"],
+      "moduleIo": "VM generates strongly typed partial properties from Input/Output definitions; input properties call Get*Value and output properties call Set*Value",
+      "moduleAccess": [
+        "CurrentProcess.GetModule(name).GetValue(parameter)",
+        "CurrentProcess.GetModule(name).GetArrayValue(parameter)",
+        "CurrentProcess.GetModule(name).GetParamValue(parameter, ref value)",
+        "CurrentProcess.GetModule(name).SetValue(parameter, value)"
+      ],
+      "variables": [
+        "GlobalVariableModule.GetValue/SetValue",
+        "LocalVariable.GetValue/SetValue",
+        "GlobalVariableModule.GetVar<Type>/SetVar<Type>",
+        "LocalVariable.GetVar<Type>/SetVar<Type>"
+      ]
+    },
+    "python-module": {
+      "contract": "def Process(data) -> int",
+      "entryObjects": ["IoHelper(data, INIT_MODULE_VAR)", "IoHelper(data, INIT_GLOBAL_VAR)", "IoHelper(data, INIT_LOCAL_VAR)"],
+      "moduleIo": "moduleVar.<input> reads and moduleVar.<output> assignment writes",
+      "variables": "globalVar/localVar are type-aware IoHelper objects; exact complex-type behavior requires reference Python samples"
+    },
+    "global-csharp": {
+      "contract": "public class UserGlobalScript : UserGlobalMethods, IScriptMethods",
+      "entryPoints": ["int Init()", "int Process()"],
+      "process": ["DefaultExecuteProcess", "ExecuteProcessOnce", "ContinuousExecuteProcess", "StopProcessExecute"],
+      "globalVariables": ["GetGlobalVariableIntValue", "GetGlobalVariableFloatValue", "GetGlobalVariableStringValue", "SetGlobalVariableIntValue", "SetGlobalVariableFloatValue", "SetGlobalVariableStringValue"],
+      "communication": ["StartGlobalCommunicate", "SendCommDeviceData", "UserGlobalMethods_OnReceiveCommunicateDataEvent"],
+      "callbacks": ["ResultDataCallBack", "ExportResultCallBack"]
+    }
+  },
+  "deterministicOperations": {
+    "csharp-module": [
+      "setOutput", "getModule", "getModuleValue", "getModuleArray", "getModuleParam", "setModuleValue",
+      "getGlobalVariable", "setGlobalVariable", "getLocalVariable", "setLocalVariable",
+      "bytesToPointset", "log", "sleep"
+    ],
+    "python-module": ["setOutput", "getGlobalVariable", "setGlobalVariable", "getLocalVariable", "setLocalVariable", "log", "sleep"],
+    "global-csharp": [
+      "runProcedure", "continuousProcedure", "stopProcedure", "setContinuousInterval",
+      "startGlobalCommunication", "sendCommunication", "setProcedureInput", "saveSolution", "loadSolution",
+      "getGlobalVariable", "setGlobalVariable", "log", "sleep"
+    ]
+  },
+  "variableTypeMethods": {
+    "int": { "get": "GetVarInt", "set": "SetVarInt", "storage": "int[]", "scalarPolicy": "first element" },
+    "int[]": { "get": "GetVarInt", "set": "SetVarInt", "storage": "int[]" },
+    "float": { "get": "GetVarFloat", "set": "SetVarFloat", "storage": "float[]", "scalarPolicy": "first element" },
+    "float[]": { "get": "GetVarFloat", "set": "SetVarFloat", "storage": "float[]" },
+    "string": { "get": "GetVarString", "set": "SetVarString", "storage": "string[]", "scalarPolicy": "first element" },
+    "string[]": { "get": "GetVarString", "set": "SetVarString", "storage": "string[]" },
+    "byte": { "get": "GetVarByte", "set": "SetVarByte", "storage": "byte[]" },
+    "image": { "get": "GetVarImage", "set": "SetVarImage", "storage": "ImageData" },
+    "roibox": { "get": "GetVarBox", "set": "SetVarBox", "storage": "RoiboxData[]", "scalarPolicy": "first element / wrap on set" },
+    "roibox[]": { "get": "GetVarBox", "set": "SetVarBox", "storage": "RoiboxData[]" },
+    "roiannulus": { "get": "GetVarAnnulus", "set": "SetVarAnnulus", "storage": "AnnulusData[]" },
+    "roipolygon": { "get": "GetVarPolygon", "set": "SetVarPolygon", "storage": "PolygonData[]" },
+    "point": { "get": "GetVarPoint", "set": "SetVarPoint", "storage": "PointData[]" },
+    "line": { "get": "GetVarLine", "set": "SetVarLine", "storage": "LineData[]" },
+    "fixture": { "get": "GetVarFixture", "set": "SetVarFixture", "storage": "FixtureData[]" },
+    "circle": { "get": "GetVarCircle", "set": "SetVarCircle", "storage": "CircleData[]" },
+    "rect": { "get": "GetVarRect", "set": "SetVarRect", "storage": "RectData[]" },
+    "ellipse": { "get": "GetVarEllipse", "set": "SetVarEllipse", "storage": "EllipseData[]" },
+    "pointset": { "get": "GetVarPointset", "set": "SetVarPointset", "storage": "byte[]" }
+  },
+  "expressionAst": {
+    "kinds": ["input", "result", "literal", "binary", "unary", "index"],
+    "binaryOperators": ["add", "subtract", "multiply", "divide", "modulo", "equal", "notEqual", "greaterThan", "greaterOrEqual", "lessThan", "lessOrEqual", "and", "or"],
+    "unaryOperators": ["not", "negate"],
+    "operationCondition": "condition expression; free-form when is rejected by deterministic generators"
+  },
+  "evidence": [
+    "docs/C#脚本相关/Script.Methods/ModuleBase.cs",
+    "docs/C#脚本相关/Script.Methods/ModuleGroup.cs",
+    "docs/C#脚本相关/Script.Methods/VarBaseModule.cs",
+    "docs/全局脚本方法/VM.GlobalScript.Methods/UserGlobalMethods.cs",
+    "resources/vm/4.4.0/global-script/samples-ch-4x/全局脚本_模块输入参数.cs",
+    "docs/SOL/全局脚本(2).cs",
+    "docs/SOL/VM FAQ手册(V1.12).chm"
+  ]
+}

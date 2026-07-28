@@ -1,0 +1,37 @@
+{
+  "ok": true,
+  "scriptTargetFramework": ".NET Framework 4.6.1",
+  "acceptedDependencyRuntime": "CLR 4 .NET Framework; final loadability is verified by Framework64 csc and VM runtime visibility",
+  "targetArchitecture": "x64",
+  "runtimeDllDirectory": "C:\\Program Files\\VisionMaster4.4.0\\Applications\\Module(sp)\\x64\\Logic\\ShellModule\\DLL",
+  "scripts": [
+    {
+      "scriptId": "netdxf-load",
+      "scriptName": "netDxf\u8BFB\u53D6\u793A\u4F8B",
+      "assemblies": [
+        {
+          "name": "netDxf",
+          "declaredName": "netDxf.dll",
+          "referenceType": 4,
+          "role": "third-party",
+          "source": "vm-runtime",
+          "sourcePath": "C:\\Program Files\\VisionMaster4.4.0\\Applications\\Module(sp)\\x64\\Logic\\ShellModule\\DLL\\netDxf.dll",
+          "packagedPath": null,
+          "deploymentTarget": null,
+          "runtimeVisible": true,
+          "assemblyVersion": "2023.11.10.0",
+          "clrMetadataVersion": "v4.0.30319",
+          "targetFramework": ".NETFramework,Version=v4.8",
+          "architecture": "anycpu",
+          "sha256": "0EB365AC2AC074A371A2766A364060BD0F2B73B9F21D7ACBDAD43B1EAA1D658F",
+          "assemblyReferences": [
+            "mscorlib",
+            "System.Drawing",
+            "System",
+            "System.Core"
+          ]
+        }
+      ]
+    }
+  ]
+}

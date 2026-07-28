@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "1.0",
+  "task": { "name": "m3-shell-create", "mode": "create", "vmVersion": "4.4.0" },
+  "scripts": [
+    {
+      "id": "sum-csharp",
+      "carrier": "csharp-module",
+      "name": "CSharp端口验证",
+      "procedure": "流程1",
+      "execution": { "mode": "once", "order": 0 },
+      "inputs": [
+        { "name": "A", "type": "float", "default": 0, "required": true },
+        { "name": "B", "type": "float", "default": 0, "required": true }
+      ],
+      "outputs": [{ "name": "Sum", "type": "float", "default": 0 }],
+      "operations": [],
+      "dependencies": []
+    }
+  ]
+}

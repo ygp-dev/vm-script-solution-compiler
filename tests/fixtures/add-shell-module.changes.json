@@ -1,0 +1,18 @@
+{
+  "changes": [
+    {
+      "action": "addModule",
+      "target": "流程1",
+      "paramName": "ShellModule",
+      "value": "脚本2",
+      "templateFile": "TEMPLATE_FILE.sol",
+      "templateModule": "流程1.脚本1"
+    },
+    {
+      "action": "setConnection",
+      "target": "流程1.脚本1",
+      "paramName": "follow",
+      "value": "流程1.脚本2"
+    }
+  ]
+}

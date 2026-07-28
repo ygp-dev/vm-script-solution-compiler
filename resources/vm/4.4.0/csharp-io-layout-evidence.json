@@ -1,0 +1,23 @@
+{
+  "visionMasterVersion": "4.4.0",
+  "evidence": {
+    "source": "2026-07-15 user-saved VM ShellModule, extracted to a SOL-free structural signature",
+    "coveredComplexTypes": ["image", "roibox", "roibox[]", "roiannulus", "roipolygon", "point", "line", "fixture", "rect", "ellipse", "pointset"],
+    "catalogExtensions": ["bool"],
+    "unsupportedPorts": ["circle"]
+  },
+  "input": {
+    "valueTypes": ["int", "int", "int[]", "float", "float[]", "string", "string[]", "byte", "IMAGE", "ROIBOX", "ROIBOX[]", "ROIANNULUS", "ROIPOLYGON", "POINT", "LINE", "FIXTURE", "Rect", "ELLIPSE", "pointset"],
+    "structFieldCounts": [1, 1, 1, 1, 1, 1, 1, 1, 4, 5, 5, 6, 3, 2, 4, 10, 4, 5, 1],
+    "dynamicCombinationPreorder": ["IMAGE", "ROIBOX", "POINT", "ROIBOX", "POINT", "ROIANNULUS", "POINT", "ROIPOLYGON", "POINT", "POINT", "LINE", "POINT", "POINT", "FIXTURE", "POINT", "POINT", "Rect", "POINT", "ELLIPSE", "POINT"],
+    "dynamicTopLevelCount": 19
+  },
+  "output": {
+    "valueTypes": ["float", "string", "int", "int", "int", "int[]", "float", "float[]", "string", "string[]", "byte", "IMAGE", "ROIBOX", "ROIBOX[]", "ROIANNULUS", "ROIPOLYGON", "POINT", "LINE", "FIXTURE", "Rect", "ELLIPSE", "pointset"],
+    "structFieldCounts": [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 4, 5, 5, 6, 3, 2, 4, 10, 4, 5, 1],
+    "dynamicCombinationPreorder": ["IMAGE", "ROIBOX", "POINT", "ROIBOX", "POINT", "ROIANNULUS", "POINT", "ROIPOLYGON", "POINT", "POINT", "LINE", "POINT", "POINT", "FIXTURE", "POINT", "POINT", "Rect", "POINT", "ELLIPSE", "POINT"],
+    "dynamicTopLevelCount": 23
+  },
+  "requiredUiParameters": ["InputValueTypes", "OutputValueTypes", "DynamicObject", "RelateIO_%ImageEcho%"],
+  "assemblyGuidLength": 36
+}

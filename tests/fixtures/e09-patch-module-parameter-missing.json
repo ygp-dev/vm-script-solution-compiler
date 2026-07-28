@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "1.0",
+  "task": { "name": "e09-parameter-missing", "mode": "patch", "vmVersion": "4.4.0" },
+  "scripts": [
+    {
+      "id": "invalid-param", "carrier": "csharp-module", "name": "无效参数验证", "procedure": "流程1_标定点位清空",
+      "execution": { "mode": "once" }, "inputs": [], "outputs": [],
+      "operations": [{ "kind": "setModuleValue", "module": "N点标定1", "parameter": "DefinitelyMissing", "value": "" }],
+      "dependencies": []
+    }
+  ],
+  "connections": []
+}

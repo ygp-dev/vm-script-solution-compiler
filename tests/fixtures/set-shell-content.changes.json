@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "action": "setBinaryParam",
+      "target": "流程1.脚本1",
+      "paramName": "ShellContent",
+      "value": "using System; public partial class UserScript : Script.Methods.ScriptMethods, Script.Methods.IProcessMethods { public void Init() {} public bool Process() { return true; } }"
+    }
+  ]
+}

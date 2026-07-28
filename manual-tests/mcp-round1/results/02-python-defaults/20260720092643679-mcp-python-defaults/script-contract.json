@@ -1,0 +1,38 @@
+{
+  "mode": "create",
+  "framework": ".NET Framework 4.6.1",
+  "architecture": "x64",
+  "scripts": [
+    {
+      "id": "python-defaults",
+      "carrier": "python-module",
+      "procedure": "\u6D41\u7A0B1",
+      "name": "Python\u9ED8\u8BA4\u503C\u9A8C\u8BC1",
+      "source": "generated/python-defaults.py",
+      "inputs": [
+        "A",
+        "B",
+        "Values"
+      ],
+      "outputs": [
+        "Sum",
+        "ValuesEcho"
+      ],
+      "dependencies": [],
+      "shellReferences": {
+        "mode": "vm-implicit-defaults",
+        "declared": []
+      }
+    }
+  ],
+  "dependencyResolution": [],
+  "sourcePrecompiled": true,
+  "precompileEnvironment": "VM 4.4 method assemblies and bundled Python parser",
+  "ioMapping": "VM-4.4 saved-sample logical ports \u002B StructName backing fields \u002B DynamicIO combinations \u002B UiParamData object mappings",
+  "inputDefaults": "int/float ModuleSubscribe mapping confirmed by VM-saved round trip; bool/string structurally encoded; Python also emits deterministic None fallback",
+  "runtimeValidated": true,
+  "runtimeValidation": {
+    "baselineValidated": true,
+    "pending": []
+  }
+}

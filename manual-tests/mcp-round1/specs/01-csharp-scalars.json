@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "1.0",
+  "task": { "name": "mcp-csharp-scalars", "mode": "create", "vmVersion": "4.4.0" },
+  "scripts": [{
+    "id": "csharp-scalars", "carrier": "csharp-module", "name": "CSharp标量验证", "procedure": "流程1",
+    "execution": { "mode": "once", "order": 0 },
+    "inputs": [
+      { "name": "A", "type": "int", "default": 7, "required": true },
+      { "name": "B", "type": "int", "default": 5, "required": true },
+      { "name": "Enabled", "type": "bool", "default": true }
+    ],
+    "outputs": [
+      { "name": "Sum", "type": "int", "default": 0 },
+      { "name": "Passed", "type": "bool", "default": false },
+      { "name": "Message", "type": "string", "default": "" }
+    ],
+    "operations": [
+      { "kind": "setOutput", "parameter": "Sum", "value": { "kind": "binary", "operator": "add", "left": { "kind": "input", "name": "A" }, "right": { "kind": "input", "name": "B" } } },
+      { "kind": "setOutput", "parameter": "Passed", "value": { "kind": "input", "name": "Enabled" } },
+      { "kind": "setOutput", "parameter": "Message", "value": "MCP CSharp OK" }
+    ],
+    "dependencies": []
+  }],
+  "connections": []
+}

@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "1.0",
+  "task": { "name": "m9-dependencies-and-init", "mode": "create", "vmVersion": "4.4.0" },
+  "scripts": [
+    {
+      "id": "drawing-script",
+      "carrier": "csharp-module",
+      "name": "Drawing引用验证",
+      "procedure": "流程2",
+      "source": "using System;\nusing System.Drawing;\nusing Script.Methods;\npublic partial class UserScript : ScriptMethods, IProcessMethods\n{\n    private Color color;\n    public void Init() { color = Color.Red; }\n    public bool Process() { using (Bitmap bitmap = new Bitmap(2, 2)) { bitmap.SetPixel(0, 0, color); OutputImage = new ImageData(bitmap); ConsoleWrite(bitmap.GetPixel(0, 0).Name); } return true; }\n}\n",
+      "execution": { "mode": "once", "order": 0 },
+      "inputs": [],
+      "outputs": [
+        { "name": "OutputImage", "type": "image" }
+      ],
+      "operations": [],
+      "dependencies": [
+        { "kind": "dotnet-assembly", "name": "System.Drawing.dll", "architecture": "anycpu" }
+      ]
+    },
+    {
+      "id": "python-json",
+      "carrier": "python-module",
+      "name": "Python依赖验证",
+      "procedure": "流程1",
+      "source": "# coding: utf-8\nimport json\nfrom ioHelper import *\ndef Process(data) -> int:\n    moduleVar = IoHelper(data, INIT_MODULE_VAR)\n    globalVar = IoHelper(data, INIT_GLOBAL_VAR)\n    localVar = IoHelper(data, INIT_LOCAL_VAR)\n    PrintMsg(json.dumps({'ok': True}))\n    return 0\n",
+      "execution": { "mode": "once", "order": 1 },
+      "inputs": [],
+      "outputs": [],
+      "operations": [],
+      "dependencies": [
+        { "kind": "python-package", "name": "json", "architecture": "pure-python" }
+      ]
+    },
+    {
+      "id": "global-init",
+      "carrier": "global-csharp",
+      "name": "初始化阶段验证",
+      "execution": { "mode": "init", "order": 0 },
+      "inputs": [],
+      "outputs": [],
+      "operations": [
+        { "kind": "log", "value": "global init" }
+      ],
+      "dependencies": []
+    }
+  ],
+  "connections": []
+}

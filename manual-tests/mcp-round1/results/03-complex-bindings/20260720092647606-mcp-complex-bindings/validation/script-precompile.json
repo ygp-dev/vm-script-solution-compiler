@@ -1,0 +1,14 @@
+{
+  "ok": true,
+  "scripts": [
+    {
+      "id": "complex-bindings",
+      "carrier": "csharp-module",
+      "compiler": "Framework64 csc",
+      "dependencies": [],
+      "exitCode": 0,
+      "standardOutput": "",
+      "standardError": ""
+    }
+  ]
+}

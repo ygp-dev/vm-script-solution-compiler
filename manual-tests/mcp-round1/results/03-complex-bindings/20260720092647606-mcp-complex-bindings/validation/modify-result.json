@@ -1,0 +1,9 @@
+﻿{
+  "applied": 7,
+  "errors": 0,
+  "warnings": [
+    "setDisplayName[Module]: 1 \"脚本1\" → \"复杂类型绑定验证\"",
+    "deleteModule: 删除 ModuleBase 条目 Index=0",
+    "deleteModule: 删除 Inside 引用 Index=0"
+  ]
+}

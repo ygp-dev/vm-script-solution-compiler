@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
+    <ProjectGuid>{AD544C33-8697-4D18-9E58-47F3FA7A8768}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>VM.GlobalScript.Methods</RootNamespace>
+    <AssemblyName>VM.GlobalScript.Methods</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Apps.BaseLog">
+      <HintPath>C:\Program Files\VisionMaster4.4.0\Applications\GlobalScript\Apps.BaseLog.dll</HintPath>
+    </Reference>
+    <Reference Include="iMVS-6000PlatformSDKCS">
+      <HintPath>C:\Program Files\VisionMaster4.4.0\Applications\GlobalScript\iMVS-6000PlatformSDKCS.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CommunicateType.cs" />
+    <Compile Include="DataType.cs" />
+    <Compile Include="DeviceType.cs" />
+    <Compile Include="GlobalCommunicateTran.cs" />
+    <Compile Include="IMVS_COMMU_REPORT_DATA_INFO.cs" />
+    <Compile Include="IScriptMethods.cs" />
+    <Compile Include="LogHelper.cs" />
+    <Compile Include="ModbusFunCode.cs" />
+    <Compile Include="OnReceiveEventHandler.cs" />
+    <Compile Include="PlatformSDKApi.cs" />
+    <Compile Include="PlatformSDKDefine.cs" />
+    <Compile Include="PlatformSdkFunction.cs" />
+    <Compile Include="PlatFormSDKManager.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReceiveDataInfo.cs" />
+    <Compile Include="UDPTransTool.cs" />
+    <Compile Include="UserGlobalMethods.cs" />
+    <Compile Include="UserGlobalScript.cs" />
+    <Compile Include="UTF8Marshaler.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "1.0",
+  "task": { "name": "external-module", "mode": "create", "vmVersion": "4.4.0" },
+  "scripts": [{
+    "id": "clear-points", "carrier": "csharp-module", "name": "清空标定点", "procedure": "流程1",
+    "execution": { "mode": "once", "order": 0 }, "inputs": [], "outputs": [],
+    "operations": [{ "kind": "setModuleValue", "module": "N点标1", "parameter": "Clear", "value": "", "onError": "fail" }],
+    "dependencies": []
+  }]
+}

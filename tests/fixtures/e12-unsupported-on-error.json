@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0",
+  "task": { "name": "unsupported-error-policy", "mode": "create", "vmVersion": "4.4.0" },
+  "scripts": [
+    {
+      "id": "guarded",
+      "carrier": "csharp-module",
+      "name": "错误策略验证",
+      "procedure": "流程1",
+      "execution": { "mode": "once", "order": 0 },
+      "inputs": [],
+      "outputs": [],
+      "operations": [
+        { "kind": "log", "value": "test", "onError": "continue" }
+      ],
+      "dependencies": []
+    }
+  ]
+}

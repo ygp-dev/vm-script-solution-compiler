@@ -1,0 +1,4799 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>VM.Core</name>
+    </assembly>
+    <members>
+        <member name="T:VM.Core.DynamicInput">
+            <summary>
+            DynamicInput3D
+            </summary>
+        </member>
+        <member name="M:VM.Core.DynamicInput.#ctor(System.UInt32)">
+            <summary>
+            动态输入
+            </summary>
+            <param name="nModuId"></param>
+        </member>
+        <member name="M:VM.Core.DynamicInput.SetInputPolygon(System.String,System.Collections.Generic.List{VM.PlatformSDKCS.Polygon})">
+            <summary>
+            设置多边形输入
+            </summary>
+            <param name="strParamName"></param>
+            <param name="stPolygon"></param>
+        </member>
+        <member name="M:VM.Core.DynamicInput.SetInputPosture(System.String,System.Collections.Generic.List{VM.PlatformSDKCS.Posture})">
+            <summary>
+            设置位姿输入
+            </summary>
+            <param name="strParamName"></param>
+            <param name="stPosture"></param>
+        </member>
+        <member name="M:VM.Core.DynamicInput.GetAllInputNameInfo">
+            <summary>
+            获取所有输出名称信息（CONTOURPOINTS、POINTSET、小写的image,这三种类型不支持）
+            </summary>
+        </member>
+        <member name="T:VM.Core.DynamicOutput">
+            <summary>
+            DynamicOutput3D
+            </summary>
+        </member>
+        <member name="M:VM.Core.DynamicOutput.GetOutputInt(System.String)">
+            <summary>
+            获取整型输出(结果为空时nValueNum为0且pIntVal和nReserved为null)
+            </summary>
+            <param name="strParam"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.DynamicOutput.GetOutputFloat(System.String)">
+            <summary>
+            获取浮点型输出(结果为空时nValueNum为0且pFloatVal和nReserved为null)
+            </summary>
+            <param name="strParam"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.DynamicOutput.GetOutputString(System.String)">
+            <summary>
+            获取字符串型输出(结果为空时nValueNum为0且astStringVal和nReserved为null)
+            </summary>
+            <param name="strParam">参数名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.DynamicOutput.GetOutputByteArray(System.String)">
+            <summary>
+            获取二进制数据型输出(结果为空时strValue为null)
+            </summary>
+            <param name="strParam"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.DynamicOutput.GetOutputImage(System.String)">
+            <summary>
+            图像型结果(结果为空时nDataLen为0且pData和nReserved为null)
+            </summary>
+            <param name="strParam"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.DynamicOutput.GetOutputPointset(System.String)">
+            <summary>
+            点集型结果
+            </summary>
+            <param name="strParam"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.DynamicOutput.GetOutputPolygonArray(System.String)">
+            <summary>
+            获取多边形结果
+            </summary>
+            <param name="strParam"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.DynamicOutput.GetOutputLineArray(System.String)">
+            <summary>
+            获取直线输出集合
+            </summary>
+            <param name="strParam"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.DynamicOutput.GetAllOutputNameInfo">
+            <summary>
+            获取所有输出名称信息（CONTOURPOINTS、POINTSET、小写的image,这三种类型不支持）
+            </summary>
+        </member>
+        <member name="M:VM.Core.DynamicOutput.DeleteSpecifyChar(System.String,System.String)">
+            <summary>
+            剔除指定字符
+            </summary>
+        </member>
+        <member name="T:VM.Core.DynamicVmIO">
+            <summary>
+            动态IO
+            </summary>
+        </member>
+        <member name="F:VM.Core.DynamicVmIO.ioValueTypeStrings">
+            <summary>
+            值类型IO的类型名称数组
+            </summary>
+        </member>
+        <member name="M:VM.Core.DynamicVmIO.OnVisibleChanged">
+            <summary>
+            显示修改时
+            </summary>
+        </member>
+        <member name="M:VM.Core.DynamicVmIO.OnTypeNameChanged">
+            <summary>
+            类型修改时
+            </summary>
+            <param name="oldTypeName"></param>
+        </member>
+        <member name="M:VM.Core.DynamicVmIO.OnNameChanged(System.String,VM.Core.VmIO,VM.Core.VmIO,System.Collections.Generic.List{System.Tuple{System.Int32,VM.Core.VmIO,VM.Core.VmIO}})">
+            <summary>
+            名称修改时
+            </summary>
+        </member>
+        <member name="M:VM.Core.DynamicVmIO.OnAddCollection(VM.Core.VmIOCollection)">
+            <summary>
+            增加时
+            </summary>
+            <param name="vmIOCollection"></param>
+        </member>
+        <member name="M:VM.Core.DynamicVmIO.UpdateDynamciIOInfo(VM.Core.VmIOCollection)">
+            <summary>
+            更新动态IO数据到模块底层
+            </summary>
+            <param name="vmIOCollection"></param>
+        </member>
+        <member name="M:VM.Core.DynamicVmIO.GetDynamicIoCollection(VM.Core.VmIOCollection)">
+            <summary>
+            把动态IO集合转换为IMVS_MODULE_IO_INFO_LIST结构体
+            </summary>
+            <param name="vmIOCollection"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.DynamicVmIO.FreeIOInfoList(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_MODULE_IO_INFO_LIST)">
+            <summary>
+            释放IMVS_MODULE_IO_INFO_LIST指针内存
+            </summary>
+            <param name="ioInfoList"></param>
+        </member>
+        <member name="M:VM.Core.DynamicVmIO.FrreIOInfo(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_MODULE_IO_INFO)">
+            <summary>
+            释放IMVS_MODULE_IO_INFO指针内存
+            </summary>
+            <param name="ioInfo"></param>
+        </member>
+        <member name="M:VM.Core.DynamicVmIO.GetDynamicIOInfo(VM.Core.VmIO)">
+            <summary>
+            IO转换为IMVS_MODULE_IO_INFO
+            </summary>
+            <param name="vmIO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.DynamicVmIO.OnRemoveCollection">
+            <summary>
+            删除时
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmSolution.mbImportProcedureEndFlag">
+            <summary>
+            流程模块加载完成标记
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmSolution.mbImportGroupEndFlag">
+            <summary>
+            组模块加载完成标记
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmSolution.importGroupModuleSet">
+            <summary>
+            正在加载的Group的上级
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmSolution.mbUpgradeProcedureEndFlag">
+            <summary>
+            流程升级标志
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmSolution.mbUpgradeGroupEndFlag">
+            <summary>
+            Group升级标志
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmSolution.AllModules">
+            <summary>
+            所有生成的模块，包含流程和组模块
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmSolution.VirtualPro">
+            <summary>
+            虚拟流程，用于存放独立group
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmSolution.IsGlobalRuning">
+            <summary>
+            全局运行标志位
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmSolution.InternalContinousRunEnable">
+            <summary>
+            辅助标志，由单独运行流程导致
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmSolution.IsSaving">
+            <summary>
+            是否正在保存方案
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmSolution.IsLoading">
+            <summary>
+            是否正在加载方案
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmSolution.ProceZoomIndex">
+            <summary>
+            全流程百分比
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmSolution.IsTakeOver">
+            <summary>
+            是否接管
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmSolution.IsIgnoreGlobalModule">
+            <summary>
+            标识导入流程是否忽略全局模块
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmSolution.SolutionPassword">
+            <summary>
+            方案密码(内部使用)
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmSolution.ID">
+            <summary>
+            流程ID
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmSolution.IsRunning">
+            <summary>
+            运行标志位（所有流程标志位的或）
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmSolution.ContinuousRunEnable">
+            <summary>
+            连续运行 | 停止执行标志
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmSolution.GloalScriptContinusRunEnable">
+            <summary>
+            全局脚本连续运行|停止运行标志位
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmSolution.SolutionPath">
+            <summary>
+            方案路径
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmSolution.IsHasPassword">
+            <summary>
+            当前方案路径是否包含密码
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.GetObjectByGUIDPath(System.String)">
+            <summary>
+            通过GUID路径获取对象,IO还是名字
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:VM.Core.VmSolution.Item(System.String)">
+            <summary>
+            路径获取对象
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmSolution.StrModuleName">
+            <summary>
+            方案模块名称
+            </summary>
+        </member>
+        <member name="E:VM.Core.VmSolution.OnSolutionLoadProgressCallBack">
+            <summary>
+            模块方案加载进度
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.VMControls#Interface#IVmSolution#IsModuleTypeLoaded(System.String)">
+            <summary>
+            该类型模块是否加载
+            </summary>
+            <param name="moduleType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmSolution.VMControls#Interface#IVmSolution#GetAllModulePathList">
+            <summary>
+            返回路径列表(内部使用)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmSolution.VMControls#Interface#IVmSolution#CloseAllModulesCallBack">
+            <summary>
+            关闭全部模块回调(已弃用)
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.VMControls#Interface#IVmSolution#ResetAllModulesCallBackStatus">
+            <summary>
+            重置所有模块回调状态
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.VMControls#Interface#IVmSolution#CreatNewInstance">
+            <summary>
+            新建方案(内部使用)
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.VMControls#Interface#IVmSolution#DisplayProgress(System.String)">
+            <summary>
+            显示进度条(内部使用)
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.VMControls#Interface#IVmSolution#CloseProgress">
+            <summary>
+            关闭进度条(内部使用)
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.ModifyImportGroup(VM.Core.IMVSGroup)">
+            <summary>
+            导入Group时特殊处理
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.ExportAs(System.String,System.String,System.Boolean)">
+            <summary>
+            方案另存为
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.ChangToProcess(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_PROCESS_INFO,System.Object)">
+            <summary>
+            加载流程
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.CheckBeforeRun(System.String@)">
+            <summary>
+            运行前检查
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.LoadModules">
+            <summary>
+            加载流程(内部使用)
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.LoadProcedures(VM.Core.VmModuleCollection{VM.Core.VmModule})">
+            <summary>
+            加载流程
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.LoadGlobleModules(VM.Core.VmModuleCollection{VM.Core.VmModule},System.Boolean)">
+            <summary>
+            加载全局模块(内部使用)
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.GetDongleInfo">
+            <summary>
+            CH: 获取加密狗信息 目前仅用于校验加密狗 | EN: Get information of dongle. Currently only used to check dongle.
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.Load(System.String,System.String,System.Boolean)">
+            <summary>
+            CH: 导入方案,功能与Import一致 | EN: Load solution
+            </summary>
+            <param name="path">方案路径</param>
+            <param name="password">方案密码</param>
+            <param name="isSilentExecute">是否静默执行</param>
+        </member>
+        <member name="M:VM.Core.VmSolution.Save">
+            <summary>
+            CH: 保存方案 | EN: Save Solution
+            </summary>
+            <returns>CH: 文件路径 | EN:File Path</returns>
+        </member>
+        <member name="M:VM.Core.VmSolution.SaveAs(System.String,System.String)">
+            <summary>
+             CH: 另存方案 | EN: Save as Solution
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmSolution.Run">
+            <summary>
+            CH:异步执行一次 | EN:Async Run once
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.EnableModulesCallback">
+            <summary>
+            CH:开启全部模块结果回调 | EN: Enable all module result callback
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.DisableModulesCallback">
+            <summary>
+            CH:关闭全部模块结果回调 | EN: Unenbale all module result callback
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.LoadProcedure(System.String,System.String,System.Object)">
+            <summary>
+             CH: 加载*.prc文件 | EN:Load *.prc File (内部使用)
+            </summary>
+            <param name="strPath">CH: 文件路径 | EN:File Path</param>
+            <param name="strPassword">CH: 密码 | EN:Password</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmSolution.LoadIndependentGroup(System.String,System.String)">
+            <summary>
+             CH: 加载*.gro文件(独立Group) | EN:Load *.gro File(Independent Group)
+            </summary>
+            <param name="strPath">CH: 文件路径 | EN:File Path</param>
+            <param name="strPassword">CH: 密码 | EN:Password</param>
+            <returns></returns>  
+        </member>
+        <member name="M:VM.Core.VmSolution.LoadGroup(VMControls.Interface.IVmModuleSet,System.String,System.String,System.Boolean)">
+            <summary>
+             CH: 加载*.gro文件 | EN:Load *.gro File
+            </summary>
+            <param name="moduleSet">CH: 父模块 | EN:Parent Module</param>
+            <param name="strPath">CH: 文件路径 | EN:File Path</param>
+            <param name="strPassword">CH: 密码 | EN:Password</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmSolution.ExportFile(System.String,System.String,System.Boolean,System.String)">
+            <summary>
+             CH: 导出*.sol文件 | EN:Save *.sol File
+            </summary>
+            <param name="strPath">CH: 文件路径 | EN:File Path</param>
+            <param name="strPassword">CH: 密码 | EN:Password</param>
+            <param name="initDir">CH: 文件夹路径 | EN:Folder Path</param>
+            <returns>CH: 文件路径 | EN:File Path</returns>
+        </member>
+        <member name="M:VM.Core.VmSolution.GetVmException(System.Exception)">
+            <summary>
+            获取VM内部异常，用于规范抛出去的异常
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmSolution.StartNewInstance">
+            <summary>
+            启动新建方案(内部使用)
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.GetSolutionTakeState">
+            <summary>
+            (内部使用)
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.CreatSolInstance">
+            <summary>
+            创建空方案(内部使用)
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.CreatSolInstanceForIndependentGroup">
+            <summary>
+            创建空方案For独立Group(内部使用)
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.Dispose">
+            <summary>
+            释放所有资源，仅在退出程序前执行一次，避免在析构函数中调用
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.Dispose(System.Boolean)">
+            <summary>
+            Dispose(内部使用)
+            </summary>
+            <param name="isTakeOver"></param>
+        </member>
+        <member name="M:VM.Core.VmSolution.SetAutoLoadSolution(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_AUTO_LOAD_SOLUTION_INFO)">
+            <summary>
+            CH:设置默认打开方案 | EN: Set Default Open Solution
+            <param name="solInfo">CH: 方案信息 | EN:Solution Info</param>
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.HasPassword(System.String)">
+            <summary>
+            CH:方案是否含有密码 | EN: Soution has password
+            </summary>
+            <param name="path">CH:方案路径 | EN:solution path</param>
+            <returns> 有密码，返回true;无密码,返回false</returns>
+        </member>
+        <member name="M:VM.Core.VmSolution.GetSolutionVersion(System.String,System.String)">
+            <summary>
+            CH:获取当前方案版本 |EN:Get solution version
+            </summary>
+            <returns> 方案版本号</returns>
+        </member>
+        <member name="M:VM.Core.VmSolution.CloseSolution">
+            <summary>
+            CH:关闭方案 |EN:Close solution
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.DeleteOneProcedure(System.String)">
+            <summary>
+            CH:删除流程 |EN:Delete procedure
+            </summary>
+            <param name="strProcedureName">CH:流程名 |EN:procedure name</param>
+        </member>
+        <member name="P:VM.Core.VmSolution.BaseHandle">
+            <summary>
+            获取句柄（内部使用）
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.IsSolModifyInfo">
+            <summary>
+            CH:判断方案是否修改|EN:Solution is modify
+            </summary>
+            <returns> 方案修改，返回true;方案未修改,返回false</returns>
+        </member>
+        <member name="M:VM.Core.VmSolution.DisableProcedure(System.String)">
+            <summary>
+            CH:禁用一个流程 |EN:Disable procedure
+            </summary>
+            <param name="strProcessName">CH:流程名称|EN:Procedure name</param>
+        </member>
+        <member name="M:VM.Core.VmSolution.EnableProcedure(System.String)">
+            <summary>
+            CH:启用一个流程 |EN:Enable procedure
+            </summary>
+            <param name="strProcessName">CH:流程名称|EN:Procedure name</param>
+        </member>
+        <member name="M:VM.Core.VmSolution.IsProcedureDisable(System.String)">
+            <summary>
+            CH:流程是否禁用|EN:Procedure is disabled
+            </summary>
+            <param name="strProcessName">流程名称</param>
+            <returns> 流程禁用，返回true;流程启用,返回false </returns>
+        </member>
+        <member name="M:VM.Core.VmSolution.GetAllProcedureList">
+            <summary>
+            CH:获取当前方案中所有流程列表|EN:Get procedure list from solution
+            </summary>
+            <returns> 流程列表</returns>
+        </member>
+        <member name="M:VM.Core.VmSolution.GetAllProcedureObjects(System.Collections.Generic.List{VM.Core.VmProcedure}@)">
+            <summary>
+            CH:获取当前方案中所有流程对象|EN:Get procedure objects from solution
+            </summary>
+            <returns> 流程对象</returns>
+        </member>
+        <member name="M:VM.Core.VmSolution.GetFullModuleList(System.String)">
+            <summary>
+            获取模块全路径信息列表
+            </summary>
+            <returns></returns>
+        </member>
+        <!-- 对于成员“M:VM.Core.VmSolution.GetAllModuleList”忽略有格式错误的 XML 注释 -->
+        <member name="M:VM.Core.VmSolution.SetModuleResultBuffer(System.Boolean,System.UInt32)">
+            <summary>
+            CH:设置模块结果缓存配置|EN:Set module result chcahe num
+            </summary>
+            <param name="bBufferEnable">CH:缓存使能|EN:Cache enable</param>
+            <param name="nBufferNum">CH:缓存结果数量|EN:Cache num</param>
+        </member>
+        <member name="M:VM.Core.VmSolution.GetModuleResultBuffer(System.Boolean@,System.UInt32@)">
+            <summary>
+            CH:获取模块结果缓存配置|EN:Get module result chcahe num
+            </summary>
+            <param name="bBufferEnable">CH:缓存使能|EN:Cache enable</param>
+            <param name="nBufferNum">CH:缓存结果数量|EN:Cache num</param>
+        </member>
+        <member name="M:VM.Core.VmSolution.SetRunInterval(System.UInt32)">
+            <summary>
+            CH:设置连续运行时间间隔|EN:Set continue run interval
+            </summary>
+            <param name="nMillSecond">CH:时间间隔|EN:Time interval</param>
+        </member>
+        <!-- 对于成员“M:VM.Core.VmSolution.GetModuleCount”忽略有格式错误的 XML 注释 -->
+        <member name="F:VM.Core.VmSolution.mbSolRunFlag">
+            <summary>
+            方案执行事件标志
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.SyncRun">
+            <summary>
+            CH:同步执行一次 | EN:Synchronize run once
+            </summary>
+        </member>
+        <member name="E:VM.Core.VmSolution.OnWorkStatusEvent">
+            <summary>
+            流程工作状态
+            </summary>
+        </member>
+        <member name="E:VM.Core.VmSolution.OnDongleEvent">
+            <summary>
+            加密狗状态
+            </summary>
+        </member>
+        <member name="E:VM.Core.VmSolution.OnSolutionLoadBeginEvent">
+            <summary>
+            开始加载方案
+            </summary>
+        </member>
+        <member name="E:VM.Core.VmSolution.OnSolutionLoadEndEvent">
+            <summary>
+            方案加载结束
+            </summary>
+        </member>
+        <member name="E:VM.Core.VmSolution.OnSolutionLoadProgressEvent">
+            <summary>
+            模块方案加载进度
+            </summary>
+        </member>
+        <member name="E:VM.Core.VmSolution.OnServerStatusEvent">
+            <summary>
+            服务状态回调 (目前服务异常时触发，状态对应错误码，VM单进程版本不触发此事件)
+            </summary>
+        </member>
+        <member name="E:VM.Core.VmSolution.OnProxyCrashEvent">
+            <summary>
+            代理崩溃 (VM单进程版本不触发此事件)
+            </summary>
+        </member>
+        <member name="E:VM.Core.VmSolution.OnProcedureUnRegisterEvent">
+            <summary>
+            流程解注册状态信息
+            </summary>
+        </member>
+        <member name="E:VM.Core.VmSolution.OnModelLoadWarnEvent">
+            <summary>
+            方案加载时模块错误警告信息
+            </summary>
+        </member>
+        <member name="E:VM.Core.VmSolution.OnProcessStatusStartEvent">
+            <summary>
+            连续执行开始状态信息
+            </summary>
+        </member>
+        <member name="E:VM.Core.VmSolution.OnProcessStatusStopEvent">
+            <summary>
+            连续执行结束状态信息
+            </summary>
+        </member>
+        <member name="E:VM.Core.VmSolution.OnModuleResultCallbackEvent">
+            <summary>
+            模块结果信息回调
+            </summary>
+        </member>
+        <member name="E:VM.Core.VmSolution.OnCommunicationRecvCallBackEvent">
+            <summary>
+            接收数据回调 (设备ID(1字节) AddressID(1字节) 数据)
+            </summary>
+        </member>
+        <member name="E:VM.Core.VmSolution.OnCommunicationStatusCallBackEvent">
+            <summary>
+            通信状态回调 (状态 设备ID(1字节))
+            </summary>
+        </member>
+        <member name="E:VM.Core.VmSolution.OnCameraCollectStartCallBackEvent">
+            <summary>
+            相机取图开始信息回调 需要在MVS中开启相机Event中的Frame Start
+            </summary>
+        </member>
+        <member name="E:VM.Core.VmSolution.OnCameraCollectCallBackEvent">
+            <summary>
+            相机取图结束信息回调
+            </summary>
+        </member>
+        <member name="E:VM.Core.VmSolution.OnCameraConnectStatusCallBackEvent">
+            <summary>
+            相机连接状态回调（相机断线后，打开全局相机模块配置界面需要较长时间，请耐心等待！）
+            </summary>
+        </member>
+        <member name="E:VM.Core.VmSolution.OnGlobalCameraModuleAddedEvent">
+            <summary>
+            相机模块添加事件
+            </summary>
+        </member>
+        <member name="E:VM.Core.VmSolution.OnGlobalCameraModuleDeletedEvent">
+            <summary>
+            相机模块删除事件
+            </summary>
+        </member>
+        <member name="E:VM.Core.VmSolution.OnCameraConnectStatusCallBackEventF">
+            <summary>
+            相机连接状态回调
+            </summary>
+        </member>
+        <member name="E:VM.Core.VmSolution.OnCommunicationStatusCallBackEventF">
+            <summary>
+            通信状态回调 (状态 设备ID(1字节))
+            </summary>
+        </member>
+        <member name="E:VM.Core.VmSolution.OnCommuConnectCallBackEvent">
+            <summary>
+            通信连接状态回调
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.Import(System.String,System.String)">
+            <summary>
+            导入方案
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.Export(System.String,System.String,System.Boolean,System.Boolean,System.String)">
+            <summary>
+            保存方案
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.ImportProFile(System.String,System.String,System.Boolean,System.UInt32)">
+            <summary>
+            导入流程
+            </summary>   
+        </member>
+        <member name="M:VM.Core.VmSolution.ImportProFile(System.String@,System.String,System.Boolean,System.UInt32,System.Boolean,System.Boolean,System.Object)">
+            <summary>
+            CH: 应调用本类ImportProcedure方法 | EN:Should Use ImportProcedure Method Replace in this Class 
+            </summary>
+            <param name="strPath"></param>
+            <param name="isForceIgnoreGlobal">默认忽略全局变量</param>
+            <param name="nIdAllocateWay"></param>
+            <param name="isFromCalib">是否来源于copy</param>
+            <param name="isFromCalibration">是否来源于一键标定</param>
+            <param name="calibData">一键标定引导数据</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmSolution.ImportFile(VMControls.Interface.IVmModuleSet,System.String,System.String,System.UInt32)">
+            <summary>
+            Group导入
+            </summary>
+            <param name="moduleSet"></param>
+            <param name="strPath"></param>
+            <param name="strPassword"></param>
+            <param name="nIdAllocateWay"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmSolution.StopReportModuleResults">
+            <summary>
+            停止上报所有模块结果
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.ReportAllModuleResults">
+            <summary>
+            上报所有模块结果
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.ReportModuleResults(System.Collections.Generic.List{System.UInt32})">
+            <summary>
+            上报指定模块结果
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.CreateProcedure(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_PROCESS_INFO,System.Object)">
+            <summary>
+            创建流程（内部使用）
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.GetVmException1(System.Exception)">
+            <summary>
+            获取VM内部异常，用于规范抛出去的异常
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmSolution.ImportIndependentGroup(System.String,System.String)">
+            <summary>
+            载入独立Group
+            </summary>
+            <param name="strPath"></param>
+            <param name="strPassword"></param>
+            <returns></returns>
+        </member>
+        <member name="P:VM.Core.VmSolution.IsOnExecuteAfterLoad">
+            <summary>
+            是否正在静默执行
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.SilentExecute(System.Int32)">
+            <summary>
+            静默执行，在OnExecuteAfterLoad中需要调用，否则出错
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmSolution._cameraNum">
+            <summary>
+            相机数量
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmSolution._RemainTime">
+            <summary>
+            加密狗剩余时间(小时数)
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmSolution.MemeryUsed">
+            <summary>
+            内存使用率
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmSolution.CPUUsed">
+            <summary>
+            CPU使用率
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmSolution.NetUsed">
+            <summary>
+            网络使用率
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MSolutionManager_OnSolutionSaveBeginCallBack(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_SOLUTION_SAVE_BEGEIN_INFO)">
+             <summary>
+            保存方案开始
+             </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MSolutionManager_OnSolutionSaveEndCallBack(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_SOLUTION_SAVE_END_INFO)">
+            <summary>
+            保存方案结束
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MSolutionManager_OnSolutionSaveProgressCallBack(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_SOLUTION_SAVE_PROCESS_INFO)">
+            <summary>
+            保存方案进度
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MSolutionManager_OnSolutionLoadProgressCallBack(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_SOLUTION_LOAD_PROCESS_INFO)">
+            <summary>
+            加载方案进度
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MSolutionManager_OnSolutionLoadBeginCallBack(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_SOLUTION_LOAD_BEGEIN_INFO)">
+            <summary>
+            方案加载开始
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MSolutionManager_OnSolutionLoadEndCallBack(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_SOLUTION_LOAD_END_INFO)">
+            <summary>
+            方案加载结束
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MSolutionManager_OnModelLoadWarn(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_LOAD_MODULE_ERROR_INFO_LIST)">
+            <summary>
+            方案加载警告信息
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MSolutionManager_OnUIGlobalProcessObjectIDCallBack(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_GLOBAL_PROCESS_UI_OBJECT_INFO)">
+            <summary>
+            加载方案通知界面获取
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MSolutionManager_OnGlobalScriptRecvDataCallBack(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_GLOBALSCRIPT_REPORTDATA_INFO)">
+            <summary>
+            全局脚本回调
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MSolutionManager_OnVarValueChangeCallBack(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_VAR_REPORT_VALUE_INFO)">
+            <summary>
+            全局/局部变量上报事件
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MSolutionManager_OnReportDataToVM(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_ALGORITHM_INIT_RESULT_INFO)">
+            <summary>
+            上报事件
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MSolutionManager_OnCloseSolutionCallBack(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_CLOSE_SOLUTION_STATUS_INFO)">
+            <summary>
+            关闭方案
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MSolutionManager_OnProcedureUnRegister(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_PROCEDURE_UNREGISTER_INFO)">
+            <summary>
+            流程解注册
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MSolutionManager_DataQueueReportData(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_REPORT_DATAQUEUE_INFO)">
+            <summary>
+            数据队列上报
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MSolutionManager_OnCommuRecvData(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_COMMU_REPORT_DATA_INFO)">
+            <summary>
+            通信数据接收
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MSolutionManager_OnCommuStatus(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_COMMU_REPORT_DATA_INFO)">
+            <summary>
+            通信设备状态
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MSolutionManager_OnCameraCollect(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_CAMERA_COLLECT_INFO)">
+            <summary>
+            相机取图结束信息
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MSolutionManager_OnCameraCollectStart(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_CAMERA_COLLECT_INFO)">
+            <summary>
+            相机取图开始信息
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MSolutionManager_OnCameraConnectStatus(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_CAMERA_CONNECT_STATUS_INFO)">
+            <summary>
+            相机连接状态
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MSolutionManager_OnCommuConnect(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_COMMUNICATION_CONNECT_INFO)">
+            <summary>
+            通信连接状态
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MProcessManager_OnProcessExecuteStatusCallBack(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_PROC_CONTIEXECUTE_INFO_LIST)">
+            <summary>
+            接管方案时，运行状态回调
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MProcessManager_OnModuleStopRunProcessStatusCallBack(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_STATUS_PROCESS_STOP_INFO)">
+            <summary>
+            流程停止回调
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MProcessManager_OnProcessStartContinuousStatusCallBack(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_STATUS_PROCESS_START_CONTINUOUSLY_INFO)">
+            <summary>
+            单个流程连续运行开始回调
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MSolutionManager_OnModuleContinousRunStatusCallBack(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_STATUS_START_RUN_INFO)">
+            <summary>
+            所有流程连续运行回调 调用所有流程连续运行会进入该回调
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MModuleManager_OnReportModuleStatusCallBack(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_REPORT_MODULE_STATUS_INFO_LIST)">
+            <summary>
+            模块状态 OK或者NG
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MProcessManager_OnWorkStatusCallBack(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_MODULE_WORK_STAUS)">
+            <summary>
+            流程工作状态空闲忙碌回调
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MSolutionManager_OnSolutionRunEndCallBack">
+            <summary>
+            方案执行结束
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.SetProcedureDelayTime(System.UInt32)">
+            <summary>
+            设置流程回调延时
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MModuleManager_OnModuleResultCallBack(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_MODULE_RESULT_INFO_LIST_EX_Data)">
+            <summary>
+            模块结果回调
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.SetValue(VM.Core.VmModule,VM.PlatformSDKCS.ImvsSdkDefine.IMVS_MODULE_RESULT_INFO_LIST_EX_Data@,System.Nullable{System.Boolean},System.Boolean)">
+            <summary>
+            设置模块结果回调的值到VMIO
+            </summary>
+            <param name="module">回调模块</param>
+            <param name="result">回调结果结构体</param>
+            <param name="isLoopEnd">是否循环结束，null-非循环结果，true-循环结束，false-循环未结束</param>
+            <param name="isCallBack">是否回调结果</param>
+        </member>
+        <member name="P:VM.Core.VmSolution.IsCallBackCacheEnable">
+            <summary>
+            是否开启回调数据缓存
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.ExpandCallBackQueueLength(System.Int32)">
+            <summary>
+            扩大回调缓存队列长度（必须在程序未加载任何方案时调用）
+            </summary>
+            <param name="newLength"></param>
+        </member>
+        <member name="M:VM.Core.VmSolution.ShutDownCallBackQueue">
+            <summary>
+            关闭回调缓存队列（必须在程序未加载任何方案时调用）
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MProcessManager_OnProcessImportBeginCallBack(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_IMPORT_PROCESS_BEGIN_INFO)">
+            <summary>
+            流程导入开始
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MProcessManager_OnProcessImportProgressCallBack(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_IMPORT_PROCESS_PROGRESS_INFO)">
+            <summary>
+            流程导入进度
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MProcessManager_OnProcessImportUiDataCallBack(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_IMPORT_PROCESS_GET_UIDATA_INFO)">
+            <summary>
+            流程导入UI数据
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmSolution.importCalibData">
+            <summary>
+            一键标定相关数据，导入一键标定流程时使用
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MProcessManager_OnProcessImportEndCallBack(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_IMPORT_PROCESS_END_INFO)">
+            <summary>
+            流程导入结束
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MProcessManager_OnProcessExportBeginCallBack(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_EXPORT_PROCESS_BEGIN_INFO)">
+            <summary>
+            流程导出开始
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MProcessManager_OnProcessExportProgressCallBack(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_EXPORT_PROCESS_PROGRESS_INFO)">
+            <summary>
+            流程导出进度
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MProcessManager_OnProcessExportEndCallBack(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_EXPORT_PROCESS_END_INFO)">
+            <summary>
+            流程导出结束
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MModuleManager_OnImportGroupBeginCallBack(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_IMPORT_GROUP_BEGIN_INFO)">
+            <summary>
+            Group导入开始
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MModuleManager_OnImportGroupProcessCallBack(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_IMPORT_GROUP_PROGRESS_INFO)">
+            <summary>
+            Group导入进度
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MModuleManager_OnImportGroupUiDataCallBack(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_IMPORT_GROUP_GET_UIDATA_INFO)">
+            <summary>
+            Group导入UI数据
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MModuleManager_OnImportGroupEndCallBack(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_IMPORT_GROUP_END_INFO)">
+            <summary>
+            Group导入结束
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MModuleManager_OnExportGroupBeginCallBack(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_EXPORT_GROUP_BEGIN_INFO)">
+            <summary>
+            Gorup导出开始
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MModuleManager_OnExportGroupProcessCallBack(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_EXPORT_GROUP_PROGRESS_INFO)">
+            <summary>
+            Group导出进度
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmSolution.MModuleManager_OnExportGroupEndCallBack(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_EXPORT_GROUP_END_INFO)">
+            <summary>
+            Group导出进度
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmSolution.VMControls#Interface#IVmSolution#IsClearLastExecuteResult">
+            <summary>
+            流程执行结束后是否清空上一次执行结果
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmSolution.VMControls#Interface#IVmSolution#IsOpenSetValueToDisplay">
+            <summary>
+            VmIO值改变时是否通知界面
+            </summary>
+        </member>
+        <member name="E:VM.Core.VmSolution.OnGlobalCameraModuleRenamedEvent">
+            <summary>
+            相机模块重命名事件
+            </summary>
+        </member>
+        <member name="E:VM.Core.VmSolution.OnModuleAddedEvent">
+            <summary>
+            新增模块事件
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmSolution.VMControls#Interface#IVmSolution#IsSubscribeInWindow">
+            <summary>
+            是否默认开启悬浮订阅窗口
+            </summary>
+        </member>
+        <member name="T:VM.Core.ImageSource3DModuleType">
+            <summary>
+            3D图像源模块数据类型
+            </summary>
+        </member>
+        <member name="F:VM.Core.ImageSource3DModuleType.ProfileRangeImageData">
+            <summary>
+            轮廓仪深度图
+            </summary>
+        </member>
+        <member name="F:VM.Core.ImageSource3DModuleType.RGBDRangeImageData">
+            <summary>
+            RGBD深度图
+            </summary>
+        </member>
+        <member name="F:VM.Core.ImageSource3DModuleType.StereoImageData">
+            <summary>
+            通用
+            </summary>
+        </member>
+        <member name="F:VM.Core.ImageSource3DModuleType.ProfileIntensityImageData">
+            <summary>
+            轮廓仪亮度图
+            </summary>
+        </member>
+        <member name="F:VM.Core.ImageSource3DModuleType.RGBDRgbImageData">
+            <summary>
+            RGBDrgb图
+            </summary>
+        </member>
+        <member name="F:VM.Core.ImageSource3DModuleType.RangeAttribute">
+            <summary>
+            深度图属性
+            </summary>
+        </member>
+        <member name="F:VM.Core.ImageSource3DModuleType.RGBDInnerParam">
+            <summary>
+            RGBD属性
+            </summary>
+        </member>
+        <member name="T:VM.Core.IVmRangeImageData">
+            <summary>
+            深度图像接口
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmRangeImageData.RangeData">
+            <summary>
+            深度图像数据
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmRangeImageData.RangeDataLenth">
+            <summary>
+            深度图像数据长度
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmRangeImageData.IntensityImageData">
+            <summary>
+            亮度图像数据
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmRangeImageData.RangeWidth">
+            <summary>
+            深度图像宽度
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmRangeImageData.RangeHeight">
+            <summary>
+            深度图像高度
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmRangeImageData.RangeImageFormat">
+            <summary>
+            深度图像像素格式
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmRangeImageData.Xoffset">
+            <summary>
+            X偏移量
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmRangeImageData.Yoffset">
+            <summary>
+            Y偏移量
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmRangeImageData.Zoffset">
+            <summary>
+            Z偏移量
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmRangeImageData.Xscale">
+            <summary>
+            X比例
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmRangeImageData.Yscale">
+            <summary>
+            Y比例
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmRangeImageData.Zscale">
+            <summary>
+            Z比例
+            </summary>
+        </member>
+        <member name="T:VM.Core.IVm3DImageData">
+            <summary>
+            3D图像接口
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVm3DImageData.ImageMode">
+            <summary>
+            图像类型
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVm3DImageData.RangeImageData">
+            <summary>
+            深度图数据
+            </summary>
+        </member>
+        <member name="T:VM.Core.VmDataType">
+            <summary>
+            Vm数据类型集合
+            </summary>
+        </member>
+        <member name="T:VM.Core.VmDataType.VmRangeImageData">
+            <summary>
+            深度图像
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmRangeImageData.rangeData">
+            <summary>
+            深度图像数据
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmRangeImageData.rangeDataLenth">
+            <summary>
+            深度图像数据长度
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmRangeImageData.intensityImageData">
+            <summary>
+            亮度图像数据
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmRangeImageData.rangeWidth">
+            <summary>
+            深度图像宽度
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmRangeImageData.rangeHeight">
+            <summary>
+            深度图像高度
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmRangeImageData.rangeImageFormat">
+            <summary>
+            深度图像像素格式
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmRangeImageData.xoffset">
+            <summary>
+            X偏移量
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmRangeImageData.yoffset">
+            <summary>
+            Y偏移量
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmRangeImageData.zoffset">
+            <summary>
+            Z偏移量
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmRangeImageData.xscale">
+            <summary>
+            X比例
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmRangeImageData.yscale">
+            <summary>
+            Y比例
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmRangeImageData.zscale">
+            <summary>
+            Z比例
+            </summary>
+        </member>
+        <member name="T:VM.Core.VmDataType.Vm3DImageData">
+            <summary>
+            3D图像
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.Vm3DImageData.imageMode">
+            <summary>
+            图像类型（1:原始图 4:轮廓图 7:深度图）
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.Vm3DImageData.rangeImageData">
+            <summary>
+            深度图数据
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmDataType.RgbdImageData.RangeData">
+            <summary>
+            深度图像数据
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmDataType.RgbdImageData.RangeDataLenth">
+            <summary>
+            深度图像数据长度
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmDataType.RgbdImageData.RgbImageData">
+            <summary>
+            Rgb图像数据
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmDataType.RgbdImageData.RangeWidth">
+            <summary>
+            深度图像宽度
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmDataType.RgbdImageData.RangeHeight">
+            <summary>
+            深度图像高度
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmDataType.RgbdImageData.RangeImageFormat">
+            <summary>
+            深度图像像素格式
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmDataType.RgbdImageData.Xoffset">
+            <summary>
+            X偏移量
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmDataType.RgbdImageData.Yoffset">
+            <summary>
+            Y偏移量
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmDataType.RgbdImageData.Zoffset">
+            <summary>
+            Z偏移量
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmDataType.RgbdImageData.Xscale">
+            <summary>
+            X比例
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmDataType.RgbdImageData.Yscale">
+            <summary>
+            Y比例
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmDataType.RgbdImageData.Zscale">
+            <summary>
+            Z比例
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmDataType.RgbdImageData.CameraIntrinsicParam">
+            <summary>
+            RGBD图像属性
+            </summary>
+        </member>
+        <member name="T:VM.Core.VmDataType.CameraIntrinsicParam">
+            <summary>
+            RGBD图像属性
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmDataType.CameraIntrinsicParam.Depth2rgbMatrix">
+            <summary>
+            深度图像到rgb的外参4*4
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmDataType.CameraIntrinsicParam.RgbCamMatrix">
+            <summary>
+            rbgd相机内参矩阵3*3
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmDataType.CameraIntrinsicParam.RgbDisCoeffs">
+            <summary>
+            rbgd相机畸变系数
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmDataType.CameraIntrinsicParam.DepthDisCoeffs">
+            <summary>
+            depth相机畸变系数
+            </summary>
+        </member>
+        <member name="T:VM.Core.VmDataType.VmImageData">
+            <summary>
+            图像数据
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmImageData.width">
+            <summary>
+            图像宽度
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmImageData.height">
+            <summary>
+            图像高度
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmImageData.data">
+            <summary>
+            图像数据
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmImageData.dataLenth">
+            <summary>
+            图像数据长度
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmImageData.imageFormat">
+            <summary>
+            图像像素格式
+            </summary>
+        </member>
+        <member name="T:VM.Core.VmDataType.VmClassInfo">
+            <summary>
+            类别信息
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmClassInfo.className">
+            <summary>
+            分类名称
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmClassInfo.grayValue">
+            <summary>
+            灰度值
+            </summary>
+        </member>
+        <member name="T:VM.Core.VmDataType.VmPixelImageData">
+            <summary>
+            像素分类信息
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmPixelImageData.imageData">
+            <summary>
+            像素图数据
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmPixelImageData.classInfo">
+            <summary>
+            分类数据
+            </summary>
+        </member>
+        <member name="T:VM.Core.VmDataType.VmPoint">
+            <summary>
+            点信息
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmPoint.x">
+            <summary>
+            点x值
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmPoint.y">
+            <summary>
+            点y值
+            </summary>
+        </member>
+        <member name="T:VM.Core.VmDataType.VmLine">
+            <summary>
+            线信息
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmLine.startPoint">
+            <summary>
+            起点
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmLine.endPoint">
+            <summary>
+            终点
+            </summary>
+        </member>
+        <member name="T:VM.Core.VmDataType.VmROIBox">
+            <summary>
+            ROI信息
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmROIBox.centerPoint">
+            <summary>
+            坐标信息
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmROIBox.width">
+            <summary>
+            ROI宽度
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmROIBox.height">
+            <summary>
+            ROI高度
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmROIBox.angle">
+            <summary>
+            ROI角度
+            </summary>
+        </member>
+        <member name="T:VM.Core.VmDataType.VmCircle">
+            <summary>
+            圆信息
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmCircle.centerPoint">
+            <summary>
+            圆心坐标信息
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmCircle.radius">
+            <summary>
+            半径
+            </summary>
+        </member>
+        <member name="T:VM.Core.VmDataType.VmEllipse">
+            <summary>
+            椭圆信息
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmEllipse.centerPoint">
+            <summary>
+            圆心坐标信息
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmEllipse.majorradius">
+            <summary>
+            长半轴
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmEllipse.minorradius">
+            <summary>
+            短半轴
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmEllipse.angle">
+            <summary>
+            角度
+            </summary>
+        </member>
+        <member name="T:VM.Core.VmDataType.VmFixturePointInfo">
+            <summary>
+            基准点信息
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmFixturePointInfo.point">
+            <summary>
+            点
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmFixturePointInfo.angle">
+            <summary>
+            角度
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmFixturePointInfo.scaleX">
+            <summary>
+            尺度X
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmFixturePointInfo.scaleY">
+            <summary>
+            尺度Y
+            </summary>
+        </member>
+        <member name="T:VM.Core.VmDataType.VmFixture">
+            <summary>
+            位置修正信息
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmFixture.fixtureInfo">
+            <summary>
+            基准点信息
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmFixture.unFixtureInfo">
+            <summary>
+            运行点信息
+            </summary>
+        </member>
+        <member name="T:VM.Core.VmDataType.VmROIAnnulus">
+            <summary>
+            圆环信息
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmROIAnnulus.centerPoint">
+            <summary>
+            中心坐标
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmROIAnnulus.innerRadius">
+            <summary>
+            内圆半径
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmROIAnnulus.outerRadius">
+            <summary>
+            外圆半径
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmROIAnnulus.startAngle">
+            <summary>
+            起始角度
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmROIAnnulus.angleExtend">
+            <summary>
+            角度范围
+            </summary>
+        </member>
+        <member name="T:VM.Core.VmDataType.VmRect">
+            <summary>
+            矩形数据
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmRect.centerPoint">
+            <summary>
+            坐标信息
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmRect.width">
+            <summary>
+            宽度
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmRect.height">
+            <summary>
+            高度
+            </summary>
+        </member>
+        <member name="T:VM.Core.VmDataType.VmROIPolygon">
+            <summary>
+            多边形ROI信息
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmROIPolygon.num">
+            <summary>
+            数量
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmROIPolygon.points">
+            <summary>
+            点集
+            </summary>
+        </member>
+        <member name="T:VM.Core.VmDataType.VmPosture">
+            <summary>
+            姿态位置信息
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmPosture.point">
+            <summary>
+            平面坐标
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmPosture.r">
+            <summary>
+            R坐标
+            </summary>
+        </member>
+        <member name="T:VM.Core.VmDataType.VmLevelPoint">
+            <summary>
+            等级点
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmLevelPoint.point">
+            <summary>
+            位置
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmLevelPoint.vmLevelEnum">
+            <summary>
+            等级
+            </summary>
+        </member>
+        <member name="T:VM.Core.VmDataType.VmContourPoints">
+            <summary>
+            轮廓点集接口
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmContourPoints.levelPoint">
+            <summary>
+            等级点集
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmDataType.VmContourPoints.num">
+            <summary>
+            数量
+            </summary>
+        </member>
+        <member name="T:VM.Core.PcdExtinfoF32">
+            <summary>
+            3D点云拓展信息
+            </summary>
+        </member>
+        <member name="M:VM.Core.PcdExtinfoF32.#ctor">
+            <summary>
+            PcdExtinfoF32 构造函数
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.CoorType">
+            <summary>
+            坐标系类型(MVB3D_PCD_COOR_TYPE)
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.flag_size">
+            <summary>
+            尺寸标记
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.length">
+            <summary>
+            长度
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.width">
+            <summary>
+            宽度
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.flag_height">
+            <summary>
+            高度标记
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.height">
+            <summary>
+            高度
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.flag_area">
+            <summary>
+            面积标记
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.area">
+            <summary>
+            点云面积
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.flag_density">
+            <summary>
+            密度标记
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.density">
+            <summary>
+            点云密度
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.flag_volume">
+            <summary>
+            体积标记
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.volume">
+            <summary>
+            体积
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.flag_center">
+            <summary>
+            中心点标记
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.center">
+            <summary>
+            中心点
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.flag_cvx">
+            <summary>
+            凸包标记
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.cvx_hull">
+            <summary>
+            凸包点
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.cvx_pnt_num">
+            <summary>
+            凸包点数
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.flag_rect">
+            <summary>
+            外接矩标记
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.rect_pt">
+            <summary>
+            外接矩角点
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.flag_rect_rat">
+            <summary>
+            矩形度标记
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.rect_rat">
+            <summary>
+            矩形度
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.flag_plane">
+            <summary>
+            平面标记
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.plane_coe">
+            <summary>
+            平面方程
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.flag_normal">
+            <summary>
+            法向量标记
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.pcd_normal">
+            <summary>
+            法向量
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.flag_range">
+            <summary>
+            坐标范围标记
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.range">
+            <summary>
+            坐标范围
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.flag_bbox">
+            <summary>
+            包围盒标记
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.bbox">
+            <summary>
+            包围盒角点
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.flag_incircle">
+            <summary>
+            内切圆标记
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.incircle_center">
+            <summary>
+            内切圆心
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.long_axis">
+            <summary>
+            内切圆长轴
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.short_axis">
+            <summary>
+            内切圆短轴
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.flag_outcircle">
+            <summary>
+            外接圆标记
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.outcircle_center">
+            <summary>
+            外接圆心
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.outcircle_radius">
+            <summary>
+            外接圆半径
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.flag_pose">
+            <summary>
+            位姿标记
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.pose">
+            <summary>
+            位姿
+            </summary>
+            MVB3D_RTMAT_F32
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.flag_class">
+            <summary>类别标记
+            
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.class_type">
+            <summary>
+            类别
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.flag_dimension">
+            <summary>
+            量纲标记
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.dimension_scale">
+            <summary>
+            缩放系数（输出结果除以该系数后可还原回原结果）
+            </summary>
+        </member>
+        <member name="P:VM.Core.PcdExtinfoF32.nReserved">
+            <summary>
+            保留字节
+            </summary>
+        </member>
+        <member name="T:VM.Core.PcdCoorType">
+            <summary>
+            点云坐标系类型
+            </summary>
+        </member>
+        <member name="F:VM.Core.PcdCoorType.MIN">
+            <summary>
+            最小类型数量
+            </summary>
+        </member>
+        <member name="F:VM.Core.PcdCoorType.RGB">
+            <summary>
+            RGB相机坐标系
+            </summary>
+        </member>
+        <member name="F:VM.Core.PcdCoorType.DEPTH">
+            <summary>
+            深度图相机坐标系
+            </summary>
+        </member>
+        <member name="F:VM.Core.PcdCoorType.ROBOT">
+            <summary>
+            机器人坐标系
+            </summary>
+        </member>
+        <member name="F:VM.Core.PcdCoorType.WORK">
+            <summary>
+            工作台坐标系
+            </summary>
+        </member>
+        <member name="F:VM.Core.PcdCoorType.OBJ">
+            <summary>
+            物体自身坐标系
+            </summary>
+        </member>
+        <member name="F:VM.Core.PcdCoorType.DEFINE">
+            <summary>
+            自定义坐标系
+            </summary>
+        </member>
+        <member name="F:VM.Core.PcdCoorType.DEFAULT">
+            <summary>
+            默认值
+            </summary>
+        </member>
+        <member name="F:VM.Core.PcdCoorType.MAX">
+            <summary>
+            最大类型数量
+            </summary>
+        </member>
+        <member name="T:VM.Core.AxisBox3DF32">
+            <summary>
+            无角度包围盒
+            </summary>
+        </member>
+        <member name="P:VM.Core.AxisBox3DF32.min_x">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:VM.Core.AxisBox3DF32.min_y">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:VM.Core.AxisBox3DF32.min_z">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:VM.Core.AxisBox3DF32.max_x">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:VM.Core.AxisBox3DF32.max_y">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:VM.Core.AxisBox3DF32.max_z">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:VM.Core.PointF32">
+            <summary>
+            3D坐标点(F32)
+            </summary>
+        </member>
+        <member name="M:VM.Core.PointF32.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:VM.Core.PointF32.X">
+            <summary>
+            空间x坐标
+            </summary>
+        </member>
+        <member name="P:VM.Core.PointF32.Y">
+            <summary>
+            空间y坐标
+            </summary>
+        </member>
+        <member name="P:VM.Core.PointF32.Z">
+            <summary>
+            空间z坐标
+            </summary>
+        </member>
+        <member name="T:VM.Core.VEC3F32">
+            <summary>
+            点向量信息
+            </summary>
+        </member>
+        <member name="P:VM.Core.VEC3F32.X">
+            <summary>
+            X 分量
+            </summary>
+        </member>
+        <member name="P:VM.Core.VEC3F32.Y">
+            <summary>
+            Y 分量
+            </summary>
+        </member>
+        <member name="P:VM.Core.VEC3F32.Z">
+            <summary>
+            Z 分量
+            </summary>
+        </member>
+        <member name="T:VM.Core.PlaneCoeF32">
+            <summary>
+             点距测量输出平面
+            </summary>
+        </member>
+        <member name="P:VM.Core.PlaneCoeF32.a">
+            <summary>
+            平面方程系数A
+            </summary>
+        </member>
+        <member name="P:VM.Core.PlaneCoeF32.b">
+            <summary>
+            平面方程系数B
+            </summary>
+        </member>
+        <member name="P:VM.Core.PlaneCoeF32.c">
+            <summary>
+            平面方程系数C
+            </summary>
+        </member>
+        <member name="P:VM.Core.PlaneCoeF32.d">
+            <summary>
+            平面方程系数D
+            </summary>
+        </member>
+        <member name="T:VM.Core.RtmatF32">
+            <summary>
+            齐次矩阵
+            4
+            </summary>
+        </member>
+        <member name="M:VM.Core.RtmatF32.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:VM.Core.RtmatF32.RtmatX">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:VM.Core.VmModule">
+            <summary>
+            VmModule3D
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.GetVmIO3DImageValue(System.String)">
+            <summary>
+            获取IO3D图像值
+            </summary>
+            <param name="vmIOName">输出名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.GetVmIORangeImageValue(System.String)">
+            <summary>
+            获取IO深度图像值
+            </summary>
+            <param name="vmIOName">输出名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.GetVmIORgbdImageValue(System.String)">
+            <summary>
+            获取IO RGB图像值
+            </summary>
+            <param name="vmIOName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.GetVmIOPointCloudImageValue(VM.Core.GetIOPointCloudDataParam)">
+            <summary>
+            获取IO 点云图数据
+            </summary>
+            <param name="PointcloudParam"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.GetChildIoByName(VM.Core.VmIO,System.String)">
+            <summary>
+            获取子节点
+            Name 获取
+            </summary>
+            <param name="parentIo"></param>
+            <param name="childName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.GetIntensityImageIoName(VM.Core.VmIO)">
+            <summary>
+            获取图像
+            Name 获取
+            </summary>
+            <param name="parentIo"></param>
+            <returns></returns>
+        </member>
+        <member name="P:VM.Core.VmModule.ID">
+            <summary>
+            模块id
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmModule.Name">
+            <summary>
+            模块显示名称
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmModule.StrModuleName">
+            <summary>
+            模块名称
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmModule.IsReady">
+            <summary>
+            模块订阅是否已完成
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmModule.IsRunOK">
+            <summary>
+            执行是否ok
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmModule._userData">
+            <summary>
+            用户数据，UserData[KeyName] = null时，删除该key
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmModule._params">
+            <summary>
+            CH: 内部参数 | EN: Internal Param
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmModule.ParamSubManager">
+            <summary>
+            模块运行参数管理
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmModule.NeedMergeValueInLoop">
+            <summary>
+            是否叠加循环内的值
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmModule.ExecuteCount">
+            <summary>
+            流程执行次数
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmModule.ModuleTime">
+            <summary>
+            模块耗时
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmModule.ProcessTime">
+            <summary>
+            流程执行时间
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmModule.AlgorithmTime">
+            <summary>
+            算法耗时
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmModule.ConfigAvailable">
+            <summary>
+            权限
+            打开配置界面
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmModule.ConfigCheck">
+            <summary>
+            配置界面打开前检查，密码校验或者模块需要打开前初始化的内容
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmModule.ReportResultEnable">
+            <summary>
+            结果回调使能
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmModule.IsLoadFailed">
+            <summary>
+            是否加载失败
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmModule.IsForbidden">
+            <summary>
+            是否禁用
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmModule.Position">
+            <summary>
+            模块位置
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmModule.IsRunning">
+            <summary>
+            执行标志位
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmModule.ContinuousRunEnable">
+            <summary>
+            连续运行 | 停止执行标志
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmModule.VMControls#Interface#IVmModule#ModuleDir">
+            <summary>
+            模块所在路径
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmModule.VMControls#Interface#IVmModule#MaxConnecion">
+            <summary>
+            最大连接数
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.VMControls#Interface#IVmModule#AutoLinkData(VMControls.Interface.IVmModule)">
+            <summary>
+            自动订阅
+            </summary>
+            <param name="target"></param>
+        </member>
+        <member name="M:VM.Core.VmModule.VMControls#Interface#IVmModule#SpModuleCheck(System.Object)">
+            <summary>
+            特殊模块的操作，例如分支，分支字符模块
+            </summary>
+            <param name="objParam"></param>
+        </member>
+        <member name="M:VM.Core.VmModule.Subscribe(VM.Core.VmIO,VM.Core.VmIO)">
+            <summary>
+            订阅
+            </summary>
+            <param name="source">订阅方</param>
+            <param name="target">被订阅方</param>
+        </member>
+        <member name="M:VM.Core.VmModule.UnSubscribe(VM.Core.VmIO,VM.Core.VmIO)">
+            <summary>
+            解订阅
+            </summary>
+            <param name="source">订阅方</param>
+            <param name="target">被订阅方</param>
+        </member>
+        <member name="M:VM.Core.VmModule.GetSubScribeVisible(System.Boolean)">
+            <summary>
+            获取能够订阅该模块的所有模块，一个模块IO只可能被本层和下一层和父节点订阅
+            增加参数isGlobalModule全局变量模块可被所有模块订阅 2021-05-08 zrw
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.GetPubInfo(VM.Core.VmIO,VM.Core.VmIO)">
+            <summary>
+            获取被订阅io信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.GetSubInfo(VM.Core.VmIO)">
+            <summary>
+            获取订阅IO信息
+            </summary>
+            <param name="source"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.IsSuitable(System.String,System.String)">
+            <summary>
+            是否可订阅，如果主动订阅IO类型为string或者两者类型相同，返回true,否则返回false// 增加允许情况，主动订阅IO类型为float,被动订阅IO类型为int---20211214，暂时只有结果显示位置XY使用
+            </summary>
+            <param name="targetType">被动订阅IO类型</param>
+            <param name="sourceType">主动订阅IO类型</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.GetAllPreModule(System.Collections.Generic.List{VM.Core.VmModule})">
+            <summary>
+            获取所有前序模块，不包括父模块
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.UnSubPreModule(System.Collections.Generic.List{VM.Core.VmModule})">
+            <summary>
+            解订阅前项
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.UnSubNextModule(System.Collections.Generic.List{VM.Core.VmModule})">
+            <summary>
+            解订阅后项
+            </summary>
+            <param name="module"></param>
+        </member>
+        <member name="M:VM.Core.VmModule.UnSubModule(System.Collections.Generic.List{VM.Core.VmModule})">
+            <summary>
+            解订阅
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.ReloadModuleData">
+            <summary>
+            模块已经存在的情况下,重新获取io参数，用于导入流程覆盖全局模块使用
+            add by zrw 20210513
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.NotifyNameChangedToParent(System.String)">
+            <summary>
+            通知父节点，名称已修改
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.LoadNextAndPreModules">
+            <summary>
+            加载后序或者前序模块
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.RefreshNextRelation(VMControls.Interface.IVmModule)">
+            <summary>
+            自动连接
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.AutoLinkData(VMControls.Interface.IVmModule,System.Int32)">
+            <summary>
+            自动订阅
+            </summary>
+            <param name="source"></param>
+            <param name="needCheckPre">是否需要往前查</param>
+            <param name="lowerlevel">降低要求的等级</param>
+        </member>
+        <member name="M:VM.Core.VmModule.IsAngle(VM.Core.VmIO)">
+            <summary>
+            判断参数是否为角度意义
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.CreateToModuleSet(VM.Core.ModelBase,System.String,System.UInt32,System.UInt32)">
+            <summary>
+            创建模块
+            </summary>
+            <param name="vmModuleSet"></param>
+            <param name="typeName"></param>
+            <param name="SetNodeType"></param>
+            <param name="mID"></param>
+        </member>
+        <member name="M:VM.Core.VmModule.AnalysisIOInfo(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_MODULE_IO_INFO,VM.Core.VmIOCollection)">
+            <summary>
+            解析IO信息
+            </summary>
+            <param name="info">sdk提供的IO信息相关结构体</param>
+            <param name="vmIOCollection">父节点</param>
+        </member>
+        <member name="M:VM.Core.VmModule.NextModules_CollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+            <summary>
+            后继模块改变事件
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.RemoveFromAllModules">
+            <summary>
+            移除所有模块
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.NotifyReadyStateToParent">
+            <summary>
+            向上汇报模块状态
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.CreateToProcessInfo">
+            <summary>
+            同步创建流程
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.RefreshResult">
+            <summary>
+            主动获取模块结果
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.CloseModuleInterface">
+            <summary>
+            删除模块
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.CommonDispose">
+            <summary>
+            通用释放
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.PasteFinish(VM.Core.VmModule,System.Object)">
+            <summary>
+            复制粘贴后操作
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.Paste(VM.Core.VmModule,System.Object)">
+            <summary>
+            复制粘贴
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.ModulePaste(System.Object)">
+            <summary>
+            模块粘贴
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.Export">
+            <summary>
+            模块导出
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.SetModuleState(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_REPORT_MODULE_STATUS_INFO)">
+            <summary>
+            设置模块状态
+            </summary>
+            <param name="info"></param>
+        </member>
+        <member name="M:VM.Core.VmModule.ModuleOperate(System.Object)">
+            <summary>
+            连线更改时操作
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.SpModuleCheck(System.Object)">
+            <summary>
+            复制粘贴前模块检验
+            </summary>
+            <param name="objParam"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.ClearVarBindResultRelation(System.Collections.Generic.Dictionary{System.UInt32,System.Collections.Generic.List{System.Nullable{System.UInt32}}})">
+            <summary>
+            解除模块输出与全局变量的绑定关系
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.InitIO">
+            <summary>
+            io初始化
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.InitDynamicIO">
+            <summary>
+            动态io初始化
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.VMControls#Interface#IVmModule#RebuildLeafIODictionary">
+            <summary>
+            重建叶子IO字典（内部使用）
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.AddAllIO(VM.Core.VmIO)">
+            <summary>
+            添加io
+            </summary>
+            <param name="allIO"></param>
+        </member>
+        <member name="M:VM.Core.VmModule.RemoveAllIO(VM.Core.VmIO)">
+            <summary>
+            移除io
+            </summary>
+            <param name="allIO"></param>
+        </member>
+        <member name="M:VM.Core.VmModule.AllIO_PropertyChanged(System.Object,System.ComponentModel.PropertyChangedEventArgs)">
+            <summary>
+            io变化事件
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.PasteIO(System.Collections.Generic.IList{VM.Core.VmIO},System.Collections.Generic.IList{VM.Core.VmIO},System.Collections.Generic.Dictionary{System.Object,System.Object})">
+            <summary>
+            复制粘贴io数据
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.GetInputIOWithLeafByName(System.Collections.Generic.IList{VM.Core.VmIO},System.String)">
+            <summary>
+            根据名称获取io
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.GetAllCombinationByType(System.String,VM.Core.VmIOCollection)">
+            <summary>
+            获得本模块指定类型的组合输出
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.GetAllCombinationByType(System.Collections.Generic.IList{VM.Core.VmIO},System.String,System.Collections.Generic.IList{VM.Core.VmIO})">
+            <summary>
+            获得本模块指定类型的组合输入
+            </summary>
+        </member>
+        <member name="E:VM.Core.VmModule.ModuleResultCallBackArrived">
+            <summary>
+            模块结果回调（EventArgs为VMControls.Interface.ValueEventArgs类型，其中Value属性为模块结果结构体ImvsSdkDefine.IMVS_MODULE_RESULT_INFO_LIST_EX_Data）
+            </summary>
+        </member>
+        <member name="E:VM.Core.VmModule.VMControls#Interface#IVmModule#AsyncModuleResultCallBackArrived">
+            <summary>
+            异步回调，VM内部渲染使用
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.OnModuleParamChanged(System.String)">
+            <summary>
+            参数变化
+            </summary>
+            <param name="key"></param>
+        </member>
+        <member name="M:VM.Core.VmModule.Run">
+            <summary>
+            模块执行
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.ReFlashReadyState">
+            <summary>
+            刷新配置状态
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.ReflashReadyStateToServer">
+            <summary>
+            强刷状态用于userdata与isready不同步的情况
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.GetNode(System.String)">
+            <summary>
+            获取io节点
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.RemoveIo(System.String,VM.Core.VmIO)">
+            <summary>
+            移除输入输出io
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.RefreshResultForce">
+            <summary>
+            强制刷新结果
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.InitGlobalIo">
+            <summary>
+            初始化全局变量模块的io
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.GetSubscribleModules(System.Boolean)">
+            <summary>
+            获取可订阅模块信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.GetAllUserData">
+            <summary>
+            获取所有userdata
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.GetModel">
+            <summary>
+            获取模型
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.ImportModel(System.Object)">
+            <summary>
+            导入模型
+            </summary>
+            <param name="model"></param>
+        </member>
+        <member name="M:VM.Core.VmModule.ImportProcess">
+            <summary>
+            导入流程或Group时做特殊处理
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.GetRelatedModules">
+            <summary>
+            获取订阅模块列表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.GetIO(System.String)">
+            <summary>
+            从输入和输入中查找一个名为name的IO对象，输入输出默认不同名
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.GetInputIOWithLeafByName(System.String)">
+            <summary>
+            根据名称获得组合输入
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.GetOutputIOWithLeafByName(System.String)">
+            <summary>
+            根据名称获得组合输出
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.GetPreModules">
+            <summary>
+            获取连接到本模块的连线
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.DeGetFrontOutputItems(System.Collections.IList)">
+            <summary>
+            获取前置模块
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.GetFrontOutputItems(System.Collections.IList)">
+            <summary>
+            获取前置模块
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.GetFrontParamItems">
+            <summary>
+            获取前置模块
+            </summary>
+            <param name="predicate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.GetNextModules">
+            <summary>
+            获取本模块后续的连线
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.DeGetBackOutputItems(System.Collections.IList)">
+            <summary>
+            获取后置模块
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.GetFrontToCurParamItems(VM.Core.VmModule)">
+            <summary>
+            获取前模块与当前模块之间的所有路径上模块(包括起始自身)
+            </summary>
+            <param name="startModule"> 起始模块</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.GetFrontIOWithLeafItemsByName(System.String)">
+            <summary>
+            获得前项模块中对应类型的组合输出
+            </summary>
+            <param name="typeName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.Import(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_IMPORT_MODULE_DATA_INFO,VM.Core.ModelBase)">
+            <summary>
+            导入模块
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.PasteParam(System.Object)">
+            <summary>
+            复制参数
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.ResetParam">
+            <summary>
+            重置算法参数
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.Dispose">
+            <summary>
+            释放 dispose
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.ToString">
+            <summary>
+            重写tostring
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.LoadModuleRelateIO">
+            <summary>
+            懒加载订阅关系，如果一个模块的其中一个输入需要加载，则加载整个模块的订阅，因为只有以模块为单位的订阅加载
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.SetBufferNodeNum(System.UInt32)">
+            <summary>
+            设置图像缓存节点数量
+            </summary>
+            <param name="nBufferNodeNum">节点数量</param>
+        </member>
+        <member name="M:VM.Core.VmModule.KeepModuleLastResult(System.Boolean)">
+            <summary>
+            保持模块上次结果
+            </summary>
+            <param name="bIsUnchanged">是否保持</param>
+        </member>
+        <member name="F:VM.Core.VmModule.ModuResultMemType">
+            <summary>
+            @~chinese 模块结果内存管理类型 @~english Module Result Memory Type
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.EnableResultCallback">
+            <summary>
+            二次开发使用，开启模块结果回调
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.GetVmIOIntValue(System.String)">
+            <summary>
+            获取IO整型值
+            </summary>
+            <param name="vmIOName">输出名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.GetVmIOFloatValue(System.String)">
+            <summary>
+            获取IO单精度值
+            </summary>
+            <param name="vmIOName">输出名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.GetVmIOStringValue(System.String)">
+            <summary>
+            获取IO字符串值
+            </summary>
+            <param name="vmIOName">输出名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.GetVmIOPointSetValue(System.String)">
+            <summary>
+            获取IO点集值
+            </summary>
+            <param name="vmIOName">输出名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.GetVmIOImageBufferValue(System.String)">
+            <summary>
+            获取IO图像缓存
+            </summary>
+            <param name="vmIOName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.GetIOByName(System.String,VM.Core.VmIO@)">
+            <summary>
+            通过名称获取对应IO(动态IO的名称存在%号)
+            </summary>
+            <param name="vmIOName"></param>
+        </member>
+        <member name="M:VM.Core.VmModule.GetOutputIOByName(System.String,VM.Core.VmIO@)">
+            <summary>
+            通过名称获取对应输出IO(动态IO的名称存在%号)
+            </summary>
+            <param name="vmIOName"></param>
+        </member>
+        <member name="M:VM.Core.VmModule.GetVmIOImageValue(System.String)">
+            <summary>
+            获取IO图像值
+            </summary>
+            <param name="vmIOName">输出名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.GetVmIOPixelImageValue(System.String)">
+            <summary>
+            获取IO像素图像值
+            </summary>
+            <param name="vmIOName">输出名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.GetVmIORoiBoxValue(System.String)">
+            <summary>
+            获取IO的ROI值
+            </summary>
+            <param name="vmIOName">输出名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.GetVmIOPointValue(System.String)">
+            <summary>
+            获取IO的Point值
+            </summary>
+            <param name="vmIOName">输出名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.GetVmIOLineValue(System.String)">
+            <summary>
+            获取IO的Line值
+            </summary>
+            <param name="vmIOName">输出名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.GetVmIOCircleValue(System.String)">
+            <summary>
+            获取IO的Line值
+            </summary>
+            <param name="vmIOName">输出名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.GetVmIOEllipseValue(System.String)">
+            <summary>
+            获取IO的Ellipse值
+            </summary>
+            <param name="vmIOName">输出名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.GetVmIOFixtureValue(System.String)">
+            <summary>
+            获取IO的位置修正值
+            </summary>
+            <param name="vmIOName">输出名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.GetVmIOROIAnnulusValue(System.String)">
+            <summary>
+            获取IO的ROIAnnulus值
+            </summary>
+            <param name="vmIOName">输出名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.GetVmIOContourPointsValue(System.String)">
+            <summary>
+            获取IO的ContourPoints值
+            </summary>
+            <param name="vmIOName">输出名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.GetVmIORectValue(System.String)">
+            <summary>
+            获取IO的Rect值
+            </summary>
+            <param name="vmIOName">输出名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.GetVmIOClassInfoValue(System.String)">
+            <summary>
+            获取IO的ROIAnnulus值
+            </summary>
+            <param name="vmIOName">输出名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.GetVmIOROIPolygonValue(System.String)">
+            <summary>
+            获取IO的ROIPolygon值
+            </summary>
+            <param name="vmIOName">输出名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.GetVmIOPostureValue(System.String)">
+            <summary>
+            获取IO的Posture值
+            </summary>
+            <param name="vmIOName">输出名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.InvokeOnModuleIONameChanged(System.String,System.String)">
+            <summary>
+            io名称修改回调处理方法
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.InvokeOnModuleDisplayParamNameChanged(System.String,System.String)">
+            <summary>
+            显示名称修改回调处理方法
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmModule.ModuleFilePath">
+            <summary>
+            模块保存加载路径
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmModule.ModuleFilePassword">
+            <summary>
+            模块密码(内部使用)
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.ExportFile(System.String,System.String,System.Boolean,System.String)">
+            <summary>
+            导出数据到文件
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModule.Save">
+            <summary>
+            保存方案，与ExportFile功能一致
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModule.SaveAs(System.String,System.String)">
+            <summary>
+            数据另存为
+            </summary>
+            <param name="path">存储路径</param>
+            <param name="passWord">存储密码</param>
+            <returns></returns>
+        </member>
+        <member name="T:VM.Core.GetIOPointCloudDataParam">
+            <summary>
+            点云数据获取参数
+            </summary>
+        </member>
+        <member name="P:VM.Core.GetIOPointCloudDataParam.PcdInputImageData">
+            <summary>
+            3D 点云
+            </summary>
+        </member>
+        <member name="P:VM.Core.GetIOPointCloudDataParam.NormalsInputImageData">
+            <summary>
+            法向量+曲率
+            </summary>
+        </member>
+        <member name="P:VM.Core.GetIOPointCloudDataParam.ColorsInputImageData">
+            <summary>
+            rgb 数据
+            </summary>
+        </member>
+        <member name="P:VM.Core.GetIOPointCloudDataParam.ExtInfo">
+            <summary>
+            扩展信息
+            </summary>
+        </member>
+        <member name="P:VM.Core.GetIOPointCloudDataParam.PcdExtInfo">
+            <summary>
+            点云扩展信息
+            </summary>
+        </member>
+        <member name="P:VM.Core.GetIOPointCloudDataParam.PointMemoryPtr">
+            <summary>
+            点云指针
+            </summary>
+        </member>
+        <member name="P:VM.Core.GetIOPointCloudDataParam.NormalMemoryPtr">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:VM.Core.ProcedureParam">
+            <summary>
+            VmProcedure3D
+            </summary>
+            <summary>
+            CH: 流程参数类 | EN: Procedure Param Class
+            </summary>
+        </member>
+        <member name="M:VM.Core.ProcedureParam.SetRangeImageData(System.String,VM.PlatformSDKCS.RangeImageBaseData_V2)">
+            <summary>
+            设置动态输入深度图像数据
+            </summary>
+            <param name="strParamName"></param>
+            <param name="stImageData3D"></param>
+        </member>
+        <member name="M:VM.Core.ProcedureParam.SetImageData3D(System.String,VM.PlatformSDKCS.ImageBaseData3D_V2)">
+            <summary>
+            设置动态输入3D图像数据
+            </summary>
+            <param name="strParamName"></param>
+            <param name="stImageData3D"></param>
+        </member>
+        <member name="M:VM.Core.ProcedureParam.#ctor(System.UInt32)">
+            <summary>
+            CH: 构造函数 | EN: Constructor
+            </summary>
+        </member>
+        <member name="M:VM.Core.ProcedureParam.#ctor(System.UInt32,VM.Core.VmModule)">
+            <summary>
+            CH: 构造函数 | EN: Constructor
+            </summary>
+        </member>
+        <member name="M:VM.Core.ProcedureParam.SetInputImage_V2(System.String,VM.PlatformSDKCS.ImageBaseData)">
+            <summary>
+            设置动态输入图像数据(仅当次执行起效)
+            </summary>
+            <param name="strParamName"></param>
+            <param name="stImageData"></param>
+        </member>
+        <member name="M:VM.Core.ProcedureParam.SetInputBox(System.String,System.Collections.Generic.List{VM.PlatformSDKCS.RectBox})">
+            <summary>
+            设置动态输入矩形框数据(仅当次执行起效)
+            </summary>
+            <param name="strParamName"></param>
+            <param name="stRoiBox"></param>
+        </member>
+        <member name="M:VM.Core.ProcedureParam.SetInputAnnulus(System.String,System.Collections.Generic.List{VM.PlatformSDKCS.Annulus})">
+            <summary>
+            设置动态输入圆环ROI数据(仅当次执行起效)
+            </summary>
+            <param name="strParamName"></param>
+            <param name="stAnnulus"></param>
+        </member>
+        <member name="M:VM.Core.ProcedureParam.SetInputCircle(System.String,System.Collections.Generic.List{VM.PlatformSDKCS.Circle})">
+            <summary>
+            设置动态输入圆形数据(仅当次执行起效)
+            </summary>
+            <param name="strParamName"></param>
+            <param name="stCircle"></param>
+        </member>
+        <member name="M:VM.Core.ProcedureParam.SetInputEllipse(System.String,System.Collections.Generic.List{VM.PlatformSDKCS.Ellipse})">
+            <summary>
+            设置动态输入椭圆形数据(仅当次执行起效)
+            </summary>
+            <param name="strParamName"></param>
+            <param name="stEllipse"></param>
+        </member>
+        <member name="M:VM.Core.ProcedureParam.SetInputLine(System.String,System.Collections.Generic.List{VM.PlatformSDKCS.Line})">
+            <summary>
+            设置动态输入线型数据(仅当次执行起效)
+            </summary>
+            <param name="strParamName"></param>
+            <param name="stLine"></param>
+        </member>
+        <member name="M:VM.Core.ProcedureParam.SetInputPoint(System.String,System.Collections.Generic.List{VM.PlatformSDKCS.PointF})">
+            <summary>
+            设置动态输入点型数据(仅当次执行起效)
+            </summary>
+            <param name="strParamName"></param>
+            <param name="stPointF"></param>
+        </member>
+        <member name="M:VM.Core.ProcedureParam.SetInputFixture(System.String,VM.PlatformSDKCS.Fixture)">
+            <summary>
+            设置动态输入位置修正数据(仅当次执行起效)
+            </summary>
+            <param name="strParamName"></param>
+            <param name="stFixture"></param>
+        </member>
+        <member name="M:VM.Core.ProcedureParam.SetInputRect(System.String,System.Collections.Generic.List{VM.PlatformSDKCS.RectF})">
+            <summary>
+            设置动态输入矩形数据(仅当次执行起效)
+            </summary>
+            <param name="strParamName"></param>
+            <param name="stRectF"></param>
+        </member>
+        <member name="M:VM.Core.ProcedureParam.SetInputClassInfo(System.String,System.Collections.Generic.List{VM.PlatformSDKCS.ClassInfo})">
+            <summary>
+            设置动态输入类别信息数据(仅当次执行起效)
+            </summary>
+            <param name="strParamName"></param>
+            <param name="stClassInfo"></param>
+        </member>
+        <member name="M:VM.Core.ProcedureParam.SetInputPixelImage(System.String,VM.PlatformSDKCS.PixelImage)">
+            <summary>
+            设置动态输入像素图像数据(仅当次执行起效)
+            </summary>
+            <param name="strParamName"></param>
+            <param name="stPixelImage"></param>
+        </member>
+        <member name="M:VM.Core.ProcedureParam.SetInputPolygon(System.String,System.Collections.Generic.List{VM.PlatformSDKCS.Polygon})">
+            <summary>
+            设置动态输入多边形数据(仅当次执行起效)
+            </summary>
+            <param name="strParamName"></param>
+            <param name="stPolygon"></param>
+        </member>
+        <member name="M:VM.Core.ProcedureParam.SetInputPosture(System.String,System.Collections.Generic.List{VM.PlatformSDKCS.Posture})">
+            <summary>
+            设置动态输入位姿数据(仅当次执行起效)
+            </summary>
+            <param name="strParamName"></param>
+            <param name="stPosture"></param>
+        </member>
+        <member name="M:VM.Core.ProcedureParam.GetAllInputNameInfo">
+            <summary>
+            获取所有输入名称信息（CONTOURPOINTS、POINTSET、小写的image,这三种类型不支持）
+            </summary>
+        </member>
+        <member name="T:VM.Core.ProcedureResult">
+            <summary>
+            CH: 流程结果类 | EN: Procedure Result Class
+            </summary>
+        </member>
+        <member name="M:VM.Core.ProcedureResult.GetOutputRangeImage(System.String)">
+            <summary>
+            获取深度图像结果（整个图像）
+            </summary>
+            <param name="strParam">参数名称</param>
+            <returns> 图像型结果</returns> 
+        </member>
+        <member name="M:VM.Core.ProcedureResult.GetOutputImageBaseData3D(System.String)">
+            <summary>
+            获取深度图像结果（整个图像）
+            </summary>
+            <param name="strParam">参数名称</param>
+            <returns> 图像型结果</returns> 
+        </member>
+        <member name="M:VM.Core.ProcedureResult.#ctor">
+            <summary>
+            CH: 构造函数 | EN: Constructor
+            </summary>
+        </member>
+        <member name="M:VM.Core.ProcedureResult.#ctor(System.UInt32)">
+            <summary>
+            CH: 构造函数 | EN: Constructor
+            </summary>
+        </member>
+        <member name="M:VM.Core.ProcedureResult.#ctor(System.UInt32,VM.Core.VmModule)">
+            <summary>
+            CH: 构造函数 | EN: Constructor
+            </summary>
+        </member>
+        <member name="P:VM.Core.ProcedureResult.ErrorCode">
+            <summary>
+            CH: 错误码 | EN: Error Code
+            </summary>
+        </member>
+        <member name="P:VM.Core.ProcedureResult.ModuRunTime">
+            <summary>
+            CH: 模块执行耗时 | EN: Module Run Time
+            </summary>
+        </member>
+        <member name="M:VM.Core.ProcedureResult.GetOutputInt(System.String)">
+            <summary>
+            获取整型输出(结果为空时nValueNum为0且pIntVal和nReserved为null)
+            </summary>
+            <param name="strParam">参数名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.ProcedureResult.GetOutputFloat(System.String)">
+            <summary>
+            获取浮点型输出(结果为空时nValueNum为0且pFloatVal和nReserved为null)
+            </summary>
+            <param name="strParam">参数名称</param>
+            <returns></returns>
+        </member>
+        <!-- 对于成员“M:VM.Core.ProcedureResult.GetOutputString(System.String)”忽略有格式错误的 XML 注释 -->
+        <member name="M:VM.Core.ProcedureResult.GetOutputByteArray(System.String)">
+            <summary>
+            获取二进制数据型输出(结果为空时strValue为null)
+            </summary>
+            <param name="strParam">参数名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.ProcedureResult.GetOutputImageV2(System.String)">
+            <summary>
+            获取图像结果（整个图像）
+            </summary>
+            <param name="strParam">参数名称</param>
+            <returns> 图像型结果</returns> 
+        </member>
+        <member name="M:VM.Core.ProcedureResult.GetOutputEllipseArray(System.String)">
+            <summary>
+            获取椭圆输出集合
+            </summary>
+            <param name="strParam">参数名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.ProcedureResult.GetOutputPointArray(System.String)">
+            <summary>
+            获取点输出集合
+            <param name="strParam">参数名称</param>
+            </summary>
+        </member>
+        <member name="M:VM.Core.ProcedureResult.GetOutputLineArray(System.String)">
+            <summary>
+            获取直线输出集合
+            </summary>
+            <param name="strParam">参数名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.ProcedureResult.GetOutputCircleArray(System.String)">
+            <summary>
+            获取圆输出集合
+            </summary>
+            <param name="strParam">参数名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.ProcedureResult.GetOutputBoxArray(System.String)">
+            <summary>
+            获取带角度矩形输出集合
+            </summary>
+            <param name="strParam">参数名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.ProcedureResult.GetOutputRectArray(System.String)">
+            <summary>
+            获取无角度矩形(浮点型)输出集合
+            </summary>
+            <param name="strParam">参数名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.ProcedureResult.GetOutputFixtureArray(System.String)">
+            <summary>
+            获取位置修正输出集合
+            </summary>
+            <param name="strParam">参数名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.ProcedureResult.GetOutputAnnulusArray(System.String)">
+            <summary>
+            获取圆环输出集合
+            </summary>
+            <param name="strParam">参数名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.ProcedureResult.GetOutputClassInfoArray(System.String)">
+            <summary>
+            获取类别信息输出集合
+            </summary>
+            <param name="strParam">参数名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.ProcedureResult.GetOutputPixelImage(System.String)">
+            <summary>
+            获取带类别信息的图(界面可根据类别信息将灰度图显示成彩图)
+            </summary>
+            <param name="strParam">参数名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.ProcedureResult.GetOutputPostureArray(System.String)">
+            <summary>
+            获取位姿集合
+            </summary>
+            <param name="strParam">参数名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.ProcedureResult.GetOutputPolygonArray(System.String)">
+            <summary>
+            获取多边形输出集合
+            </summary>
+            <param name="strParam">参数名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.ProcedureResult.GetAllOutputNameInfo">
+            <summary>
+            获取所有输出名称信息（CONTOURPOINTS、POINTSET、小写的image,这三种类型不支持）
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="F:VM.Core.ProcedureResult.m_nModuleId">
+            <summary>
+            流程ID
+            </summary>
+        </member>
+        <member name="F:VM.Core.UnRedo_ProcessData.Path">
+            <summary>
+            流程路径
+            </summary>
+        </member>
+        <member name="F:VM.Core.UnRedo_ProcessData.FullName">
+            <summary>
+            流程对象名称
+            </summary>
+        </member>
+        <member name="F:VM.Core.UnRedo_ProcessData.Point">
+            <summary>
+            流程位置
+            </summary>
+        </member>
+        <member name="F:VM.Core.UnRedo_ProcessData.Calib">
+            <summary>
+            一键标定相关流程的标定文件
+            </summary>
+        </member>
+        <member name="F:VM.Core.UnRedo_ConnectionData.SourceModuleFullName">
+            <summary>
+            连接源头模块全路径
+            </summary>
+        </member>
+        <member name="F:VM.Core.UnRedo_ConnectionData.TargetModuleFullName">
+            <summary>
+            连接目标模块全路径
+            </summary>
+        </member>
+        <member name="F:VM.Core.UnRedo_UserData.ModuleFullName">
+            <summary>
+            UserData所属模块全路径
+            </summary>
+        </member>
+        <member name="F:VM.Core.UnRedo_UserData.IsAllUserData">
+            <summary>
+            动态IO界面数据标记，因为有动态数据，动态数据先于订阅数据处理
+            </summary>
+        </member>
+        <member name="F:VM.Core.UnRedo_UserData.PropertyKey">
+            <summary>
+            UserData KEY
+            </summary>
+        </member>
+        <member name="F:VM.Core.UnRedo_UserData.OldValue">
+            <summary>
+            UserData原值
+            </summary>
+        </member>
+        <member name="F:VM.Core.UnRedo_UserData.NewValue">
+            <summary>
+            UserData新值
+            </summary>
+        </member>
+        <member name="F:VM.Core.UnRedo_UserData.IsEnd">
+            <summary>
+            是否是最后一个撤销的ParamRoot
+            </summary>
+        </member>
+        <member name="F:VM.Core.UnRedo_ParamsData.ModuleFullName">
+            <summary>
+            参数所属模块全路径
+            </summary>
+        </member>
+        <member name="F:VM.Core.UnRedo_ParamsData.OldParamList">
+            <summary>
+            原参数列表
+            </summary>
+        </member>
+        <member name="F:VM.Core.UnRedo_ParamsData.NewParamList">
+            <summary>
+            新参数列表
+            </summary>
+        </member>
+        <member name="F:VM.Core.UnRedo_ModelData.ModuleFullName">
+            <summary>
+            模型所属模块全路径
+            </summary>
+        </member>
+        <member name="F:VM.Core.UnRedo_ModelData.OldModel">
+            <summary>
+            原模型列表
+            </summary>
+        </member>
+        <member name="F:VM.Core.UnRedo_ModelData.NewModel">
+            <summary>
+            新模型列表
+            </summary>
+        </member>
+        <member name="F:VM.Core.UnRedo_SubscribeData.ModuleFullName">
+            <summary>
+            订阅模块全路径
+            </summary>
+        </member>
+        <member name="F:VM.Core.UnRedo_SubscribeData.OldSubList">
+            <summary>
+            原订阅列表
+            </summary>
+        </member>
+        <member name="F:VM.Core.UnRedo_SubscribeData.NewSubList">
+            <summary>
+            新订阅列表
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmFrameTreeBase.GetObjectByGUIDPath(System.String)">
+            <summary>
+            通过GUID路径获取对象,IO还是名字
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:VM.Core.VmIndependentProcedure">
+            <summary>
+            独立Group的容器类
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmIndependentProcedure.UserData">
+            <summary>
+            用户数据，UserData[KeyName] = null时，删除该key
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmIndependentProcedure.IsVirtual">
+            <summary>
+            是否虚拟流程
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmIndependentProcedure.IsForbidden">
+            <summary>
+            流程禁用/启用
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmIndependentProcedure.IsReady">
+            <summary>
+            模块订阅是否已完成
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmIndependentProcedure.#ctor(System.UInt32,System.String)">
+            <summary>
+            用于独立group的父流程
+            </summary>
+            <param name="id"></param>
+            <param name="str"></param>
+        </member>
+        <member name="T:VM.Core.LeafIOTypeEnum">
+            <summary>
+            叶子节点IO类型
+            </summary>
+        </member>
+        <member name="T:VM.Core.CombinationIOTypeEnum">
+            <summary>
+            组合类型
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmIO.IsReady">
+            <summary>
+            是否准备好
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmIO.CollectionParent">
+            <summary>
+            列表容器
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmIO.RemoveSelf">
+            <summary>
+            删除自身
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmIO.SubscriptionInfo">
+            <summary>
+            订阅信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmIO.GetSubscriptionInfo">
+            <summary>
+            获取订阅信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmIO.SetRelateIndex(VM.Core.VmIO)">
+            <summary>
+            迭代设置_relateIndex
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:VM.Core.VmIO.InitRelateIndexIO(VM.Core.VmIO)">
+            <summary>
+            初始化RelateIndexIO，懒加载用
+            </summary>
+            <param name="vmIO"></param>
+        </member>
+        <member name="M:VM.Core.VmIO.InitRelateIO(VM.Core.VmIO)">
+            <summary>
+            初始化IO，懒加载用
+            </summary>
+            <param name="vmIO"></param>
+        </member>
+        <member name="M:VM.Core.VmIO.GetAllLeafIO(System.Collections.Generic.List{VM.Core.VmIO})">
+            <summary>
+            获取叶子IO
+            </summary>
+            <param name="ls"></param>
+            <returns></returns>
+        </member>
+        <member name="P:VM.Core.VmIO.CustomName">
+            <summary>
+            输出配置自定义名称
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmIO.visible">
+            <summary>
+            是否在界面可见
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmIO.visibleInResultTree">
+            <summary>
+            是否在模块结果树中显示
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmIO.IsPrivate">
+            <summary>
+            是否为私有IO，比如group的LoopIndex为私有IO，只能内部模块订阅
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmIO.IsReturnRelateValue">
+            <summary>
+            是否优先返回RelateIO的值
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmIO.IsForce">
+            <summary>
+            是否需要强制订阅
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmIO.IsPrefer">
+            <summary>
+            是否建议订阅
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmIO.AutoSubscribe">
+            <summary>
+            是否允许自动订阅
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmIO.AutoSubscribeByOther">
+            <summary>
+            是否允许被自动订阅
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmIO.CanSubscribeA">
+            <summary>
+            是否允许订阅
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmIO.ModulePathName">
+             <summary>
+            id+ 模块名+参数名
+             </summary>
+        </member>
+        <member name="P:VM.Core.VmIO.IsOutput">
+            <summary>
+            是否为输出IO
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmIO.ClearRelation(System.Collections.Generic.List{System.Tuple{System.Int32,VM.Core.VmIO,VM.Core.VmIO}})">
+            <summary>
+            清除订阅
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmIO.SetValueFromDefault">
+            <summary>
+            添加默认值null
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmIO.IsResultShow">
+            <summary>
+            是否结果显示IO,如果是，模块底层需要在执行时输出
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmIO.UnBindingVariableWithNoIo(System.String,System.String,VM.Core.VmModule)">
+            <summary>
+            解绑与变量的绑定关系，不考虑IO的情况，适用于名称修改
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmIO.UnBindingGlobalVariable">
+            <summary>
+            解除与全局变量的绑定关系
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmIOCollection.GetLeafIO(System.String)">
+            <summary>
+            获得叶子节点
+            </summary>
+            <param name="name">名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmIOCollection.GetAllTrunkIO(System.Collections.Generic.List{VM.Core.VmIO})">
+            <summary>
+            获取非叶子节点IO
+            </summary>
+            <param name="ios"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmIOCollection.GetAllIO(System.Collections.Generic.List{VM.Core.VmIO})">
+            <summary>
+            获取所有节点IO
+            </summary>
+            <param name="ios"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmIOCollection.GetCombinationIO(System.Collections.Generic.List{VM.Core.VmIO})">
+            <summary>
+            获取所有组合IO
+            </summary>
+            <param name="ios"></param>
+            <returns></returns>
+        </member>
+        <member name="T:VM.Core.IVmRect">
+            <summary>
+            矩形数据接口
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmRect.CenterPoint">
+            <summary>
+            坐标信息
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmRect.Width">
+            <summary>
+            宽度
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmRect.Height">
+            <summary>
+            高度
+            </summary>
+        </member>
+        <member name="T:VM.Core.IVmContourPoints">
+            <summary>
+            轮廓点集接口
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmContourPoints.LevelPoint">
+            <summary>
+            等级点集
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmContourPoints.Num">
+            <summary>
+            数量
+            </summary>
+        </member>
+        <member name="T:VM.Core.IVmROIAnnulus">
+            <summary>
+            圆环信息接口
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmROIAnnulus.CenterPoint">
+            <summary>
+            中心坐标
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmROIAnnulus.InnerRadius">
+            <summary>
+            内圆半径
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmROIAnnulus.OuterRadius">
+            <summary>
+            外圆半径
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmROIAnnulus.StartAngle">
+            <summary>
+            起始角度
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmROIAnnulus.AngleExtend">
+            <summary>
+            角度范围
+            </summary>
+        </member>
+        <member name="T:VM.Core.IVmFixturePointInfo">
+            <summary>
+            基准信息接口
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmFixturePointInfo.Point">
+            <summary>
+            点
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmFixturePointInfo.Angle">
+            <summary>
+            角度
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmFixturePointInfo.ScaleX">
+            <summary>
+            尺度X
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmFixturePointInfo.ScaleY">
+            <summary>
+            尺度Y
+            </summary>
+        </member>
+        <member name="T:VM.Core.IVmFixture">
+            <summary>
+            位置修正接口
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmFixture.FixtureInfo">
+            <summary>
+            基准点信息
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmFixture.UnFixtureInfo">
+            <summary>
+            运行点信息
+            </summary>
+        </member>
+        <member name="T:VM.Core.IVmCircle">
+            <summary>
+            圆信息接口
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmCircle.CenterPoint">
+            <summary>
+            圆心坐标信息
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmCircle.Radius">
+            <summary>
+            半径
+            </summary>
+        </member>
+        <member name="T:VM.Core.IVmEllipse">
+            <summary>
+            椭圆信息接口
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmEllipse.CenterPoint">
+            <summary>
+            椭圆心坐标信息
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmEllipse.MajorRadius">
+            <summary>
+            长半轴
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmEllipse.MinorRadius">
+            <summary>
+            短半轴
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmEllipse.Angle">
+            <summary>
+            角度
+            </summary>
+        </member>
+        <member name="T:VM.Core.IVmLine">
+            <summary>
+            线信息接口
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmLine.StartPoint">
+            <summary>
+            线起点
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmLine.EndPoint">
+            <summary>
+            线终点
+            </summary>
+        </member>
+        <member name="T:VM.Core.VmLevelEnum">
+            <summary>
+            等级
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmLevelEnum.BED">
+            <summary>
+            差
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmLevelEnum.BELOWNORMAL">
+            <summary>
+            次级
+            </summary>
+        </member>
+        <member name="F:VM.Core.VmLevelEnum.NORMAL">
+            <summary>
+            正常
+            </summary>
+        </member>
+        <member name="T:VM.Core.IVmLevelPoint">
+            <summary>
+            等级点
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmLevelPoint.Point">
+            <summary>
+            位置
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmLevelPoint.VmLevelEnum">
+            <summary>
+            等级
+            </summary>
+        </member>
+        <member name="T:VM.Core.IVmPoint">
+            <summary>
+            点信息接口
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmPoint.X">
+            <summary>
+            点X值
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmPoint.Y">
+            <summary>
+            点Y值
+            </summary>
+        </member>
+        <member name="T:VM.Core.IVmROIBox">
+            <summary>
+            ROI信息接口
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmROIBox.CenterPoint">
+            <summary>
+            坐标信息
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmROIBox.Width">
+            <summary>
+            ROI宽度
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmROIBox.Height">
+            <summary>
+            ROI高度
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmROIBox.Angle">
+            <summary>
+            ROI角度
+            </summary>
+        </member>
+        <member name="T:VM.Core.IVmPosture">
+            <summary>
+            姿态位置信息接口
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmPosture.Point">
+            <summary>
+            平面坐标
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmPosture.R">
+            <summary>
+            R坐标
+            </summary>
+        </member>
+        <member name="T:VM.Core.IVmROIPolygon">
+            <summary>
+            多边形ROI信息接口
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmROIPolygon.Num">
+            <summary>
+            数量
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmROIPolygon.Points">
+            <summary>
+            点集
+            </summary>
+        </member>
+        <member name="T:VM.Core.IVmClassInfo">
+            <summary>
+            类别信息接口
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmClassInfo.ClassName">
+            <summary>
+            分类名称
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmClassInfo.GrayValue">
+            <summary>
+            灰度值
+            </summary>
+        </member>
+        <member name="T:VM.Core.IVmImageData">
+            <summary>
+            图像数据接口
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmImageData.Width">
+            <summary>
+            图像宽度
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmImageData.Height">
+            <summary>
+            图像高度
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmImageData.Data">
+            <summary>
+            图像数据
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmImageData.DataLenth">
+            <summary>
+            图像数据长度
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmImageData.ImageFormat">
+            <summary>
+            图像像素格式
+            </summary>
+        </member>
+        <member name="T:VM.Core.IVmPixelImageData">
+            <summary>
+            像素分类信息接口
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmPixelImageData.ImageData">
+            <summary>
+            像素信息
+            </summary>
+        </member>
+        <member name="P:VM.Core.IVmPixelImageData.ClassInfo">
+            <summary>
+            分类信息
+            </summary>
+        </member>
+        <member name="T:VM.Core.UserData">
+            <summary>
+            数据给到服务
+            </summary>
+        </member>
+        <member name="T:VM.Core.ModuleParam">
+            <summary>
+            数据设置到底层模块，包括算法参数和二进制数据
+            </summary>
+        </member>
+        <member name="P:VM.Core.IMVSGroup.IsEnableLoop">
+            <summary>
+            循环使能
+            </summary>
+        </member>
+        <member name="P:VM.Core.IMVSGroup.IsDynamicModu">
+            <summary>
+            内部使用
+            </summary>
+        </member>
+        <member name="M:VM.Core.IMVSGroup.#ctor">
+            <summary>
+            默认构造
+            </summary>
+        </member>
+        <member name="M:VM.Core.IMVSGroup.#ctor(System.Object)">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="M:VM.Core.IMVSGroup.#ctor(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_MODULE_INFO)">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="M:VM.Core.IMVSGroup.Export">
+            <summary>
+            导出Group(内部使用)
+            </summary>
+        </member>
+        <member name="M:VM.Core.IMVSGroup.RaiseGroupSubModuleValueChanged">
+            <summary>
+            循环结束后，Group内普通模块发出ValueChanged事件
+            </summary>
+        </member>
+        <member name="M:VM.Core.IMVSGroup.VMControls#Interface#IVMGroup#SetIoParams">
+            <summary>
+            设置IO参数到底层（内部使用）
+            </summary>
+        </member>
+        <member name="M:VM.Core.IMVSGroup.GetGroupIoList(VM.Core.VmIOCollection,VM.PlatformSDKCS.ImvsSdkDefine.IMVS_GROUP_IO_INFO[],System.UInt32@)">
+            <summary>
+            内部使用
+            </summary>
+        </member>
+        <member name="M:VM.Core.IMVSGroup.AddFilterToList(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_GROUP_IO_INFO@,VM.Core.VmIO)">
+            <summary>
+            内部使用
+            </summary>
+        </member>
+        <member name="M:VM.Core.IMVSGroup.GetDeepLevel">
+            <summary>
+            内部使用
+            </summary>
+        </member>
+        <member name="M:VM.Core.IMVSGroup.RemovePercentSign(System.String)">
+            <summary>
+            去除百分号，动态io名称
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.IMVSGroup.LoadModules">
+            <summary>
+            加载模块，内部使用，懒加载
+            </summary>
+        </member>
+        <member name="M:VM.Core.IMVSGroup.CloseModuleInterface">
+            <summary>
+            删除group,内部使用
+            </summary>
+        </member>
+        <member name="M:VM.Core.IMVSGroup.LoadAssemblies">
+            <summary>
+            加载Group模块库（独立使用时调用）
+            </summary>
+        </member>
+        <member name="M:VM.Core.IMVSGroup.GetNode(System.String)">
+            <summary>
+            内部使用
+            </summary>
+        </member>
+        <member name="M:VM.Core.IMVSGroup.ReFlashReadyState">
+            <summary>
+            模块配置状态
+            </summary>
+        </member>
+        <member name="M:VM.Core.IMVSGroup.ExportFile(System.String,System.String,System.Boolean,System.String)">
+            <summary>
+             CH: 导出*.gro文件 | EN:Save *.gro File
+            </summary>
+            <param name="path">CH: 文件路径 | EN:File Path</param>
+            <param name="password">CH: 密码 | EN:Password</param>
+            <param name="initDir">CH: 文件夹路径 | EN:Folder Path</param>
+            <returns>CH: 文件路径 | EN:File Path</returns>
+        </member>
+        <member name="E:VM.Core.IMVSGroup.OnModuleIONameChanged">
+            <summary>
+            IO重命名事件
+            </summary>
+        </member>
+        <member name="M:VM.Core.IMVSGroup.InvokeOnModuleIONameChanged(System.String,System.String)">
+            <summary>
+            重命名
+            </summary>
+            <param name="oldName">旧名称</param>
+            <param name="newName">新名称</param>
+        </member>
+        <member name="E:VM.Core.IMVSGroup.OnModuleDisplayParamNameChanged">
+            <summary>
+            显示IO重命名事件
+            </summary>
+        </member>
+        <member name="M:VM.Core.IMVSGroup.SaveAs(System.String,System.String)">
+            <summary>
+            保存Group至文件 (不支持导出方案中Group相关的连接订阅信息)
+            </summary>
+            <param name="strGroPath">路径</param>
+            <param name="strPassword">密码</param>
+            <returns></returns>
+        </member>
+        <member name="T:VM.Core.CameraInformation">
+            <summary>
+            CH: 单个相机信息结构 | EN: Camera information structure
+            </summary>
+        </member>
+        <member name="F:VM.Core.CameraInformation.strCameraName">
+            <param name="strCameraName">CH: 相机名称 | EN: Camera Name</param>
+        </member>
+        <member name="F:VM.Core.CameraInformation.strCameraSN">
+            <param name="strCameraSN">CH: 相机SN | EN: Camera SN</param>
+        </member>
+        <member name="F:VM.Core.CameraInformation.nReserved">
+            <param name="nReserved">CH: 保留字段 | EN: Reserved</param>
+        </member>
+        <member name="T:VM.Core.CameraInfoList">
+            <summary>
+            CH: 相机列表信息结构 | EN: Camera information list structure
+            </summary>
+        </member>
+        <member name="F:VM.Core.CameraInfoList.nNum">
+            <param name="nNum">CH: 相机数量 | EN: Camera Number</param>
+        </member>
+        <member name="F:VM.Core.CameraInfoList.astCameraInfo">
+            <param name="astCameraInfo">CH: 相机信息 | EN: Camera Info</param>
+        </member>
+        <member name="F:VM.Core.CameraInfoList.nReserved">
+            <param name="nReserved">CH: 保留字段 | EN: Reserved</param>
+        </member>
+        <member name="T:VM.Core.ModuInfo">
+            <summary>
+            CH: 单个模块信息结构 | EN: Module information structure
+            </summary>
+        </member>
+        <member name="F:VM.Core.ModuInfo.nModuleID">
+            <param name="nModuleID">CH: 模块ID | EN: Module ID</param>
+        </member>
+        <member name="F:VM.Core.ModuInfo.nProcessID">
+            <param name="nProcessID">CH: 流程ID | EN: Process ID</param>
+        </member>
+        <member name="F:VM.Core.ModuInfo.nReserved">
+            <param name="nReserved">CH: 保留字段 | EN: Reserved</param>
+        </member>
+        <member name="P:VM.Core.ModuInfo.strDisplayName">
+            <param name="strDisplayName">CH: 界面显示名称 | EN: Displayed module name</param>
+        </member>
+        <member name="P:VM.Core.ModuInfo.strModuleName">
+            <param name="strModuleName">CH: 模块名称 | EN: Module name</param>
+        </member>
+        <member name="T:VM.Core.FullMoudleInfo">
+            <summary>
+            包含模块全路径的结构体
+            </summary>
+        </member>
+        <member name="T:VM.Core.ModuleInfoList">
+            <summary>
+            CH: 模块信息列表结构 | EN: Module information list structure
+            </summary>
+        </member>
+        <member name="F:VM.Core.ModuleInfoList.nNum">
+            <param name="nNum">CH: 模块个数 | EN: Number of modules in list</param>
+        </member>
+        <member name="F:VM.Core.ModuleInfoList.astModuleInfo">
+            <param name="astModuleInfo">CH: 模块信息列表 | EN: Information details of a module</param>
+        </member>
+        <member name="F:VM.Core.ModuleInfoList.nReserved">
+            <param name="nReserved">CH: 保留字段 | EN: Reserved</param>
+        </member>
+        <member name="T:VM.Core.GroupModuInfo">
+            <summary>
+            CH: Group模块信息结构 | EN: Group module information structure
+            </summary>
+        </member>
+        <member name="F:VM.Core.GroupModuInfo.nModuleID">
+            <param name="nModuleID">CH: 模块ID | EN: Module ID</param>
+        </member>
+        <member name="F:VM.Core.GroupModuInfo.nReserved">
+            <param name="nReserved">CH: 保留字段 | EN: Reserved</param>
+        </member>
+        <member name="T:VM.Core.GroupModuInfoList">
+            <summary>
+            CH: Group模块信息列表结构 | EN: Group module information list structure
+            </summary>
+        </member>
+        <member name="F:VM.Core.GroupModuInfoList.nNum">
+            <param name="nNum">CH: 模块个数 | EN: Number of modules in list</param>
+        </member>
+        <member name="F:VM.Core.GroupModuInfoList.astModuleInfo">
+            <param name="astModuleInfo">CH: 模块信息列表 | EN: Information details of a module</param>
+        </member>
+        <member name="F:VM.Core.GroupModuInfoList.nReserved">
+            <param name="nReserved">CH: 保留字段 | EN: Reserved</param>
+        </member>
+        <member name="T:VM.Core.IntResultInfo">
+            <summary>
+            CH: 整型结果数据信息结构 | EN: Int type data structure
+            </summary>
+        </member>
+        <member name="F:VM.Core.IntResultInfo.nValueStatus">
+            <param name="nValueStatus">CH: 单个输出参数的状态 1成功，其他值失败 | EN: Status of a single module, 1-succeeded, other values-error codes</param>
+        </member>
+        <member name="F:VM.Core.IntResultInfo.nValueNum">
+            <param name="nValueNum">CH: 模块值个数 | EN: Number of module values</param>
+        </member>
+        <member name="F:VM.Core.IntResultInfo.pIntValue">
+            <param name="pIntValue">CH: 整型数据 | EN: Integer data</param>
+        </member>
+        <member name="T:VM.Core.FloatResultInfo">
+            <summary>
+            CH: 浮点型结果数据信息结构 | EN: Float type data structure
+            </summary>
+        </member>
+        <member name="F:VM.Core.FloatResultInfo.nValueStatus">
+            <param name="nValueStatus">CH: 单个输出参数的状态 1成功，其他值失败 | EN: Status of a single module, 1-succeeded, other values-error codes</param>
+        </member>
+        <member name="F:VM.Core.FloatResultInfo.nValueNum">
+            <param name="nValueNum">CH: 模块值个数 | EN: Number of module values</param>
+        </member>
+        <member name="F:VM.Core.FloatResultInfo.pFloatValue">
+            <param name="pFloatValue">CH: 浮点型数据 | EN: Float data</param>
+        </member>
+        <member name="T:VM.Core.StringValueInfo">
+            <summary>
+            CH: 字符串数据 | EN: String data
+            </summary>
+        </member>
+        <member name="F:VM.Core.StringValueInfo.strValue">
+            <param name="strValue">CH: 字符串数据类型 | EN: String data structure</param>
+        </member>
+        <member name="F:VM.Core.StringValueInfo.nReserved">
+            <param name="nReserved">CH: 保留字段 | EN: Reserved</param>
+        </member>
+        <member name="T:VM.Core.StringResultInfo">
+            <summary>
+            CH: 字符串型结果数据信息结构 | EN: Float type data structure
+            </summary>
+        </member>
+        <member name="F:VM.Core.StringResultInfo.nValueStatus">
+            <param name="nValueStatus">CH: 单个输出参数的状态 1成功，其他值失败 | EN: Status of a single module, 1-succeeded, other values-error codes</param>
+        </member>
+        <member name="F:VM.Core.StringResultInfo.nValueNum">
+            <param name="nValueNum">CH: 模块值个数 | EN: Number of module values</param>
+        </member>
+        <member name="F:VM.Core.StringResultInfo.astStringValue">
+            <param name="pstStringValue">CH: 字符串型数据 | EN: String data</param>
+        </member>
+        <member name="T:VM.Core.BaseDataInfo">
+            <summary>
+            CH: 基本数据类型 | EN: Base data structure
+            </summary>
+        </member>
+        <member name="F:VM.Core.BaseDataInfo.pData">
+            <param name="pData">CH: 实际数据 | EN: Actual data</param>
+        </member>
+        <member name="F:VM.Core.BaseDataInfo.nLen">
+            <param name="nLen">CH: 实际数据长度 | EN: Actual data size</param>
+        </member>
+        <member name="F:VM.Core.BaseDataInfo.nReserved">
+            <param name="nReserved">CH: 保留字段 | EN: Reserved</param>
+        </member>
+        <member name="P:VM.Core.BaseDataInfo.strReserved">
+            <param name="strReserved">CH: 保留字段 | EN: Reserved</param>
+        </member>
+        <member name="T:VM.Core.ImageResultInfo">
+            <summary>
+            CH: 图像类型结果数据信息结构 | EN: Image type data structure (Read share memory data)
+            </summary>
+        </member>
+        <member name="F:VM.Core.ImageResultInfo.nValueStatus">
+            <param name="nValueStatus">CH: 单个输出参数的状态 1成功，其他值失败 | EN: Status of a single module, 1-succeeded, other values-error codes</param>
+        </member>
+        <member name="F:VM.Core.ImageResultInfo.nValueNum">
+            <param name="nValueNum">CH: 模块值个数 | EN: Number of module values</param>
+        </member>
+        <member name="F:VM.Core.ImageResultInfo.pstImageValue">
+            <param name="pstImageValue">CH: 图像数据 | EN: Image data</param>
+        </member>
+        <member name="T:VM.Core.PointsetResultInfo">
+            <summary>
+            CH: 点集类型结果数据信息结构 | EN: Pointset type data structure (Read share memory data)
+            </summary>
+        </member>
+        <member name="F:VM.Core.PointsetResultInfo.nValueStatus">
+            <param name="nValueStatus">CH: 单个输出参数的状态 1成功，其他值失败 | EN: Status of a single module, 1-succeeded, other values-error codes</param>
+        </member>
+        <member name="F:VM.Core.PointsetResultInfo.nValueNum">
+            <param name="nValueNum">CH: 模块值个数 | EN: Number of module values</param>
+        </member>
+        <member name="F:VM.Core.PointsetResultInfo.pstChunkValue">
+            <param name="pstChunkValue">CH: 点集数据 | EN: Pointset data</param>
+        </member>
+        <member name="T:VM.Core.ProcessInfo">
+            <summary>
+            CH: 流程信息结构 | EN: Process information structure
+            </summary>
+        </member>
+        <member name="F:VM.Core.ProcessInfo.nProcessID">
+            <param name="nProcessID">CH: 流程ID | EN: Process ID</param>
+        </member>
+        <member name="F:VM.Core.ProcessInfo.nReserved">
+            <param name="nReserved">CH: 保留字段 | EN: Reserved</param>
+        </member>
+        <member name="P:VM.Core.ProcessInfo.strProcessName">
+            <param name="strProcessName">CH: 流程名称 | EN: Process name</param>
+        </member>
+        <member name="T:VM.Core.ProcessInfoList">
+            <summary>
+            CH: 流程信息列表结构 | EN: Process information list structure
+            </summary>
+        </member>
+        <member name="F:VM.Core.ProcessInfoList.nNum">
+            <param name="nNum">CH: 流程个数 | EN: The number of processes in the list</param>
+        </member>
+        <member name="F:VM.Core.ProcessInfoList.astProcessInfo">
+            <param name="astProcessInfo">CH: 流程信息列表 | EN: Process information</param>
+        </member>
+        <member name="F:VM.Core.ProcessInfoList.nReserved">
+            <param name="nReserved">CH: 保留字段 | EN: Reserved</param>
+        </member>
+        <member name="T:VM.Core.ProcedureRunPolicy">
+            <summary>
+            用户自定义流程运行策略信息结构
+            </summary>
+        </member>
+        <member name="F:VM.Core.ProcedureRunPolicy.nThreadNum">
+            <param name="nThreadNum">指定流程其执行线程数目</param>
+        </member>
+        <member name="T:VM.Core.ObjectIODataType">
+            <summary>
+            CH: IO数据类型 | EN: IO Data Type
+            </summary>
+        </member>
+        <member name="F:VM.Core.ObjectIODataType.OBJECT_IO_DATA_TYPE_INVALID">
+            <summary>
+            CH: 无效类型 | EN: Invalid Type
+            </summary>
+        </member>
+        <member name="F:VM.Core.ObjectIODataType.OBJECT_IO_DATA_TYPE_INT">
+            <summary>
+            CH: Int类型 | EN: Int Type
+            </summary>
+        </member>
+        <member name="F:VM.Core.ObjectIODataType.OBJECT_IO_DATA_TYPE_FLOAT">
+            <summary>
+            CH: Float类型 | EN: Float Type
+            </summary>
+        </member>
+        <member name="F:VM.Core.ObjectIODataType.OBJECT_IO_DATA_TYPE_STRING">
+            <summary>
+            CH: String类型 | EN: String Type
+            </summary>
+        </member>
+        <member name="F:VM.Core.ObjectIODataType.OBJECT_IO_DATA_TYPE_IMAGE">
+            <summary>
+            CH: Image类型 | EN: Image Type
+            </summary>
+        </member>
+        <member name="F:VM.Core.ObjectIODataType.OBJECT_IO_DATA_TYPE_CHUNK">
+            <summary>
+            CH: Chunk类型 | EN: Chunk Type
+            </summary>
+        </member>
+        <member name="T:VM.Core.DynamicIOInfoItem">
+            <summary>
+            CH: 单个动态IO信息结构 | EN: Dynamic IO Information Item
+            </summary>
+        </member>
+        <member name="F:VM.Core.DynamicIOInfoItem.nIOType">
+            <param name="nIOType">CH: 动态IO类型 | EN: Dynamic IO Type</param>
+        </member>
+        <member name="F:VM.Core.DynamicIOInfoItem.strIOName">
+            <param name="strIOName">CH: 动态IO名称 | EN: Dynamic IO Name</param>
+        </member>
+        <member name="T:VM.Core.DataType">
+            <summary>
+            数据类型枚举
+            </summary>
+        </member>
+        <member name="T:VM.Core.InOutParamInfo">
+            <summary>
+            输入输出基本参数信息结构
+            </summary>
+        </member>
+        <member name="F:VM.Core.InOutParamInfo.strParamName">
+            <param name="strParamName">CH: 参数名称 | EN: Parameter name</param>
+        </member>
+        <member name="F:VM.Core.InOutParamInfo.eDataType">
+            <param name="eDataType">CH: 数据类型 | EN: Data type</param>
+        </member>
+        <member name="T:VM.Core.AllInOutParamList">
+            <summary>
+            所有输入输出参数信息结构列表
+            </summary>
+        </member>
+        <member name="M:VM.Core.AllInOutParamList.#ctor">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="F:VM.Core.AllInOutParamList.strParamName">
+            <param name="strParamName">CH: 参数名称 | EN: Parameter name</param>
+        </member>
+        <member name="F:VM.Core.AllInOutParamList.eDataType">
+            <param name="eDataType">CH: 数据类型 | EN: Data type</param>
+        </member>
+        <member name="F:VM.Core.AllInOutParamList.listAllParam">
+            <param name="listParam">CH: 所有参数列表 | EN: All parameter list</param>
+        </member>
+        <member name="T:VM.Core.ModuRunErrorInfo">
+            <summary>
+            CH: 模块运行错误信息 | EN: Module Run Error Info
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModuleSet.LoadModules">
+            <summary>
+            加载模块
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModuleSet.LoadModuleDLL(System.String)">
+            <summary>
+            根据模块类型，加载模块dll
+            </summary>
+            <param name="moduleName"></param>
+        </member>
+        <member name="M:VM.Core.VmModuleSet.GetLibs(System.String)">
+            <summary>
+            获取公共外部库路径
+            </summary>
+            <param name="libPath">Librarys.Config路径</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModuleSet.UnSubInnerModule(VM.Core.VmModule)">
+            <summary>
+            (输出)解订阅内部模块
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModuleSet.GetAllModuleByType(System.Collections.Generic.List{VM.Core.VmModule},System.String,System.Boolean)">
+            <summary>
+            根据模块类型查找当前集合中的目标模块(注：若要查询全局类型模块，请直接使用VmSolution.Instance.Modules查询)
+            </summary>
+            <param name="allModules">待填充模块列表</param>
+            <param name="type">模块类型</param>
+            <param name="isCurrentLevel">是否本层级查询</param>
+        </member>
+        <member name="M:VM.Core.VmModuleSet.GetModuleByID(System.UInt32)">
+            <summary>
+            根据ID全方案搜索目标模块
+            </summary>
+            <param name="id">传入id</param>
+            <returns>目标模块</returns>
+        </member>
+        <member name="M:VM.Core.VmModuleSet.GetGlobalVariabelInputModule(System.Int32,System.String,System.Collections.Generic.Dictionary{System.UInt32,VM.PlatformSDKCS.ImvsSdkDefine.IMVS_MODULE_INFO}@)">
+            <summary>
+            获取订阅全局变量的模块
+            </summary>
+            <param name="FullName">模块全名称</param>
+            <param name="ModuleId">模块ID</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmModuleSet.SetChildRunState(System.Boolean)">
+            <summary>
+            设置子节点运行状态
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModuleSet.SetGlobalRunState(System.Boolean)">
+            <summary>
+            设置全局模块运行状态
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmModuleSet.LocalVariable">
+            <summary>
+            二次开发对外局部变量
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmModuleSet.VMControls#Interface#IVmModuleSet#LocalVariablModule">
+            <summary>
+            局部变量模块
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModuleSet.AddOrGetLocalVariableModule(System.Boolean)">
+            <summary>
+            获取局部变量模块
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:VM.Core.VmModuleSet.ProcedureCommunicaitonModule">
+            <summary>
+            流程通信模块
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmModuleSet.AddOrGetProcedureCommunicaitonModule">
+            <summary>
+            获取流程通信模块
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:VM.Core.VmParamSubManager">
+            <summary>
+            模块运行参数订阅管理
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmParamSubManager.SetModuleParamBinding(System.String,System.String,VM.PlatformSDKCS.ImvsSdkDefine.IMVS_ENUM_SUBSCRIBE_VAR_TYPE,System.String,System.UInt32,System.String,VM.PlatformSDKCS.ImvsSdkDefine.IMVS_ENUM_SUBSCRIBE_INDEX_TYPE,System.String,System.UInt32,System.String)">
+            <summary>
+            关联订阅
+            </summary>
+            <param name="paramName"></param>
+            <param name="paramType"></param>
+            <param name="subType"></param>
+            <param name="constantValue"></param>
+            <param name="targetModuleId"></param>
+            <param name="targetParamName"></param>
+            <param name="indexType"></param>
+            <param name="indexConstantValue"></param>
+            <param name="indexModuleId"></param>
+            <param name="indexParamName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmParamSubManager.GetModuleParamBinding(System.String)">
+            <summary>
+            获取订阅
+            </summary>
+            <param name="paramName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmParamSubManager.DelModuleParamBinding(System.String,System.String)">
+            <summary>
+            删除订阅
+            </summary>
+            <param name="paramName"></param>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmParamSubManager.GetVarType(System.String)">
+            <summary>
+            类型转换
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="P:VM.Core.VmProcedure.SelectedModule">
+            <summary>
+            内部使用
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmProcedure.IsDynamicModu">
+            <summary>
+            动态io模块标识
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmProcedure.IsVirtual">
+            <summary>
+            是否虚拟流程
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmProcedure.StrModuleName">
+            <summary>
+            内部使用
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmProcedure.Name">
+            <summary>
+            内部使用
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmProcedure.ID">
+            <summary>
+            流程ID
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmProcedure.ProcessTime">
+            <summary>
+            流程执行耗时
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmProcedure.ContinuousRunEnable">
+            <summary>
+            连续运行 | 停止执行标志
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmProcedure.IsGlobalRuning">
+            <summary>
+            只是为了令流程按钮变灰(内部使用)
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmProcedure.IsForbidden">
+            <summary>
+            是否受全局流程控制
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmProcedure.IsEnabled">
+            <summary>
+            流程禁用/启用
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmProcedure.IsProcessRunStop">
+            <summary>
+            流程ng停止运行标识
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmProcedure.UniqueName">
+            <summary>
+            内部使用
+            </summary>
+        </member>
+        <member name="E:VM.Core.VmProcedure.OnWorkBeginStatusCallBack">
+            <summary>
+            流程开始执行状态回调（EventArgs为VMControls.Interface.ValueEventArgs类型，其中Value属性为流程状态结构体ImvsSdkDefine.IMVS_MODULE_WORK_STAUS）
+            </summary>
+        </member>
+        <member name="E:VM.Core.VmProcedure.OnWorkEndStatusCallBack">
+            <summary>
+            流程执行结束状态回调（EventArgs为VMControls.Interface.ValueEventArgs类型，其中Value属性为流程状态结构体ImvsSdkDefine.IMVS_MODULE_WORK_STAUS）
+            </summary>
+        </member>
+        <member name="E:VM.Core.VmProcedure.VMControls#Interface#IVmProcedure#AsyncWorkStatusCallBack">
+            <summary>
+            异步回调，VM内部渲染使用
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmProcedure.#ctor(System.UInt32,System.String)">
+            <summary>
+            用于独立group的父流程
+            </summary>
+            <param name="id"></param>
+            <param name="str"></param>
+        </member>
+        <member name="M:VM.Core.VmProcedure.#ctor(System.Object)">
+            <summary>
+            内部使用
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmProcedure.VMControls#Interface#IVmProcedure#CanModuleSelfExecute">
+            <summary>
+            流程内模块是否可自执行，若为false则需流程先执行一次
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmProcedure.VMControls#Interface#IVmProcedure#SetInnerModuleIsSelfRuning(System.Boolean)">
+            <summary>
+            是否有内部模块在自执行
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmProcedure.VMControls#Interface#IVMRun#ContinuousRunEnable">
+            <summary>
+            实际标志
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmProcedure.VMControls#Interface#IVmProcedure#SetIoParams">
+            <summary>
+            内部使用
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmProcedure.VMControls#Interface#IVmProcedure#DeleteSelf">
+            <summary>
+            删除流程
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmProcedure.Init(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_PROCESS_INFO)">
+            <summary>
+            内部使用
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmProcedure.InvokeOnWorkBeginStatusCallBack(System.Object,System.UInt32)">
+            <summary>
+            流程忙碌
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmProcedure.InvokeOnWorkEndStatusCallBack(System.Object,System.UInt32)">
+            <summary>
+            流程空闲
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmProcedure.OnAsyncWorkStatusCallBack(VMControls.Interface.ValueEventArgs)">
+            <summary>
+            流程状态异步回调
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmProcedure.UpdateRunStatus(System.Boolean)">
+            <summary>
+            更新执行一次按钮状态 回调更新
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmProcedure.UpdateGlobalRunStatus(System.Boolean)">
+            <summary>
+            更新全局连续执行按钮状态，连续运行接管 回调更新 zrw 220105
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmProcedure.UpdateContinusRunStatusSync(System.Boolean)">
+            <summary>
+            更新流程连续执行按钮
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmProcedure.Export">
+            <summary>
+            流程Export为同步方法，里面加了等待（内部使用）
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmProcedure.SetProcedureRelateIO(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_MODULE_SUBSCRIBE_INFO_LIST)">
+            <summary>
+            设置流程IO
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmProcedure.SubscribeForProcedure(VM.Core.VmIO,VM.Core.VmIO)">
+            <summary>
+            流程订阅逻辑:走流程结果配置接口
+            </summary>
+            <param name="vmIO"></param>
+            <param name="relateIO"></param>
+        </member>
+        <member name="M:VM.Core.VmProcedure.UnSubscribeForProcedure(VM.Core.VmIO,VM.Core.VmIO)">
+            <summary>
+            流程订阅逻辑:走流程结果配置接口
+            </summary>
+            <param name="vmIO"></param>
+            <param name="relateIO"></param>
+        </member>
+        <member name="M:VM.Core.VmProcedure.RefreshResult">
+            <summary>
+            主动获取流程结果
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmProcedure.Delete_Process(VM.Core.UnRedo_ProcessData,VMControls.Interface.IUnRedoParams)">
+            <summary>
+            删除流程（撤销重做）
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmProcedure.Import_Process(VM.Core.UnRedo_ProcessData,VMControls.Interface.IUnRedoParams)">
+            <summary>
+            导入流程（撤销重做）
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmProcedure.procedureInfoCopy(VM.Core.VmProcedure)">
+            <summary>
+            流程复制
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmProcedure.Subscribe(VM.Core.VmIO,VM.Core.VmIO,System.Boolean)">
+            <summary>
+            流程配置解订阅
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmProcedure.GetGroupIoList(VM.Core.VmIOCollection,VM.PlatformSDKCS.ImvsSdkDefine.IMVS_PROCEDURE_IO_INFO[],System.UInt32@)">
+            <summary>
+            内部使用
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmProcedure.AddFilterToList(VM.PlatformSDKCS.ImvsSdkDefine.IMVS_PROCEDURE_IO_INFO@,VM.Core.VmIO)">
+            <summary>
+            内部使用
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmProcedure.CreateToModuleSet(VM.Core.ModelBase,System.String,System.UInt32,System.UInt32)">
+            <summary>
+            内部使用
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmProcedure.Run">
+            <summary>
+            CH: 执行一次 | EN: run once
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmProcedure.Run(System.Boolean)">
+            <summary>
+            CH: 执行一次 | EN: run once
+            </summary>
+            <param name="bIsRespondToUI">接口执行期间是否尝试响应界面操作，在UI线程中设置为true可避免阻塞界面，在非UI线程中设置为false可减小耗时波动</param>
+        </member>
+        <member name="M:VM.Core.VmProcedure.Run(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            CH: 执行一次 | EN: run once
+            </summary>
+            <param name="strCommand">触发字符串</param>
+            <param name="bIsWait">是否等待执行结束</param>
+            <param name="bIsRespondToUI">接口执行期间是否尝试响应界面操作，在UI线程中设置为true可避免阻塞界面，在非UI线程中设置为false可减小耗时波动</param>
+        </member>
+        <member name="M:VM.Core.VmProcedure.Run(System.String,System.UInt32@,System.Boolean,System.Boolean)">
+            <summary>
+            CH: 执行一次带执行次数 | EN: run once with execute count
+            </summary>
+            <param name="strCommand">触发字符串</param>
+            <param name="nExecuteCount">执行次数</param>
+            <param name="bIsWait">是否等待执行结束</param>
+            <param name="bIsRespondToUI">接口执行期间是否尝试响应界面操作，在UI线程中设置为true可避免阻塞界面，在非UI线程中设置为false可减小耗时波动</param>
+        </member>
+        <member name="M:VM.Core.VmProcedure.RunP2P(System.UInt32,System.Boolean)">
+            <summary>
+            CH: 执行一次点对点模式 | EN: run once in point to point model
+            </summary>
+            <param name="nTimeout">超时时间</param>
+            <param name="bIsRespondToUI">接口执行期间是否尝试响应界面操作，在UI线程中设置为true可避免阻塞界面，在非UI线程中设置为false可减小耗时波动</param>
+        </member>
+        <member name="M:VM.Core.VmProcedure.SyncRun">
+            <summary>
+            CH: 同步执行一次 | EN: run once synchronize
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmProcedure.CopyProcedure">
+            <summary>
+            拷贝流程
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmProcedure.ExportFile(System.String,System.String,System.Boolean,System.String)">
+            <summary>
+             CH: 导出*.prc文件 | EN:Save *.prc File
+            </summary>
+            <param name="strPath">CH: 文件路径 | EN:File Path</param>
+            <param name="strPassword">CH: 密码 | EN:Password</param>
+            <param name="initDir">CH: 文件夹路径 | EN:Folder Path</param>
+            <returns>CH: 文件路径 | EN:File Path</returns>
+        </member>
+        <member name="M:VM.Core.VmProcedure.Dispose">
+            <summary>
+            CH: 释放 | EN: Dispose
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmProcedure.SetContinousRunInterval(System.UInt32)">
+            <summary>
+            CH: 设置流程时间间隔 | EN: Set procedure continuous run interval
+            </summary>
+            <param name="nInterval">时间间隔(ms)</param>
+        </member>
+        <member name="M:VM.Core.VmProcedure.GetAllModuleList">
+            <summary>
+            CH: 获取当前流程中所有模块列表 | EN: Get All Module list in this Procedure
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmProcedure.GetProcedureModuleList">
+            <summary>
+            CH: 获取流程第一层级模块列表（不包含Group内部模块） | EN: Get first layer Module list in Procedure (Module in Group is not included)
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmProcedure.ModuResult">
+            <summary>
+            CH: 模块结果对象 | EN: Module Result Object
+            </summary>
+        </member>
+        <member name="P:VM.Core.VmProcedure.ModuParams">
+            <summary>
+            CH: 模块参数对象 | EN: Module Param Object
+            </summary>
+        </member>
+        <member name="M:VM.Core.VmProcedure.GetIsExecuteNormal">
+            <summary>
+            CH: 获取流程内模块是否全部执行正常 | EN: Is all modules execute normally
+            </summary>
+            <returns>是否正常 1正常 0异常 默认为1</returns>
+        </member>
+        <member name="M:VM.Core.VmProcedure.GetModuErrorInfoList">
+            <summary>
+            CH: 获取流程内模块运行错误信息 | EN: Get Module Run Error Info In Procedure
+            </summary>
+            <returns>错误信息数组，数量上限16个</returns>
+        </member>
+        <member name="M:VM.Core.VmProcedure.SetProcedureRunPolicy(VM.Core.ProcedureRunPolicy)">
+            <summary>
+            CH: 设置流程运行策略 | EN: Set procedure run policy
+            </summary>
+            <param name="stPrcRunPolicy">运行策略信息</param>
+        </member>
+        <member name="M:VM.Core.VmProcedure.Load(System.String,System.String,System.Boolean)">
+            <summary>
+            导入流程
+            </summary>
+            <param name="strPath">路径</param>
+            <param name="strPassword">密码(预留)</param>
+            <param name="bIsOverrideGlobal">是否覆盖全局模块，true:覆盖全局模块,false:忽略全局模块</param>
+            <returns></returns>
+        </member>
+        <member name="M:VM.Core.VmProcedure.SaveAs(System.String,System.String)">
+            <summary>
+            导出流程
+            </summary>
+            <param name="strPath">路径</param>
+            <param name="strPassword">密码(预留)</param>
+            <returns></returns>
+        </member>
+        <!-- 对于成员“M:VM.Core.VmProcedure.ImportProcess(System.String,System.String)”忽略有格式错误的 XML 注释 -->
+        <member name="M:VM.Core.VmProcedure.ExportProcess(System.String,System.String)">
+            <summary>
+            导出流程
+            </summary>
+            <param name="strPath">流程路径</param>
+            <param name="strPassword">流程密码</param>
+        </member>
+        <!-- 对于成员“M:VM.Core.VmProcedure.GetIntOutputResult(System.String)”忽略有格式错误的 XML 注释 -->
+        <!-- 对于成员“M:VM.Core.VmProcedure.GetFloatOutputResult(System.String)”忽略有格式错误的 XML 注释 -->
+        <!-- 对于成员“M:VM.Core.VmProcedure.GetStringOutputResult(System.String)”忽略有格式错误的 XML 注释 -->
+        <!-- 对于成员“M:VM.Core.VmProcedure.GetImageOutputResult(System.String)”忽略有格式错误的 XML 注释 -->
+        <!-- 对于成员“M:VM.Core.VmProcedure.GetPointsetOutputResult(System.String)”忽略有格式错误的 XML 注释 -->
+        <member name="M:VM.Core.VmProcedure.VMControls#Interface#IVmProcedure#SaveCalibData">
+            <summary>
+            把一键标定引导数据存储到userdata
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5C6031E6-1A50-4B7D-B390-AA79EF55E876}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Script.Methods</RootNamespace>
+    <AssemblyName>Script.Methods</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60DC8134-EBA5-43B8-BCC9-BB4BC16C2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="Script.Algorithm">
+      <HintPath>C:\Program Files\VisionMaster4.4.0\Applications\Module(sp)\x64\Logic\ShellModule\Script.Algorithm.dll</HintPath>
+    </Reference>
+    <Reference Include="Script.Render">
+      <HintPath>C:\Program Files\VisionMaster4.4.0\Applications\Module(sp)\x64\Logic\ShellModule\Script.Render.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AnnulusData.cs" />
+    <Compile Include="CircleData.cs" />
+    <Compile Include="CommDevice.cs" />
+    <Compile Include="CommDeviceBase.cs" />
+    <Compile Include="Conceal\InternalMethods.cs" />
+    <Compile Include="ContourPointData.cs" />
+    <Compile Include="CONTOUR_POINT_DATA.cs" />
+    <Compile Include="DataConvert.cs" />
+    <Compile Include="DataType.cs" />
+    <Compile Include="DeviceAddress.cs" />
+    <Compile Include="DeviceType.cs" />
+    <Compile Include="EllipseData.cs" />
+    <Compile Include="FixtureConfig.cs" />
+    <Compile Include="FixtureData.cs" />
+    <Compile Include="GlobalCommModule.cs" />
+    <Compile Include="ImageData.cs" />
+    <Compile Include="ImagePixelFormate.cs" />
+    <Compile Include="Interop.cs" />
+    <Compile Include="IProcessMethods.cs" />
+    <Compile Include="ISetData.cs" />
+    <Compile Include="LineConfig.cs" />
+    <Compile Include="LineData.cs" />
+    <Compile Include="ModbusFunCode.cs" />
+    <Compile Include="ModuleBase.cs" />
+    <Compile Include="ModuleGroup.cs" />
+    <Compile Include="PointData.cs" />
+    <Compile Include="PolygonData.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RectData.cs" />
+    <Compile Include="RoiboxData.cs" />
+    <Compile Include="ScriptMethods.cs" />
+    <Compile Include="ShapeColor.cs" />
+    <Compile Include="ShapeConfig.cs" />
+    <Compile Include="TextConfig.cs" />
+    <Compile Include="VarBaseModule.cs" />
+    <Compile Include="VarModule.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

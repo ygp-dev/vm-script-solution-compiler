@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "1.0",
+  "task": { "name": "m7-vm-types", "mode": "create", "vmVersion": "4.4.0" },
+  "scripts": [
+    {
+      "id": "all-types",
+      "carrier": "csharp-module",
+      "name": "VM原生类型",
+      "procedure": "流程1",
+      "execution": { "mode": "once" },
+      "inputs": [
+        { "name": "IntValue", "type": "int" },
+        { "name": "IntArray", "type": "int[]" },
+        { "name": "FloatValue", "type": "float" },
+        { "name": "FloatArray", "type": "float[]" },
+        { "name": "StringValue", "type": "string" },
+        { "name": "StringArray", "type": "string[]" },
+        { "name": "Bytes", "type": "byte" },
+        { "name": "Image", "type": "image" },
+        { "name": "Box", "type": "roibox" },
+        { "name": "Boxes", "type": "roibox[]" },
+        { "name": "Annulus", "type": "roiannulus" },
+        { "name": "Polygon", "type": "roipolygon" },
+        { "name": "Points", "type": "point" },
+        { "name": "Lines", "type": "line" },
+        { "name": "Fixture", "type": "fixture" },
+        { "name": "Rects", "type": "rect" },
+        { "name": "Ellipses", "type": "ellipse" },
+        { "name": "Pointset", "type": "pointset" }
+      ],
+      "outputs": [],
+      "operations": [],
+      "dependencies": []
+    }
+  ]
+}

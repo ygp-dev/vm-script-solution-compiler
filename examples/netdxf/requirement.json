@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "1.0",
+  "task": {
+    "name": "netdxf-load-example",
+    "mode": "create",
+    "vmVersion": "4.4.0"
+  },
+  "scripts": [
+    {
+      "id": "netdxf-load",
+      "carrier": "csharp-module",
+      "name": "netDxf读取示例",
+      "procedure": "流程1",
+      "source": "using System;\nusing netDxf;\nusing Script.Methods;\n\npublic partial class UserScript : ScriptMethods, IProcessMethods\n{\n    public void Init() { }\n\n    public bool Process()\n    {\n        try\n        {\n            DxfDocument document = DxfDocument.Load(DxfPath);\n            Loaded = document != null ? 1 : 0;\n            return document != null;\n        }\n        catch (Exception error)\n        {\n            Loaded = 0;\n            ConsoleWrite(error.ToString());\n            return false;\n        }\n    }\n}\n",
+      "execution": { "mode": "once", "order": 0 },
+      "inputs": [
+        { "name": "DxfPath", "type": "string", "required": true, "description": "DXF 文件绝对路径" }
+      ],
+      "outputs": [
+        { "name": "Loaded", "type": "int", "description": "1=加载成功，0=加载失败" }
+      ],
+      "operations": [],
+      "dependencies": [
+        { "kind": "dotnet-assembly", "name": "netDxf.dll", "architecture": "anycpu" }
+      ]
+    }
+  ],
+  "connections": []
+}

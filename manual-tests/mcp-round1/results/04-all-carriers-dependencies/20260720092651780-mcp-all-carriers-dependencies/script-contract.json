@@ -1,0 +1,117 @@
+{
+  "mode": "create",
+  "framework": ".NET Framework 4.6.1",
+  "architecture": "x64",
+  "scripts": [
+    {
+      "carrier": "global-csharp",
+      "source": "generated/GlobalScript.cs",
+      "solEntry": "SolutionFile/GlobalScript_0",
+      "references": [
+        "mscorlib.dll",
+        "System.dll",
+        "System.Core.dll",
+        "System.Drawing.dll",
+        "System.Windows.Forms.dll",
+        "VM.GlobalScript.Methods.dll",
+        "iMVS-6000PlatformSDKCS.dll",
+        "Apps.Json.dll",
+        "VM.Core.dll",
+        "VM.PlatformSDKCS.dll",
+        "VMControls.BaseInterface.dll",
+        "VMControls.Interface.dll",
+        "VMControls.RenderInterface.dll",
+        "ImageSourceModuleCs.dll",
+        "IMVSFastFeatureMatchModuCs.dll"
+      ]
+    },
+    {
+      "id": "drawing-dependency",
+      "carrier": "csharp-module",
+      "procedure": "\u6D41\u7A0B1",
+      "name": "CSharp\u4F9D\u8D56\u9A8C\u8BC1",
+      "source": "generated/drawing-dependency.cs",
+      "inputs": [],
+      "outputs": [
+        "ColorName"
+      ],
+      "dependencies": [
+        {
+          "kind": "dotnet-assembly",
+          "name": "System.Drawing.dll",
+          "role": "system",
+          "version": null,
+          "path": null,
+          "architecture": "anycpu",
+          "referenceType": 0
+        }
+      ],
+      "shellReferences": {
+        "mode": "explicit-shell-refrences-payload",
+        "declared": [
+          "System.Drawing.dll"
+        ]
+      }
+    },
+    {
+      "id": "python-json",
+      "carrier": "python-module",
+      "procedure": "\u6D41\u7A0B1",
+      "name": "Python\u4F9D\u8D56\u9A8C\u8BC1",
+      "source": "generated/python-json.py",
+      "inputs": [],
+      "outputs": [
+        "JsonText"
+      ],
+      "dependencies": [
+        {
+          "kind": "python-package",
+          "name": "json",
+          "role": null,
+          "version": null,
+          "path": null,
+          "architecture": "pure-python",
+          "referenceType": null
+        }
+      ],
+      "shellReferences": {
+        "mode": "vm-implicit-defaults",
+        "declared": []
+      }
+    }
+  ],
+  "dependencyResolution": [
+    {
+      "scriptId": "drawing-dependency",
+      "scriptName": "CSharp\u4F9D\u8D56\u9A8C\u8BC1",
+      "assemblies": [
+        {
+          "name": "System.Drawing.dll",
+          "declaredName": "System.Drawing.dll",
+          "referenceType": 0,
+          "role": "system",
+          "source": "framework",
+          "sourcePath": null,
+          "packagedPath": null,
+          "deploymentTarget": null,
+          "runtimeVisible": true,
+          "assemblyVersion": null,
+          "clrMetadataVersion": "v4.0.30319",
+          "targetFramework": ".NET Framework 4.6.1 runtime reference",
+          "architecture": "anycpu",
+          "sha256": null,
+          "assemblyReferences": []
+        }
+      ]
+    }
+  ],
+  "sourcePrecompiled": true,
+  "precompileEnvironment": "VM 4.4 method assemblies and bundled Python parser",
+  "ioMapping": "VM-4.4 saved-sample logical ports \u002B StructName backing fields \u002B DynamicIO combinations \u002B UiParamData object mappings",
+  "inputDefaults": "int/float ModuleSubscribe mapping confirmed by VM-saved round trip; bool/string structurally encoded; Python also emits deterministic None fallback",
+  "runtimeValidated": true,
+  "runtimeValidation": {
+    "baselineValidated": true,
+    "pending": []
+  }
+}

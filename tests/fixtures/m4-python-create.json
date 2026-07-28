@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "1.0",
+  "task": { "name": "m4-python-create", "mode": "create", "vmVersion": "4.4.0" },
+  "scripts": [
+    {
+      "id": "sum-python",
+      "carrier": "python-module",
+      "name": "Python求和",
+      "procedure": "流程1",
+      "execution": { "mode": "once", "order": 0 },
+      "source": "# coding: utf-8\nfrom ioHelper import *\n\ndef Process(data) -> int:\n    moduleVar = IoHelper(data, INIT_MODULE_VAR)\n    globalVar = IoHelper(data, INIT_GLOBAL_VAR)\n    localVar = IoHelper(data, INIT_LOCAL_VAR)\n    try:\n        a = moduleVar.A\n        b = moduleVar.B\n        if a is None:\n            a = 0\n        if b is None:\n            b = 0\n        moduleVar.Sum = int(a) + int(b)\n    except BaseException as error:\n        PrintMsg(error)\n        return -1\n    return 0\n",
+      "inputs": [
+        { "name": "A", "type": "int", "default": 0, "required": true },
+        { "name": "B", "type": "int", "default": 0, "required": true }
+      ],
+      "outputs": [{ "name": "Sum", "type": "int", "default": 0 }],
+      "operations": [],
+      "dependencies": []
+    }
+  ]
+}

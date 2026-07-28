@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<Root>
+    <SoftVersion>
+        <Version CurrentVersion="V4.4.0" />
+    </SoftVersion>
+    <SaveInfo>
+        <SaveInfo Time="2026-07-14 15:17:34" Name="VisionMaster.exe" />
+    </SaveInfo>
+    <SolutionInfo>
+        <Solution SolutionName="脚本方案" />
+    </SolutionInfo>
+    <MainInterfaceInfo>
+        <MainInterface FileName="MainInterface" />
+    </MainInterfaceInfo>
+    <ModulesInfo>
+        <ModuleBase>
+            <Module Index="0" Name="PyShellModule" Type="0" IsSlave="0" ServerAddr="" ModuleFile="" DisplayName="Python脚本1" EnableModule="1" EnableCallBack="1" Guid="FD3EB89203954662B31A66504D06AD0C" />
+            <Module Index="1" Name="ShellModule" Type="0" IsSlave="0" ServerAddr="" ModuleFile="" DisplayName="脚本1" EnableModule="1" EnableCallBack="1" Guid="8D9CA9A5BE144C039A0925D9DA686946" />
+        </ModuleBase>
+        <ModuleCommonConnect />
+        <ModuleSubscribe />
+    </ModulesInfo>
+    <ProceduresInfo>
+        <ProcedureBase>
+            <Procedure Index="10000" DisplayName="流程1" ShieldGlobalCtrl="0" ContinueExecuteTimGap="100" Guid="478B9999FD514054B225099732B82FB6" StopWhenNG="0" RunTimeout="0" />
+        </ProcedureBase>
+        <ProcedureInsideModules>
+            <Procedure Index="10000">
+                <Inside Index="0" />
+                <Inside Index="1" />
+            </Procedure>
+        </ProcedureInsideModules>
+        <ConnectInfo />
+        <SubscribeInfo />
+    </ProceduresInfo>
+    <GlobalSriptInfo>
+        <Module Index="0" Name="GlobalScript" DisplayName="GlobalScript" ModuleFile="GlobalScript_0" />
+    </GlobalSriptInfo>
+    <SaveImageGlobalParam>
+        <Param Enable="0" Path="" />
+    </SaveImageGlobalParam>
+</Root>

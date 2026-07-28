@@ -1,0 +1,52 @@
+{
+  "changes": [
+    {
+      "action": "addModule",
+      "target": "\u6D41\u7A0B1",
+      "paramName": "ShellModule",
+      "value": "MCP\u6CE8\u5165\u9A8C\u8BC1",
+      "templateFile": "D:\\project\\2023\\VM\u64CD\u4F5C\u96C6\u5408\\vm-script-solution-compiler\\manual-tests\\mcp-round1\\results\\05-patch-ffa\\20260720092657582-mcp-patch-ffa\\module-template.sol",
+      "templateModule": "\u6D41\u7A0B1.\u811A\u672C1"
+    },
+    {
+      "action": "setBinaryParam",
+      "target": "\u6D41\u7A0B1.MCP\u6CE8\u5165\u9A8C\u8BC1",
+      "paramName": "ShellContent",
+      "value": "using System;\nusing System.Globalization;\nusing System.Threading;\nusing Script.Methods;\n\npublic partial class UserScript : ScriptMethods, IProcessMethods\n{\n    public void Init()\n    {\n        try\n        {\n        }\n        catch (Exception error)\n        {\n            ConsoleWrite(error.ToString());\n        }\n    }\n\n    public bool Process()\n    {\n        try\n        {\n            Doubled = (Value * 2);\r\n            return true;\n        }\n        catch (Exception error)\n        {\n            ConsoleWrite(error.ToString());\n            return false;\n        }\n    }\n}\n",
+      "templateFile": null,
+      "templateModule": null
+    },
+    {
+      "action": "setBinaryParam",
+      "target": "\u6D41\u7A0B1.MCP\u6CE8\u5165\u9A8C\u8BC1",
+      "paramName": "Input",
+      "value": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022UTF-8\u0022?\u003E\n\u003CArrayOfModuleParamItem\u003E\n    \u003CModuleParamItem\u003E\n        \u003CName\u003E%Value%\u003C/Name\u003E\n        \u003CStructName\u003E%Value%\u003C/StructName\u003E\n        \u003CValueType\u003Eint\u003C/ValueType\u003E\n        \u003CIsForce\u003Etrue\u003C/IsForce\u003E\n        \u003CIsShow\u003Etrue\u003C/IsShow\u003E\n    \u003C/ModuleParamItem\u003E\n\u003C/ArrayOfModuleParamItem\u003E\n\u0000\u0000",
+      "templateFile": null,
+      "templateModule": null
+    },
+    {
+      "action": "setBinaryParam",
+      "target": "\u6D41\u7A0B1.MCP\u6CE8\u5165\u9A8C\u8BC1",
+      "paramName": "Output",
+      "value": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022UTF-8\u0022?\u003E\n\u003CArrayOfModuleParamItem\u003E\n    \u003CModuleParamItem\u003E\n        \u003CName\u003EModuRunTime\u003C/Name\u003E\n        \u003CStructName\u003EModuRunTime\u003C/StructName\u003E\n        \u003CValueType\u003Efloat\u003C/ValueType\u003E\n        \u003CIsForce\u003Etrue\u003C/IsForce\u003E\n        \u003CIsShow\u003Etrue\u003C/IsShow\u003E\n    \u003C/ModuleParamItem\u003E\n    \u003CModuleParamItem\u003E\n        \u003CName\u003EResultShow\u003C/Name\u003E\n        \u003CStructName\u003EResultShow\u003C/StructName\u003E\n        \u003CValueType\u003Estring\u003C/ValueType\u003E\n        \u003CIsForce\u003Etrue\u003C/IsForce\u003E\n        \u003CIsShow\u003Etrue\u003C/IsShow\u003E\n    \u003C/ModuleParamItem\u003E\n    \u003CModuleParamItem\u003E\n        \u003CName\u003EModuStatus\u003C/Name\u003E\n        \u003CStructName\u003EModuStatus\u003C/StructName\u003E\n        \u003CValueType\u003Eint\u003C/ValueType\u003E\n        \u003CIsForce\u003Etrue\u003C/IsForce\u003E\n        \u003CIsShow\u003Etrue\u003C/IsShow\u003E\n    \u003C/ModuleParamItem\u003E\n    \u003CModuleParamItem\u003E\n        \u003CName\u003E%Doubled%\u003C/Name\u003E\n        \u003CStructName\u003E%Doubled%\u003C/StructName\u003E\n        \u003CValueType\u003Eint\u003C/ValueType\u003E\n        \u003CIsForce\u003Etrue\u003C/IsForce\u003E\n        \u003CIsShow\u003Etrue\u003C/IsShow\u003E\n    \u003C/ModuleParamItem\u003E\n\u003C/ArrayOfModuleParamItem\u003E\n\u0000\u0000",
+      "templateFile": null,
+      "templateModule": null
+    },
+    {
+      "action": "setBinaryParam",
+      "target": "\u6D41\u7A0B1.MCP\u6CE8\u5165\u9A8C\u8BC1",
+      "paramName": "DynamicInData",
+      "value": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022UTF-8\u0022?\u003E\n\u003CParamRoot\u003E\n    \u003CCategorys\u003E\n        \u003CCategory Name=\u0022Input\u0022\u003E\n            \u003CItems\u003E\n                \u003CFilter Name=\u0022%Value%\u0022 ValueType=\u0022int\u0022 Others=\u0022CustomVisible=True;IsForce=False;CanSubscribe=True;IsPrefer=False;Visible=True;VisibleInResultTree=True;IsPrivate=False;IsReturnRelateValue=True;AllowAutoSubscribe=True;AutoSubscribeByOther=True;IsResultShow=False;AutoSubscribeName=\u0022/\u003E\n            \u003C/Items\u003E\n        \u003C/Category\u003E\n    \u003C/Categorys\u003E\n\u003C/ParamRoot\u003E\n\u0000",
+      "templateFile": null,
+      "templateModule": null
+    },
+    {
+      "action": "setBinaryParam",
+      "target": "\u6D41\u7A0B1.MCP\u6CE8\u5165\u9A8C\u8BC1",
+      "paramName": "DynamicOutData",
+      "value": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022UTF-8\u0022?\u003E\n\u003CParamRoot\u003E\n    \u003CCategorys\u003E\n        \u003CCategory Name=\u0022Output\u0022\u003E\n            \u003CItems\u003E\n                \u003CFilter Name=\u0022fArrivalTimeStampLow\u0022 ValueType=\u0022float\u0022 Others=\u0022CustomVisible=False;IsForce=False;CanSubscribe=False;IsPrefer=False;Visible=False;VisibleInResultTree=False;IsPrivate=False;IsReturnRelateValue=True;AllowAutoSubscribe=True;AutoSubscribeByOther=True;IsResultShow=False;AutoSubscribeName=\u0022/\u003E\n                \u003CFilter Name=\u0022fArrivalTimeStampHigh\u0022 ValueType=\u0022float\u0022 Others=\u0022CustomVisible=False;IsForce=False;CanSubscribe=False;IsPrefer=False;Visible=False;VisibleInResultTree=False;IsPrivate=False;IsReturnRelateValue=True;AllowAutoSubscribe=True;AutoSubscribeByOther=True;IsResultShow=False;AutoSubscribeName=\u0022/\u003E\n                \u003CFilter Name=\u0022fLeaveTimeStampLow\u0022 ValueType=\u0022float\u0022 Others=\u0022CustomVisible=False;IsForce=False;CanSubscribe=False;IsPrefer=False;Visible=False;VisibleInResultTree=False;IsPrivate=False;IsReturnRelateValue=True;AllowAutoSubscribe=True;AutoSubscribeByOther=True;IsResultShow=False;AutoSubscribeName=\u0022/\u003E\n                \u003CFilter Name=\u0022fLeaveTimeStampHigh\u0022 ValueType=\u0022float\u0022 Others=\u0022CustomVisible=False;IsForce=False;CanSubscribe=False;IsPrefer=False;Visible=False;VisibleInResultTree=False;IsPrivate=False;IsReturnRelateValue=True;AllowAutoSubscribe=True;AutoSubscribeByOther=True;IsResultShow=False;AutoSubscribeName=\u0022/\u003E\n                \u003CFilter Name=\u0022%Doubled%\u0022 ValueType=\u0022int\u0022 Others=\u0022CustomVisible=True;IsForce=False;CanSubscribe=True;IsPrefer=False;Visible=True;VisibleInResultTree=True;IsPrivate=False;IsReturnRelateValue=True;AllowAutoSubscribe=True;AutoSubscribeByOther=True;IsResultShow=False;AutoSubscribeName=\u0022/\u003E\n            \u003C/Items\u003E\n        \u003C/Category\u003E\n    \u003C/Categorys\u003E\n\u003C/ParamRoot\u003E\n\u0000",
+      "templateFile": null,
+      "templateModule": null
+    }
+  ]
+}

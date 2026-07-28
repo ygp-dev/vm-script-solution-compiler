@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "1.0",
+  "task": { "name": "m7-explicit-connection", "mode": "create", "vmVersion": "4.4.0" },
+  "scripts": [
+    { "id": "first", "carrier": "csharp-module", "name": "独立脚本A", "procedure": "流程1", "execution": { "mode": "once" }, "inputs": [], "outputs": [], "operations": [], "dependencies": [] },
+    { "id": "second", "carrier": "csharp-module", "name": "独立脚本B", "procedure": "流程1", "execution": { "mode": "once" }, "inputs": [], "outputs": [], "operations": [], "dependencies": [] }
+  ],
+  "connections": [
+    { "from": "first", "to": "second" }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "version": "1.0.0",
+  "vmVersion": "4.4.0",
+  "types": [
+    { "ir": "int", "sol": "int", "dynamic": "int", "csharp": "int", "read": "GetIntValue", "write": "SetIntValue", "defaultInModuleSubscribe": true },
+    { "ir": "int[]", "sol": "int[]", "dynamic": "int", "csharp": "int[]", "read": "GetIntArrayValue", "write": "SetIntArrayValue", "defaultInModuleSubscribe": false },
+    { "ir": "float", "sol": "float", "dynamic": "float", "csharp": "float", "read": "GetFloatValue", "write": "SetFloatValue", "defaultInModuleSubscribe": true },
+    { "ir": "float[]", "sol": "float[]", "dynamic": "float", "csharp": "float[]", "read": "GetFloatArrayValue", "write": "SetFloatArrayValue", "defaultInModuleSubscribe": false },
+    { "ir": "string", "sol": "string", "dynamic": "string", "csharp": "string", "read": "GetStringValue", "write": "SetStringValue", "defaultInModuleSubscribe": true },
+    { "ir": "string[]", "sol": "string[]", "dynamic": "string", "csharp": "string[]", "read": "GetStringArrayValue", "write": "SetStringArrayValue", "defaultInModuleSubscribe": false },
+    { "ir": "byte", "sol": "byte", "dynamic": "byte", "csharp": "byte[]", "read": "GetBytesValue", "write": "SetBytesValue", "defaultInModuleSubscribe": false },
+    { "ir": "image", "sol": "IMAGE", "dynamic": "IMAGE", "csharp": "ImageData", "read": "GetImageValue", "write": "SetImageValue", "defaultInModuleSubscribe": false },
+    { "ir": "roibox", "sol": "ROIBOX", "dynamic": "ROIBOX", "csharp": "RoiboxData", "read": "GetRoiboxValue", "write": "SetRoiboxValue", "defaultInModuleSubscribe": false },
+    { "ir": "roibox[]", "sol": "ROIBOX[]", "dynamic": "ROIBOX", "csharp": "RoiboxData[]", "read": "InternalMethods.GetRoiBoxArrayValue", "write": "InternalMethods.SetRoiBoxArrayValue", "defaultInModuleSubscribe": false },
+    { "ir": "roiannulus", "sol": "ROIANNULUS", "dynamic": "ROIANNULUS", "csharp": "AnnulusData[]", "read": "InternalMethods.GetAnnulusArrayValue", "write": "InternalMethods.SetAnnulusArrayValue", "defaultInModuleSubscribe": false },
+    { "ir": "roipolygon", "sol": "ROIPOLYGON", "dynamic": "ROIPOLYGON", "csharp": "PolygonData[]", "read": "InternalMethods.GetPolygonArrayValue", "write": "InternalMethods.SetPolygonArrayValue", "defaultInModuleSubscribe": false },
+    { "ir": "point", "sol": "POINT", "dynamic": "POINT", "csharp": "PointData[]", "read": "InternalMethods.GetPointArrayValue", "write": "InternalMethods.SetPointArrayValue", "defaultInModuleSubscribe": false },
+    { "ir": "line", "sol": "LINE", "dynamic": "LINE", "csharp": "LineData[]", "read": "InternalMethods.GetLineArrayValue", "write": "InternalMethods.SetLineArrayValue", "defaultInModuleSubscribe": false },
+    { "ir": "fixture", "sol": "FIXTURE", "dynamic": "FIXTURE", "csharp": "FixtureData[]", "read": "InternalMethods.GetFixtureArrayValue", "write": "InternalMethods.SetFixtureArrayValue", "defaultInModuleSubscribe": false },
+    { "ir": "circle", "sol": null, "dynamic": null, "csharp": "CircleData[]", "read": "GetVarCircle", "write": "SetVarCircle", "portSupported": false, "variableSupported": true, "note": "VM 4.4 ShellModule UI has no selectable circle IO port; user runtime evidence supersedes the dormant GenerateUserPropertyCs branch", "defaultInModuleSubscribe": false },
+    { "ir": "rect", "sol": "Rect", "dynamic": "Rect", "csharp": "RectData[]", "read": "InternalMethods.GetRectArrayValue", "write": "InternalMethods.SetRectArrayValue", "defaultInModuleSubscribe": false },
+    { "ir": "ellipse", "sol": "ELLIPSE", "dynamic": "ELLIPSE", "csharp": "EllipseData[]", "read": "InternalMethods.GetEllipseArrayValue", "write": "InternalMethods.SetEllipseArrayValue", "defaultInModuleSubscribe": false },
+    { "ir": "pointset", "sol": "pointset", "dynamic": "pointset", "csharp": "byte[]", "read": "InternalMethods.GetContourPointArrayValue", "write": "InternalMethods.SetContourPointArrayValue", "defaultInModuleSubscribe": false }
+  ],
+  "compatibilityAliases": [
+    { "ir": "bool", "sol": "int", "dynamic": "int", "csharp": "int", "note": "VM 4.4 ScriptDefine has no native bool port; deterministic generators map false/true to 0/1" }
+  ],
+  "evidence": [
+    "docs/C#脚本相关/Script.Algorithm/ScriptDefine.cs",
+    "docs/C#脚本相关/Script.Support/GenerateUserPropertyCs.cs",
+    "docs/C#脚本相关/Script.Methods/ScriptMethods.cs",
+    "knowledge/reference-solutions/inventory.json"
+  ]
+}

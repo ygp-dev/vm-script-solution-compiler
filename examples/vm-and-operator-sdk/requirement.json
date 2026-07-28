@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "1.0",
+  "task": {
+    "name": "vm-and-operator-sdk-types",
+    "mode": "create",
+    "vmVersion": "4.4.0"
+  },
+  "scripts": [
+    {
+      "id": "sdk-types",
+      "carrier": "csharp-module",
+      "name": "VM与算子SDK验证",
+      "procedure": "流程1",
+      "source": "using System;\nusing Script.Methods;\nusing VM.Core;\nusing VisionDesigner.PositionFix;\n\npublic partial class UserScript : ScriptMethods, IProcessMethods\n{\n    public void Init() { }\n\n    public bool Process()\n    {\n        VmSdkType = typeof(VmDataType).FullName;\n        OperatorSdkType = typeof(CPositionFixTool).FullName;\n        return true;\n    }\n}\n",
+      "execution": { "mode": "once", "order": 0 },
+      "inputs": [],
+      "outputs": [
+        { "name": "VmSdkType", "type": "string" },
+        { "name": "OperatorSdkType", "type": "string" }
+      ],
+      "operations": [],
+      "dependencies": [
+        { "kind": "dotnet-assembly", "name": "VM.Core.dll", "role": "vm-sdk", "architecture": "anycpu" },
+        { "kind": "dotnet-assembly", "name": "MVDPositionFix.Net.dll", "role": "operator-sdk", "architecture": "anycpu" }
+      ]
+    }
+  ],
+  "connections": []
+}

@@ -1,0 +1,34 @@
+# VM Script Solution Compiler build report
+
+- Task: `20260720092657582-mcp-patch-ffa`
+- Compiler phase: `complete`
+- Compiler version: `1.0.0`
+- Mode: `patch`
+- Requirement SHA-256: `1D9E50BE2F18E1B55C494D76727D242046EA56722A8BD0703A6FA057A5BC051D`
+- Base SOL: `D:\User\Desktop\1\ffa.sol`
+- Base SOL SHA-256: `A649D0341CDEE110080F05D0ADA115B6ADD9E6F20EF3265475D7085E9A80AC14`
+- Result SHA-256: `CF9CF82F7ED6599185A4FFB2A10286789257B1F4FC0581CC37AD92B3547810C7`
+- Determinism: Requirement semantics, generated source, module structure, and compiler AssemblyGuid are deterministic; task id and ZIP entry timestamps are build-specific, so byte hashes may differ across equivalent builds
+- VM root: `C:\Program Files\VisionMaster4.4.0`
+- VM version: `4.4.0`
+- VM architecture: `x64`
+- Platform SDK root: `C:\Program Files\VisionMaster4.4.0\Development`
+- Algorithm SDK root: `C:\Program Files\VisionMaster4.4.0\MVDAlgorithmSDK`
+- GlobalScript available: `True`
+- Resource version: `1.0.0`
+- Resource VM version: `4.4.0`
+- Script carriers: `csharp-module`
+- Declared dependencies: `none`
+- ShellRefrences payload: `not emitted; VM default references remain implicit`
+- DLL validation: `none`
+- DLL deployment required: `none`
+- Dependency manifest: `validation/dependency-manifest.json` (external files are packaged under `dependencies/<script-id>/`; when deployment is needed, run `dependencies/deploy-to-vm.ps1` explicitly as an administrator)
+- Dependency safety: the compiler and Desktop never modify the VM installation automatically
+- Dependency validation: assembly role, verified/user-declared ShellRefrences type, managed identity, version, architecture, target framework, direct reference graph, runtime visibility, and VM Python package probe
+- Script precompile: passed against VM 4.4 method assemblies / bundled Python syntax parser; C# port properties are a generated contract and still require VM precompile confirmation
+- Parser exit code: `0`
+- Inspect exit code: `0`
+- DynamicIO validation: complex C# ports use VM-saved uppercase logical types, CR-separated `StructName` backing fields, nested DynamicIO `Combination` nodes, array type metadata, image object mappings, and a non-empty AssemblyGuid
+- Input defaults: int/float `ModuleSubscribe` round-trip confirmed; bool/string structurally encoded; Python also has deterministic `None` fallback
+- VM runtime baseline validation: `passed by user verification in VisionMaster 4.4`
+- VM runtime validation pending: `none`
