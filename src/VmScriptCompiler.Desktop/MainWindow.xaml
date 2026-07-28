@@ -1,0 +1,270 @@
+<Window x:Class="VmScriptCompiler.Desktop.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="VM Script Solution Agent" Width="1240" Height="840" MinWidth="980" MinHeight="680"
+        Background="#FF090909" Foreground="#FFF0F0F0" Loaded="Window_Loaded" Closing="Window_Closing">
+    <Window.Resources>
+        <Style TargetType="TextBlock"><Setter Property="Foreground" Value="#FFE8E8E8" /></Style>
+        <Style TargetType="Button">
+            <Setter Property="Cursor" Value="Hand" /><Setter Property="Padding" Value="12,7" />
+            <Setter Property="Foreground" Value="#FFF0F0F0" /><Setter Property="Background" Value="#FF1B1B1B" />
+            <Setter Property="BorderBrush" Value="#FF353535" /><Setter Property="BorderThickness" Value="1" />
+        </Style>
+        <Style x:Key="SidebarButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="HorizontalContentAlignment" Value="Left" /><Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" /><Setter Property="Padding" Value="10,8" /><Setter Property="Margin" Value="0,1" />
+        </Style>
+        <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="#FFF0F0F0" /><Setter Property="Foreground" Value="#FF111111" />
+            <Setter Property="BorderBrush" Value="#FFF0F0F0" /><Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Foreground" Value="#FFF0F0F0" /><Setter Property="CaretBrush" Value="#FFFFFFFF" />
+            <Setter Property="Background" Value="#FF151515" /><Setter Property="BorderBrush" Value="#FF3A3A3A" />
+        </Style>
+        <Style TargetType="PasswordBox">
+            <Setter Property="Foreground" Value="#FFF0F0F0" /><Setter Property="Background" Value="#FF151515" />
+            <Setter Property="BorderBrush" Value="#FF3A3A3A" />
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Foreground" Value="#FFF0F0F0" /><Setter Property="Background" Value="#FF1B1B1B" />
+            <Setter Property="BorderBrush" Value="#FF3A3A3A" />
+        </Style>
+        <Style TargetType="ComboBoxItem"><Setter Property="Foreground" Value="#FFF0F0F0" /><Setter Property="Background" Value="#FF1B1B1B" /></Style>
+        <Style TargetType="ListBox"><Setter Property="Foreground" Value="#FFE8E8E8" /><Setter Property="Background" Value="#FF0D0D0D" /></Style>
+        <Style TargetType="RadioButton"><Setter Property="Foreground" Value="#FFE8E8E8" /></Style>
+        <Style TargetType="Expander"><Setter Property="Foreground" Value="#FFE8E8E8" /></Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions><ColumnDefinition Width="260" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" Background="#FF0D0D0D" BorderBrush="#FF292929" BorderThickness="0,0,1,0">
+            <Grid Margin="12">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" /><RowDefinition Height="*" /><RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <DockPanel Margin="6,5,6,14">
+                    <Border Width="30" Height="30" Margin="0,0,9,0" Background="#FF171717" CornerRadius="8">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" Text="VM" />
+                    </Border>
+                    <StackPanel>
+                        <TextBlock FontSize="15" FontWeight="SemiBold" Text="Script Solution Agent" />
+                        <TextBlock x:Name="AgentStatusText" Margin="0,2,0,0" FontSize="11" Foreground="#FF999999" Text="Agent 正在启动…" />
+                    </StackPanel>
+                </DockPanel>
+                <Button Grid.Row="1" Style="{StaticResource PrimaryButton}" HorizontalContentAlignment="Left"
+                        Margin="0,0,0,8" Content="＋  新对话" Click="NewConversation_Click" />
+                <StackPanel Grid.Row="2">
+                    <Button Style="{StaticResource SidebarButton}" Content="▣  结果产物" Click="ShowArtifacts_Click" />
+                    <Button Style="{StaticResource SidebarButton}" Content="⚙  配置" Click="ShowSettings_Click" />
+                </StackPanel>
+                <DockPanel Grid.Row="3" Margin="8,18,5,7">
+                    <Button DockPanel.Dock="Right" Style="{StaticResource SidebarButton}" Padding="4" Content="↻" Click="RefreshHistory_Click" />
+                    <TextBlock VerticalAlignment="Center" Foreground="#FF999999" FontSize="12" Text="Agent 会话" />
+                </DockPanel>
+                <ListBox x:Name="RecentConversationList" Grid.Row="4" Background="Transparent" BorderThickness="0"
+                         SelectionChanged="RecentConversation_SelectionChanged" MouseDoubleClick="RecentConversation_DoubleClick">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Padding" Value="8,7" /><Setter Property="Margin" Value="0,1" />
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" /><Setter Property="ToolTip" Value="{Binding Path}" />
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding DisplayTitle}" TextTrimming="CharacterEllipsis" />
+                                <TextBlock Margin="0,2,0,0" FontSize="11" Foreground="#FF999999" Text="{Binding DisplayTime}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <StackPanel Grid.Row="5" Margin="0,10,0,0">
+                    <Button Style="{StaticResource SidebarButton}" Content="打开当前结果文件夹" Click="OpenConversationFolder_Click" />
+                    <TextBlock x:Name="SidebarStatusText" Margin="9,5" FontSize="11" Foreground="#FF999999" TextWrapping="Wrap" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <TabControl x:Name="WorkspaceTabs" Grid.Column="1" Background="#FF090909" BorderThickness="0">
+            <TabControl.Resources><Style TargetType="TabItem"><Setter Property="Visibility" Value="Collapsed" /></Style></TabControl.Resources>
+
+            <TabItem x:Name="ComposerTab">
+                <Grid>
+                    <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="*" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                    <Border Padding="22,14" Background="#FF0D0D0D" BorderBrush="#FF292929" BorderThickness="0,0,0,1">
+                        <DockPanel>
+                            <Button DockPanel.Dock="Right" Padding="10,5" Content="重新连接" Click="ReconnectAgent_Click" />
+                            <StackPanel>
+                                <TextBlock FontSize="17" FontWeight="SemiBold" Text="VisionMaster 领域 Agent" />
+                                <TextBlock x:Name="EnvironmentText" Margin="0,4,0,0" Foreground="#FFA5A5A5" Text="正在检测 VisionMaster…" />
+                                <TextBlock x:Name="AiStatusText" Margin="0,2,0,0" Foreground="#FFA5A5A5" Text="正在初始化 Pi Runtime…" />
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+
+                    <ScrollViewer x:Name="TranscriptScroll" Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <StackPanel x:Name="TranscriptPanel" Margin="34,28" MaxWidth="1100" HorizontalAlignment="Center">
+                            <Border x:Name="WelcomePanel" Padding="26" Margin="0,16,0,22" Background="#FF121212"
+                                    BorderBrush="#FF292929" BorderThickness="1" CornerRadius="12">
+                                <StackPanel>
+                                    <TextBlock HorizontalAlignment="Center" FontSize="24" FontWeight="SemiBold" Text="想让 VisionMaster 做什么？" />
+                                    <TextBlock HorizontalAlignment="Center" Margin="0,8,0,0" Foreground="#FFA5A5A5"
+                                               TextAlignment="Center" TextWrapping="Wrap"
+                                               Text="Agent 会检查环境和 VM 能力，建立 Requirement，生成或补丁 SOL，再完成确定性离线验证。" />
+                                </StackPanel>
+                            </Border>
+                            <StackPanel x:Name="MessagesPanel" />
+
+                            <StackPanel x:Name="BaseSolutionPanel" Visibility="Collapsed" Margin="0,0,0,12">
+                                <TextBlock Margin="2,0,0,6" FontWeight="SemiBold" Text="基底 SOL" />
+                                <Grid>
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="88" /></Grid.ColumnDefinitions>
+                                    <TextBox x:Name="BaseSolutionText" Height="35" Padding="8,5" Margin="0,0,8,0" IsReadOnly="True" />
+                                    <Button Grid.Column="1" Content="选择…" Click="BrowseBase_Click" />
+                                </Grid>
+                            </StackPanel>
+
+                            <StackPanel>
+                                <TextBlock x:Name="FriendlyStatus" Visibility="Collapsed" Margin="2,0,0,10" TextWrapping="Wrap" Foreground="#FFA5A5A5" />
+                                <Border x:Name="SuccessPanel" Visibility="Collapsed" Padding="12" Background="#FF102419"
+                                        BorderBrush="#FF39794C" BorderThickness="1" CornerRadius="8">
+                                    <DockPanel>
+                                        <WrapPanel DockPanel.Dock="Right">
+                                            <Button x:Name="ConfirmVmButton" Margin="8,0,0,0" Content="我已在 VM 验证" Click="ConfirmVm_Click" />
+                                            <Button x:Name="OpenDependenciesButton" Visibility="Collapsed" Margin="8,0,0,0" Content="DLL 部署包" Click="OpenDependencies_Click" />
+                                            <Button Margin="8,0,0,0" Content="复制路径" Click="CopyResultPath_Click" />
+                                            <Button Margin="8,0,0,0" Content="打开文件夹" Click="OpenResultFolder_Click" />
+                                        </WrapPanel>
+                                        <TextBlock x:Name="SuccessText" VerticalAlignment="Center" TextWrapping="Wrap" />
+                                    </DockPanel>
+                                </Border>
+                                <Expander x:Name="AdvancedDeterministicTools" Header="高级确定性工具" Margin="0,12,0,0">
+                                    <StackPanel Margin="0,10,0,0">
+                                        <Grid Margin="0,0,0,8">
+                                            <Grid.ColumnDefinitions><ColumnDefinition Width="100" /><ColumnDefinition Width="*" /><ColumnDefinition Width="86" /></Grid.ColumnDefinitions>
+                                            <TextBlock VerticalAlignment="Center" Text="Requirement" />
+                                            <TextBox x:Name="SpecPathText" Grid.Column="1" Margin="0,0,8,0" Padding="7,4" />
+                                            <Button Grid.Column="2" Content="选择…" Click="BrowseSpec_Click" />
+                                        </Grid>
+                                        <Grid Margin="0,0,0,8">
+                                            <Grid.ColumnDefinitions><ColumnDefinition Width="100" /><ColumnDefinition Width="*" /><ColumnDefinition Width="86" /></Grid.ColumnDefinitions>
+                                            <TextBlock VerticalAlignment="Center" Text="输出目录" />
+                                            <TextBox x:Name="OutputPathText" Grid.Column="1" Margin="0,0,8,0" Padding="7,4" />
+                                            <Button Grid.Column="2" Content="选择…" Click="BrowseOutput_Click" />
+                                        </Grid>
+                                        <WrapPanel x:Name="ActionPanel">
+                                            <Button Margin="0,0,7,6" Content="校验 Requirement" Click="Plan_Click" />
+                                            <Button Margin="0,0,7,6" Content="从 Requirement 创建" Click="Build_Click" />
+                                            <Button Margin="0,0,7,6" Content="从 Requirement补丁" Click="Patch_Click" />
+                                            <Button Margin="0,0,7,6" Content="验证 SOL" Click="Validate_Click" />
+                                            <Button Margin="0,0,7,6" Content="检测环境" Click="Detect_Click" />
+                                        </WrapPanel>
+                                        <TextBox x:Name="ResultText" Height="150" IsReadOnly="True" AcceptsReturn="True"
+                                                 VerticalScrollBarVisibility="Auto" FontFamily="Consolas" TextWrapping="NoWrap" Padding="9" />
+                                    </StackPanel>
+                                </Expander>
+                            </StackPanel>
+                        </StackPanel>
+                    </ScrollViewer>
+
+                    <Border Grid.Row="2" Padding="18,12,18,20" Background="#FF090909">
+                        <StackPanel MaxWidth="1100" HorizontalAlignment="Stretch">
+                            <Border Padding="14" Background="#FF151515" BorderBrush="#FF454545" BorderThickness="1" CornerRadius="14">
+                                <Grid>
+                                    <Grid.RowDefinitions><RowDefinition Height="110" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                                    <TextBox x:Name="PromptText" BorderThickness="0" AcceptsReturn="True" TextWrapping="Wrap"
+                                             VerticalScrollBarVisibility="Auto" FontSize="15"
+                                             ToolTip="例如：给已有方案增加一个 C# 脚本，输入 A、B，输出 Sum，并设置默认值" />
+                                    <DockPanel Grid.Row="1" Margin="0,10,0,0">
+                                        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                                            <Button x:Name="StopButton" Visibility="Collapsed" Margin="0,0,8,0" Content="停止" Click="Stop_Click" />
+                                            <Button x:Name="GenerateButton" Style="{StaticResource PrimaryButton}" MinWidth="112"
+                                                    Content="发送" Click="Generate_Click" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                            <RadioButton x:Name="CreateModeRadio" Content="新建方案" IsChecked="True" Margin="0,0,16,0" Checked="Mode_Changed" />
+                                            <RadioButton x:Name="PatchModeRadio" Content="加入已有方案" Checked="Mode_Changed" />
+                                        </StackPanel>
+                                    </DockPanel>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <TabItem x:Name="ArtifactsTab">
+                <Grid Margin="28">
+                    <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="*" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                    <DockPanel Margin="0,0,0,18">
+                        <Button DockPanel.Dock="Right" Content="重新建立索引" Click="RefreshArtifacts_Click" />
+                        <StackPanel><TextBlock FontSize="22" FontWeight="SemiBold" Text="结果产物" />
+                            <TextBlock x:Name="ArtifactSummaryText" Margin="0,5,0,0" Foreground="#FFA5A5A5" /></StackPanel>
+                    </DockPanel>
+                    <Border Grid.Row="1" Margin="0,0,0,12" BorderBrush="#FF3A3A3A" BorderThickness="1" CornerRadius="9">
+                        <TextBox x:Name="ArtifactSearchText" Height="38" Padding="12,8" BorderThickness="0" TextChanged="ArtifactSearch_Changed" />
+                    </Border>
+                    <ListBox x:Name="ArtifactList" Grid.Row="2" BorderBrush="#FF303030" MouseDoubleClick="ArtifactList_DoubleClick">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="8">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="130" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                                    <Border Padding="8,4" Margin="0,0,12,0" VerticalAlignment="Top" Background="#FF1A1A1A" CornerRadius="5">
+                                        <TextBlock HorizontalAlignment="Center" Text="{Binding Kind}" />
+                                    </Border>
+                                    <StackPanel Grid.Column="1"><TextBlock FontWeight="SemiBold" Text="{Binding FileName}" />
+                                        <TextBlock Margin="0,4,0,0" Foreground="#FFA5A5A5" Text="{Binding DisplayDetail}" TextTrimming="CharacterEllipsis" /></StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,14,0,0">
+                        <Button Margin="0,0,8,0" Content="打开文件" Click="OpenArtifact_Click" />
+                        <Button Content="打开所在文件夹" Click="OpenArtifactFolder_Click" />
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+            <TabItem x:Name="SettingsTab">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="34" MaxWidth="780" HorizontalAlignment="Left">
+                        <TextBlock FontSize="22" FontWeight="SemiBold" Text="Agent 配置" />
+                        <TextBlock Margin="0,6,0,24" Foreground="#FFA5A5A5" TextWrapping="Wrap"
+                                   Text="保存后会重启内置 Pi Agent。API Key 使用 Windows 当前用户级加密，不写入会话和构建报告。" />
+                        <TextBlock Margin="0,0,0,7" FontWeight="SemiBold" Text="默认输出目录" />
+                        <Grid Margin="0,0,0,16"><Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="88" /></Grid.ColumnDefinitions>
+                            <TextBox x:Name="SettingsOutputPathText" Margin="0,0,8,0" Padding="8,5" />
+                            <Button Grid.Column="1" Content="选择…" Click="BrowseSettingsOutput_Click" /></Grid>
+                        <TextBlock Margin="0,0,0,7" FontWeight="SemiBold" Text="Provider 协议" />
+                        <ComboBox x:Name="SettingsProviderChoice" Margin="0,0,0,16" Padding="6">
+                            <ComboBoxItem Tag="openai-responses" Content="OpenAI Responses（推荐）" />
+                            <ComboBoxItem Tag="openai-compatible" Content="OpenAI-compatible Chat Completions" />
+                        </ComboBox>
+                        <TextBlock Margin="0,0,0,7" FontWeight="SemiBold" Text="API 基础地址" />
+                        <TextBox x:Name="SettingsEndpointText" Margin="0,0,0,16" Padding="8,5" ToolTip="例如 https://api.openai.com/v1，不要填写 /responses" />
+                        <TextBlock Margin="0,0,0,7" FontWeight="SemiBold" Text="模型 ID" />
+                        <TextBox x:Name="SettingsModelText" Margin="0,0,0,16" Padding="8,5" />
+                        <TextBlock Margin="0,0,0,7" FontWeight="SemiBold" Text="Reasoning" />
+                        <ComboBox x:Name="SettingsThinkingChoice" Margin="0,0,0,16" Padding="6">
+                            <ComboBoxItem Tag="low" Content="低" /><ComboBoxItem Tag="medium" Content="中" />
+                            <ComboBoxItem Tag="high" Content="高（推荐）" /><ComboBoxItem Tag="xhigh" Content="很高" />
+                        </ComboBox>
+                        <TextBlock Margin="0,0,0,7" FontWeight="SemiBold" Text="API Key（加密保存）" />
+                        <PasswordBox x:Name="SettingsApiKeyBox" Margin="0,0,0,20" Padding="8,5" />
+                        <TextBlock Margin="0,0,0,7" FontWeight="SemiBold" Text="配置文件" />
+                        <DockPanel Margin="0,0,0,20"><Button DockPanel.Dock="Right" Margin="8,0,0,0" Content="打开文件" Click="OpenSettingsFile_Click" />
+                            <TextBox x:Name="SettingsFilePathText" IsReadOnly="True" Padding="8,5" /></DockPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Style="{StaticResource PrimaryButton}" Padding="18,8" Content="保存并重启 Agent" Click="SaveSettings_Click" />
+                            <Button Margin="10,0,0,0" Padding="18,8" Content="打开数据目录" Click="OpenStateDirectory_Click" />
+                        </StackPanel>
+                        <TextBlock x:Name="SettingsStatusText" Margin="0,14,0,0" Foreground="#FFA5A5A5" TextWrapping="Wrap" />
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

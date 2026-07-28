@@ -1,0 +1,29 @@
+**/bin/
+**/obj/
+.vs/
+dist/
+.tmp-m1-output/
+outputs/
+agent/node_modules/
+agent/dist/
+.runtime/
+*.user
+*.suo
+
+# Generated/customer VM artifacts and proprietary reference binaries.
+*.sol
+*.chm
+*.mp4
+*.prc
+*.pdf
+*.p7s
+*.nupkg
+docs/SOL/**/*.dll
+docs/SOL/**/*.exe
+manual-tests/**/result_AutoSaveSolParam_*
+
+# Local caches and diagnostic artifacts.
+ImageTemp/
+AwakenGPUToolLog.txt
+images_v2.db
+*.log

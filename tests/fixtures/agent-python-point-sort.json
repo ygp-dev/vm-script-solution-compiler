@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "1.0",
+  "task": {
+    "name": "python-point-sort",
+    "mode": "create",
+    "vmVersion": "4.4.0"
+  },
+  "scripts": [
+    {
+      "id": "point-sort-python",
+      "carrier": "python-module",
+      "name": "Python点集排序",
+      "procedure": "流程1",
+      "execution": {
+        "mode": "once",
+        "order": 0
+      },
+      "source": "# coding: utf-8\nfrom ioHelper import *\n\ndef Process(data) -> int:\n    moduleVar = IoHelper(data, INIT_MODULE_VAR)\n    globalVar = IoHelper(data, INIT_GLOBAL_VAR)\n    localVar = IoHelper(data, INIT_LOCAL_VAR)\n    try:\n        xs = list(moduleVar.InX or [])\n        ys = list(moduleVar.InY or [])\n        count = min(len(xs), len(ys))\n        order = sorted(range(count), key=lambda index: (float(xs[index]), float(ys[index])))\n        moduleVar.OutX = [float(xs[index]) for index in order]\n        moduleVar.OutY = [float(ys[index]) for index in order]\n        moduleVar.OriginalIndex = [int(index) for index in order]\n        moduleVar.PointCount = int(count)\n    except BaseException as error:\n        PrintMsg(error)\n        return -1\n    return 0\n",
+      "inputs": [
+        {
+          "name": "InX",
+          "type": "float[]",
+          "description": "输入点集的 X 坐标"
+        },
+        {
+          "name": "InY",
+          "type": "float[]",
+          "description": "输入点集的 Y 坐标"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "OutX",
+          "type": "float[]",
+          "description": "按 X、Y 升序排列后的 X 坐标"
+        },
+        {
+          "name": "OutY",
+          "type": "float[]",
+          "description": "按 X、Y 升序排列后的 Y 坐标"
+        },
+        {
+          "name": "OriginalIndex",
+          "type": "int[]",
+          "description": "排序结果对应的原始索引"
+        },
+        {
+          "name": "PointCount",
+          "type": "int",
+          "default": 0
+        }
+      ],
+      "operations": [],
+      "dependencies": []
+    }
+  ],
+  "connections": []
+}

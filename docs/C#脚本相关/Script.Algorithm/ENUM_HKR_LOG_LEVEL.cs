@@ -1,0 +1,23 @@
+﻿using System;
+
+namespace Script.Algorithm
+{
+	// Token: 0x02000019 RID: 25
+	public enum ENUM_HKR_LOG_LEVEL
+	{
+		// Token: 0x040000A0 RID: 160
+		HKR_LOG_LEVEL_TRACE,
+		// Token: 0x040000A1 RID: 161
+		HKR_LOG_LEVEL_DEBUG,
+		// Token: 0x040000A2 RID: 162
+		HKR_LOG_LEVEL_INFO,
+		// Token: 0x040000A3 RID: 163
+		HKR_LOG_LEVEL_WARN,
+		// Token: 0x040000A4 RID: 164
+		HKR_LOG_LEVEL_CRITICAL,
+		// Token: 0x040000A5 RID: 165
+		HKR_LOG_LEVEL_ERROR,
+		// Token: 0x040000A6 RID: 166
+		HKR_LOG_LEVEL_OFF
+	}
+}

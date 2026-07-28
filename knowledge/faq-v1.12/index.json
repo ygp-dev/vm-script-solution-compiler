@@ -1,0 +1,269 @@
+[
+    {
+        "title":  "1.1.2 脚本环境：联合OpenCV开发的环境配置方法",
+        "chmPath":  "VM4.2/1 VM软件使用/1.1.2 脚本环境：联合OpenCV开发的环境配置方法.html",
+        "textFile":  "topics/001-1.1.2 脚本环境：联合OpenCV开发的环境配置方法.txt",
+        "keywords":  [
+                         "OpenCV"
+                     ],
+        "length":  272
+    },
+    {
+        "title":  "1.2.8 脚本模块：脚本模块保存图像的方法",
+        "chmPath":  "VM4.2/1 VM软件使用/1.2.8 脚本模块：脚本模块保存图像的方法.html",
+        "textFile":  "topics/002-1.2.8 脚本模块：脚本模块保存图像的方法.txt",
+        "keywords":  [
+                         "ImageData"
+                     ],
+        "length":  1085
+    },
+    {
+        "title":  "1.1.1 脚本调试：脚本调试的方法",
+        "chmPath":  "VM4.3/1.1.1 脚本调试：脚本调试的方法.html",
+        "textFile":  "topics/003-1.1.1 脚本调试：脚本调试的方法.txt",
+        "keywords":  [
+
+                     ],
+        "length":  344
+    },
+    {
+        "title":  "1.2.2 脚本编程：脚本实现对图像坐标先行排序再列排序的方法",
+        "chmPath":  "VM4.3/1.2.2 脚本编程：脚本实现对图像坐标先行排序再列排序的方法.html",
+        "textFile":  "topics/004-1.2.2 脚本编程：脚本实现对图像坐标先行排序再列排序的方法.txt",
+        "keywords":  [
+
+                     ],
+        "length":  4129
+    },
+    {
+        "title":  "1.3.1 全局脚本：轮廓匹配的轮廓质心点计算的方法",
+        "chmPath":  "VM4.4/1.3.1 全局脚本：轮廓匹配的轮廓质心点计算的方法.html",
+        "textFile":  "topics/005-1.3.1 全局脚本：轮廓匹配的轮廓质心点计算的方法.txt",
+        "keywords":  [
+
+                     ],
+        "length":  2391
+    },
+    {
+        "title":  "1.2.14 字符串显示：使用脚本显示字符串的方法",
+        "chmPath":  "第1章 VM软件使用/1.2.14 字符串显示：使用脚本显示字符串的方法.html",
+        "textFile":  "topics/006-1.2.14 字符串显示：使用脚本显示字符串的方法.txt",
+        "keywords":  [
+
+                     ],
+        "length":  556
+    },
+    {
+        "title":  "1.2.17 脚本模块：编写脚本处理点集合的方法",
+        "chmPath":  "第1章 VM软件使用/1.2.17 脚本模块：编写脚本处理点集合的方法.html",
+        "textFile":  "topics/007-1.2.17 脚本模块：编写脚本处理点集合的方法.txt",
+        "keywords":  [
+
+                     ],
+        "length":  959
+    },
+    {
+        "title":  "1.2.18 脚本模块：添加自定义程序集的方法",
+        "chmPath":  "第1章 VM软件使用/1.2.18 脚本模块：添加自定义程序集的方法.html",
+        "textFile":  "topics/008-1.2.18 脚本模块：添加自定义程序集的方法.txt",
+        "keywords":  [
+
+                     ],
+        "length":  234
+    },
+    {
+        "title":  "1.2.2 脚本模块：循环模块搭配脚本的使用方法",
+        "chmPath":  "第1章 VM软件使用/1.2.2 脚本模块：循环模块搭配脚本的使用方法.html",
+        "textFile":  "topics/009-1.2.2 脚本模块：循环模块搭配脚本的使用方法.txt",
+        "keywords":  [
+
+                     ],
+        "length":  1940
+    },
+    {
+        "title":  "1.2.23 调试脚本：对脚本进行调试的方法",
+        "chmPath":  "第1章 VM软件使用/1.2.23 调试脚本：对脚本进行调试的方法.html",
+        "textFile":  "topics/010-1.2.23 调试脚本：对脚本进行调试的方法.txt",
+        "keywords":  [
+                         "ShellModule"
+                     ],
+        "length":  473
+    },
+    {
+        "title":  "1.2.29 脚本模块：脚本模块图像数据转换的方法",
+        "chmPath":  "第1章 VM软件使用/1.2.29 脚本模块：脚本模块图像数据转换的方法.html",
+        "textFile":  "topics/011-1.2.29 脚本模块：脚本模块图像数据转换的方法.txt",
+        "keywords":  [
+
+                     ],
+        "length":  912
+    },
+    {
+        "title":  "1.2.6 数据解析：使用脚本模块解析32位寄存器数据的方法",
+        "chmPath":  "第1章 VM软件使用/1.2.6 数据解析：使用脚本模块解析32位寄存器数据的方法.html",
+        "textFile":  "topics/012-1.2.6 数据解析：使用脚本模块解析32位寄存器数据的方法.txt",
+        "keywords":  [
+
+                     ],
+        "length":  2292
+    },
+    {
+        "title":  "1.3.10 全局脚本：多流程协作控制的方法",
+        "chmPath":  "第1章 VM软件使用/1.3.10 全局脚本：多流程协作控制的方法.html",
+        "textFile":  "topics/013-1.3.10 全局脚本：多流程协作控制的方法.txt",
+        "keywords":  [
+                         "GlobalScript",
+                         "ExecuteProcess"
+                     ],
+        "length":  3559
+    },
+    {
+        "title":  "1.3.11 全局脚本：通过通讯触发快速匹配换型的方法",
+        "chmPath":  "第1章 VM软件使用/1.3.11 全局脚本：通过通讯触发快速匹配换型的方法.html",
+        "textFile":  "topics/014-1.3.11 全局脚本：通过通讯触发快速匹配换型的方法.txt",
+        "keywords":  [
+                         "GlobalScript",
+                         "ExecuteProcess"
+                     ],
+        "length":  4303
+    },
+    {
+        "title":  "1.3.3 全局变量：全局变量关联流程中具体模块结果的方法",
+        "chmPath":  "第1章 VM软件使用/1.3.3 全局变量：全局变量关联流程中具体模块结果的方法.html",
+        "textFile":  "topics/015-1.3.3 全局变量：全局变量关联流程中具体模块结果的方法.txt",
+        "keywords":  [
+
+                     ],
+        "length":  210
+    },
+    {
+        "title":  "1.3.4 全局脚本：方案加载完成信号发给通信设备的方法",
+        "chmPath":  "第1章 VM软件使用/1.3.4 全局脚本：方案加载完成信号发给通信设备的方法.html",
+        "textFile":  "topics/016-1.3.4 全局脚本：方案加载完成信号发给通信设备的方法.txt",
+        "keywords":  [
+
+                     ],
+        "length":  168
+    },
+    {
+        "title":  "1.3.5 全局脚本：通信设备ID获取方法",
+        "chmPath":  "第1章 VM软件使用/1.3.5 全局脚本：通信设备ID获取方法.html",
+        "textFile":  "topics/017-1.3.5 全局脚本：通信设备ID获取方法.txt",
+        "keywords":  [
+
+                     ],
+        "length":  197
+    },
+    {
+        "title":  "1.3.6 全局脚本：PLC通讯字符触发流程执行的方法",
+        "chmPath":  "第1章 VM软件使用/1.3.6 全局脚本：PLC通讯字符触发流程执行的方法.html",
+        "textFile":  "topics/018-1.3.6 全局脚本：PLC通讯字符触发流程执行的方法.txt",
+        "keywords":  [
+
+                     ],
+        "length":  821
+    },
+    {
+        "title":  "1.3.7 全局脚本：通过全局脚本加载本地图像的方法",
+        "chmPath":  "第1章 VM软件使用/1.3.7 全局脚本：通过全局脚本加载本地图像的方法.html",
+        "textFile":  "topics/019-1.3.7 全局脚本：通过全局脚本加载本地图像的方法.txt",
+        "keywords":  [
+                         "ImageData"
+                     ],
+        "length":  798
+    },
+    {
+        "title":  "1.3.8 全局脚本：通过全局脚本获取通讯输入的参数并赋值给全局变量",
+        "chmPath":  "第1章 VM软件使用/1.3.8 全局脚本：通过全局脚本获取通讯输入的参数并赋值给全局变量.html",
+        "textFile":  "topics/020-1.3.8 全局脚本：通过全局脚本获取通讯输入的参数并赋值给全局变量.txt",
+        "keywords":  [
+
+                     ],
+        "length":  292
+    },
+    {
+        "title":  "1.3.9 全局脚本：VM加载方案后自动执行的方法",
+        "chmPath":  "第1章 VM软件使用/1.3.9 全局脚本：VM加载方案后自动执行的方法.html",
+        "textFile":  "topics/021-1.3.9 全局脚本：VM加载方案后自动执行的方法.txt",
+        "keywords":  [
+
+                     ],
+        "length":  306
+    },
+    {
+        "title":  "2.5.5 全局变量：获取和设置全局变量的方法",
+        "chmPath":  "第2章 VM二次开发/2.5.5 全局变量：获取和设置全局变量的方法.html",
+        "textFile":  "topics/022-2.5.5 全局变量：获取和设置全局变量的方法.txt",
+        "keywords":  [
+
+                     ],
+        "length":  426
+    },
+    {
+        "title":  "1.1.6 应用-中级-脚本编程开发",
+        "chmPath":  "专题/1.1.6 应用-中级-脚本编程开发.html",
+        "textFile":  "topics/023-1.1.6 应用-中级-脚本编程开发.txt",
+        "keywords":  [
+
+                     ],
+        "length":  18
+    },
+    {
+        "title":  "2.1.4 联合开发：VM脚本联合OpenCV开发",
+        "chmPath":  "专题/2.1.4 联合开发：VM脚本联合OpenCV开发.html",
+        "textFile":  "topics/024-2.1.4 联合开发：VM脚本联合OpenCV开发.txt",
+        "keywords":  [
+                         "OpenCV",
+                         "ImageData"
+                     ],
+        "length":  1902
+    },
+    {
+        "title":  "2.1.5 联合开发：VM脚本联合OpenCV实现轮廓查找",
+        "chmPath":  "专题/2.1.5 联合开发：VM脚本联合OpenCV实现轮廓查找.html",
+        "textFile":  "topics/025-2.1.5 联合开发：VM脚本联合OpenCV实现轮廓查找.txt",
+        "keywords":  [
+                         "OpenCV",
+                         "ImageData"
+                     ],
+        "length":  5288
+    },
+    {
+        "title":  "2.1.8 凸包算法：脚本模块实现平面点集凸包算法",
+        "chmPath":  "专题/2.1.8 凸包算法：脚本模块实现平面点集凸包算法.html",
+        "textFile":  "topics/026-2.1.8 凸包算法：脚本模块实现平面点集凸包算法.txt",
+        "keywords":  [
+                         "OpenCV",
+                         "ImageData"
+                     ],
+        "length":  4742
+    },
+    {
+        "title":  "2.3.4 快捷键：键盘快捷键操作VM的方法",
+        "chmPath":  "专题/2.3.4 快捷键：键盘快捷键操作VM的方法.html",
+        "textFile":  "topics/027-2.3.4 快捷键：键盘快捷键操作VM的方法.txt",
+        "keywords":  [
+                         "CurrentProcess",
+                         "GetModule"
+                     ],
+        "length":  2198
+    },
+    {
+        "title":  "3.4 Mat转流程输入、Group输入、图像源SDK输入、模块输入、算子输入、算子输出、流程输出、脚本图像",
+        "chmPath":  "专题/3.4 Mat转流程输入、Group输入、图像源SDK输入、模块输入、算子输入、算子输出、流程输出、脚本图像.html",
+        "textFile":  "topics/028-3.4 Mat转流程输入、Group输入、图像源SDK输入、模块输入、算子输入、算子输出、流程输出、脚本图像.txt",
+        "keywords":  [
+                         "ImageData"
+                     ],
+        "length":  10396
+    },
+    {
+        "title":  "3.5 Halcon转流程输入、Group输入、图像源SDK输入、模块输入、算子输入、算子输出、流程输出、脚本图像",
+        "chmPath":  "专题/3.5 Halcon转流程输入、Group输入、图像源SDK输入、模块输入、算子输入、算子输出、流程输出、脚本图像.html",
+        "textFile":  "topics/029-3.5 Halcon转流程输入、Group输入、图像源SDK输入、模块输入、算子输入、算子输出、流程输出、脚本图像.txt",
+        "keywords":  [
+                         "ImageData"
+                     ],
+        "length":  20666
+    }
+]

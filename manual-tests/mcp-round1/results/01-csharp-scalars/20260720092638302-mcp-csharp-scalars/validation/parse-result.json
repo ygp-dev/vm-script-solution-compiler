@@ -1,0 +1,78 @@
+﻿{
+  "formatVersion": 7,
+  "sourceFile": "D:\\project\\2023\\VM操作集合\\vm-script-solution-compiler\\manual-tests\\mcp-round1\\results\\01-csharp-scalars\\20260720092638302-mcp-csharp-scalars\\result.sol",
+  "parseTime": "2026-07-20T17:26:42",
+  "parserVersion": "vm-sol-format v2.3.0",
+  "solution": {
+    "globalModules": [
+    ],
+    "procedures": [
+      {
+        "procedureId": 10000,
+        "displayName": "流程1",
+        "properties": {
+          "continueExecuteTimGap": 100,
+          "stopWhenNG": false,
+          "runTimeout": 0,
+          "shieldGlobalCtrl": false
+        },
+        "modules": [
+          {
+            "moduleId": 1,
+            "name": "ShellModule",
+            "displayName": "CSharp标量验证",
+            "type": "Module",
+            "typeId": 0,
+            "isEnabled": true,
+            "fullPath": "流程1.CSharp标量验证",
+            "frameNameSlot": "1-ShellModule.mdata",
+            "enableCallBack": true,
+            "guid": "8D9CA9A5BE144C039A0925D9DA686946",
+            "algoriParams": [
+            ],
+            "binaryParams": [
+              {"name": "Version", "valueLen": 6, "parsed": "V3.2.0"},
+              {"name": "Input", "valueLen": 716, "parsed": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ArrayOfModuleParamItem>\n    <ModuleParamItem>\n        <Name>%A%</Name>\n        <StructName>%A%</StructName>\n        <ValueType>int</ValueType>\n        <IsForce>true</IsForce>\n        <IsShow>true</IsShow>\n    </ModuleParamItem>\n    <ModuleParamItem>\n        <Name>%B%</Name>\n        <StructName>%B%</StructName>\n        <ValueType>int</ValueType>\n        <IsForce>true</IsForce>\n        <IsShow>true</IsShow>\n    </ModuleParamItem>\n    <ModuleParamItem>\n      ..."},
+              {"name": "Output", "valueLen": 1394, "parsed": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ArrayOfModuleParamItem>\n    <ModuleParamItem>\n        <Name>ModuRunTime</Name>\n        <StructName>ModuRunTime</StructName>\n        <ValueType>float</ValueType>\n        <IsForce>true</IsForce>\n        <IsShow>true</IsShow>\n    </ModuleParamItem>\n    <ModuleParamItem>\n        <Name>ResultShow</Name>\n        <StructName>ResultShow</StructName>\n        <ValueType>string</ValueType>\n        <IsForce>true</IsForce>\n        <IsShow>true</IsShow>\n    </ModulePara..."},
+              {"name": "ShellContent", "valueLen": 655, "parsed": "using System;\nusing System.Globalization;\nusing System.Threading;\nusing Script.Methods;\n\npublic partial class UserScript : ScriptMethods, IProcessMethods\n{\n    public void Init()\n    {\n        try\n        {\n        }\n        catch (Exception error)\n        {\n            ConsoleWrite(error.ToString());\n        }\n    }\n\n    public bool Process()\n    {\n        try\n        {\n            Sum = (A + B);\r\n            Passed = ((Enabled != 0)) ? 1 : 0;\r\n            Message = \"MCP CSharp OK\";\r\n          ..."},
+              {"name": "AssemblyGuid", "valueLen": 36, "parsed": "824d3738-0887-59b3-82e8-d8c46f2264b0"},
+              {"name": "DynamicInData", "valueLen": 1082, "parsed": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ParamRoot>\n    <Categorys>\n        <Category Name=\"Input\">\n            <Items>\n                <Filter Name=\"%A%\" ValueType=\"int\" Others=\"CustomVisible=True;IsForce=False;CanSubscribe=True;IsPrefer=False;Visible=True;VisibleInResultTree=True;IsPrivate=False;IsReturnRelateValue=True;AllowAutoSubscribe=True;AutoSubscribeByOther=True;IsResultShow=False;AutoSubscribeName=\"/>\n                <Filter Name=\"%B%\" ValueType=\"int\" Others=\"CustomVisible=True;IsForce=..."},
+              {"name": "DynamicOutData", "valueLen": 2363, "parsed": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ParamRoot>\n    <Categorys>\n        <Category Name=\"Output\">\n            <Items>\n                <Filter Name=\"fArrivalTimeStampLow\" ValueType=\"float\" Others=\"CustomVisible=False;IsForce=False;CanSubscribe=False;IsPrefer=False;Visible=False;VisibleInResultTree=False;IsPrivate=False;IsReturnRelateValue=True;AllowAutoSubscribe=True;AutoSubscribeByOther=True;IsResultShow=False;AutoSubscribeName=\"/>\n                <Filter Name=\"fArrivalTimeStampHigh\" ValueType..."}
+            ],
+            "connections": {
+              "frontModules": [],
+              "followModules": []
+            },
+            "subscriptions": [
+              {"paramName": "%A%", "isBound": false, "targetModuleId": 0, "targetParamName": "7", "indexMode": "All", "isIndexBind": false, "indexTargetModuleId": 0, "relationString": "1 . %A% . 0 . 7 . 1 . 0 . All . 1"},
+              {"paramName": "%B%", "isBound": false, "targetModuleId": 0, "targetParamName": "5", "indexMode": "All", "isIndexBind": false, "indexTargetModuleId": 0, "relationString": "1 . %B% . 0 . 5 . 1 . 0 . All . 1"},
+              {"paramName": "%Enabled%", "isBound": false, "targetModuleId": 0, "targetParamName": "1", "indexMode": "All", "isIndexBind": false, "indexTargetModuleId": 0, "relationString": "1 . %Enabled% . 0 . 1 . 1 . 0 . All . 1"}
+            ],
+            "uiParams": [
+              {"name": "GUID", "inferredType": "guid", "value": "2207E067-9681-45F9-A37C-C30675BD313E"},
+              {"name": "IsReady", "inferredType": "bool", "value": "True"},
+              {"name": "Position", "inferredType": "position", "value": "(315.0, 130.0)"},
+              {"name": "[ParamRoot]_%Data Record%Type", "inferredType": "string", "value": "datarecord"},
+              {"name": "[ParamRoot]_%Data Record%IsDisplay", "inferredType": "string", "value": "True"},
+              {"name": "DynamicObject_%Data Record%_[Child]", "inferredType": "string", "value": "Content"},
+              {"name": "[ParamRoot]_%Data Record%.Content.Value", "inferredType": "string", "value": "Sum:{0},Passed:{1},Message:{2}"},
+              {"name": "[ParamRoot]_%Data Record%.Content.Mapping", "inferredType": "string", "value": "%Sum%,%Passed%,%Message%"},
+              {"name": "DynamicObject", "inferredType": "string", "value": "%Data Record%"}
+            ],
+            "scriptText": "using System;\nusing System.Globalization;\nusing System.Threading;\nusing Script.Methods;\n\npublic partial class UserScript : ScriptMethods, IProcessMethods\n{\n    public void Init()\n    {\n        try\n        {\n        }\n        catch (Exception error)\n        {\n            ConsoleWrite(error.ToString());\n        }\n    }\n\n    public bool Process()\n    {\n        try\n        {\n            Sum = (A + B);\r\n            Passed = ((Enabled != 0)) ? 1 : 0;\r\n            Message = \"MCP CSharp OK\";\r\n            return true;\n        }\n        catch (Exception error)\n        {\n            ConsoleWrite(error.ToString());\n            return false;\n        }\n    }\n}\n",
+            "assemblyGuid": "824d3738-0887-59b3-82e8-d8c46f2264b0"          }
+        ]
+      }
+    ],
+    "globalScript": {
+      "version": "V3.4.0",
+      "scriptLength": 2941,
+      "hasPassword": false,
+      "references": [
+      ]
+    },
+    "moduleParamBindings": [
+    ],
+    "warnings": null
+  }
+}

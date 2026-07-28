@@ -1,0 +1,37 @@
+{
+  "actions": [
+    {
+      "kind": "validateResources"
+    },
+    {
+      "kind": "materializeScriptBase"
+    },
+    {
+      "kind": "configureScriptModules"
+    },
+    {
+      "kind": "writeModuleIo"
+    },
+    {
+      "kind": "writeCSharpObjectBindings"
+    },
+    {
+      "kind": "writeAndVerifyInputDefaults"
+    },
+    {
+      "kind": "rebuildModuleFrame"
+    },
+    {
+      "kind": "validateAndWriteDependencies"
+    },
+    {
+      "kind": "offlineScriptPrecompile"
+    },
+    {
+      "kind": "parseAndValidate"
+    },
+    {
+      "kind": "inspectSolution"
+    }
+  ]
+}

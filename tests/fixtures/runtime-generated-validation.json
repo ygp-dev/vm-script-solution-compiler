@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "1.0",
+  "task": { "name": "runtime-generated-validation", "mode": "create", "vmVersion": "4.4.0" },
+  "scripts": [
+    {
+      "id": "generated-csharp-sum",
+      "carrier": "csharp-module",
+      "name": "CSharp端口验证",
+      "procedure": "流程1",
+      "execution": { "mode": "once", "order": 0 },
+      "inputs": [
+        { "name": "A", "type": "float", "default": 1.25, "required": true },
+        { "name": "B", "type": "float", "default": 2.5, "required": true }
+      ],
+      "outputs": [{ "name": "Sum", "type": "float" }],
+      "operations": [
+        {
+          "kind": "setOutput",
+          "parameter": "Sum",
+          "value": {
+            "kind": "binary", "operator": "add",
+            "left": { "kind": "input", "name": "A" },
+            "right": { "kind": "input", "name": "B" }
+          }
+        }
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "generated-python-sum",
+      "carrier": "python-module",
+      "name": "Python端口验证",
+      "procedure": "流程1",
+      "execution": { "mode": "once", "order": 1 },
+      "inputs": [
+        { "name": "A", "type": "int", "default": 101, "required": true },
+        { "name": "B", "type": "int", "default": 202, "required": true }
+      ],
+      "outputs": [{ "name": "Sum", "type": "int" }],
+      "operations": [
+        {
+          "kind": "setOutput",
+          "parameter": "Sum",
+          "value": {
+            "kind": "binary", "operator": "add",
+            "left": { "kind": "input", "name": "A" },
+            "right": { "kind": "input", "name": "B" }
+          }
+        }
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "generated-global",
+      "carrier": "global-csharp",
+      "name": "全局脚本验证",
+      "execution": { "mode": "once", "order": 0 },
+      "inputs": [],
+      "outputs": [],
+      "operations": [{ "kind": "runProcedure", "procedure": "流程1" }],
+      "dependencies": []
+    }
+  ],
+  "connections": []
+}

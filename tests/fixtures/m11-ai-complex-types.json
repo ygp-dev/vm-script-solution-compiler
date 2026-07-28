@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "1.0",
+  "task": { "name": "m11-ai-complex-types", "mode": "create", "vmVersion": "4.4.0" },
+  "scripts": [
+    {
+      "id": "ai-complex-types",
+      "carrier": "csharp-module",
+      "name": "AI复杂类型",
+      "procedure": "流程1",
+      "execution": { "mode": "once", "order": 0 },
+      "inputs": [
+        { "name": "SourceImage", "type": "image" },
+        { "name": "FeaturePoints", "type": "point" }
+      ],
+      "outputs": [
+        { "name": "ImageEcho", "type": "image" },
+        { "name": "PointsEcho", "type": "point" }
+      ],
+      "operations": [
+        { "kind": "setOutput", "parameter": "ImageEcho", "value": { "kind": "input", "name": "SourceImage" }, "onError": "fail" },
+        { "kind": "setOutput", "parameter": "PointsEcho", "value": { "kind": "input", "name": "FeaturePoints" }, "onError": "fail" }
+      ],
+      "dependencies": []
+    }
+  ],
+  "connections": []
+}

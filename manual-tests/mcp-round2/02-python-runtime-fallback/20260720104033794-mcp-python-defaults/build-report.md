@@ -1,0 +1,34 @@
+# VM Script Solution Compiler build report
+
+- Task: `20260720104033794-mcp-python-defaults`
+- Compiler phase: `complete`
+- Compiler version: `1.0.0`
+- Mode: `create`
+- Requirement SHA-256: `AFF7FF41534F9F20B79FCDDBBC20B00EC0ADD8E77BFAFB87797A7BE8E6FC4328`
+- Base SOL: `none`
+- Base SOL SHA-256: `none`
+- Result SHA-256: `CF228F56908A8464CB7DAB8C61DCC67E5DC8122D87434DE61838A33190106E7B`
+- Determinism: Requirement semantics, generated source, module structure, and compiler AssemblyGuid are deterministic; task id and ZIP entry timestamps are build-specific, so byte hashes may differ across equivalent builds
+- VM root: `C:\Program Files\VisionMaster4.4.0`
+- VM version: `4.4.0`
+- VM architecture: `x64`
+- Platform SDK root: `C:\Program Files\VisionMaster4.4.0\Development`
+- Algorithm SDK root: `C:\Program Files\VisionMaster4.4.0\MVDAlgorithmSDK`
+- GlobalScript available: `True`
+- Resource version: `1.0.0`
+- Resource VM version: `4.4.0`
+- Script carriers: `python-module`
+- Declared dependencies: `none`
+- ShellRefrences payload: `not emitted; VM default references remain implicit`
+- DLL validation: `none`
+- DLL deployment required: `none`
+- Dependency manifest: `validation/dependency-manifest.json` (external files are packaged under `dependencies/<script-id>/`; when deployment is needed, run `dependencies/deploy-to-vm.ps1` explicitly as an administrator)
+- Dependency safety: the compiler and Desktop never modify the VM installation automatically
+- Dependency validation: assembly role, verified/user-declared ShellRefrences type, managed identity, version, architecture, target framework, direct reference graph, runtime visibility, and VM Python package probe
+- Script precompile: passed against VM 4.4 method assemblies / bundled Python syntax parser; C# port properties are a generated contract and still require VM precompile confirmation
+- Parser exit code: `0`
+- Inspect exit code: `0`
+- DynamicIO validation: complex C# ports use VM-saved uppercase logical types, CR-separated `StructName` backing fields, nested DynamicIO `Combination` nodes, array type metadata, image object mappings, and a non-empty AssemblyGuid
+- Input defaults: int/float `ModuleSubscribe` round-trip confirmed; bool/string structurally encoded; Python also has deterministic `None` fallback
+- VM runtime baseline validation: `passed by user verification in VisionMaster 4.4`
+- VM runtime validation pending: `none`

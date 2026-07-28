@@ -1,0 +1,10 @@
+﻿{
+  "applied": 7,
+  "errors": 0,
+  "warnings": [
+    "deleteModule: 删除 ModuleBase 条目 Index=1",
+    "deleteModule: 删除 Inside 引用 Index=1",
+    "setDisplayName[Module]: 0 \"Python脚本1\" → \"Python默认值验证\"",
+    "setDisplayName[Module]: 0 \"GlobalScript\" → \"Python默认值验证\""
+  ]
+}

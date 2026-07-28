@@ -1,0 +1,52 @@
+{
+  "ok": true,
+  "scripts": [
+    {
+      "id": "drawing-dependency",
+      "carrier": "csharp-module",
+      "compiler": "Framework64 csc",
+      "dependencies": [
+        "System.Drawing.dll"
+      ],
+      "exitCode": 0,
+      "standardOutput": "",
+      "standardError": ""
+    },
+    {
+      "id": "python-json",
+      "carrier": "python-module",
+      "compiler": "C:\\Program Files\\VisionMaster4.4.0\\Applications\\ModuleProxy\\x64\\python.exe",
+      "dependencies": [
+        "json"
+      ],
+      "exitCode": 0,
+      "standardOutput": "",
+      "standardError": ""
+    },
+    {
+      "id": "global-csharp",
+      "carrier": "global-csharp",
+      "compiler": "Framework64 csc",
+      "dependencies": [
+        "mscorlib.dll",
+        "System.dll",
+        "System.Core.dll",
+        "System.Drawing.dll",
+        "System.Windows.Forms.dll",
+        "VM.GlobalScript.Methods.dll",
+        "iMVS-6000PlatformSDKCS.dll",
+        "Apps.Json.dll",
+        "VM.Core.dll",
+        "VM.PlatformSDKCS.dll",
+        "VMControls.BaseInterface.dll",
+        "VMControls.Interface.dll",
+        "VMControls.RenderInterface.dll",
+        "ImageSourceModuleCs.dll",
+        "IMVSFastFeatureMatchModuCs.dll"
+      ],
+      "exitCode": 0,
+      "standardOutput": "",
+      "standardError": ""
+    }
+  ]
+}

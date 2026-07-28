@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "1.0",
+  "task": { "name": "mcp-python-defaults", "mode": "create", "vmVersion": "4.4.0" },
+  "scripts": [{
+    "id": "python-defaults", "carrier": "python-module", "name": "Python默认值验证", "procedure": "流程1",
+    "execution": { "mode": "once", "order": 0 },
+    "inputs": [
+      { "name": "A", "type": "int", "default": 3, "required": true },
+      { "name": "B", "type": "int", "default": 4, "required": true },
+      { "name": "Values", "type": "int[]", "default": [1, 2, 3] }
+    ],
+    "outputs": [
+      { "name": "Sum", "type": "int", "default": 0 },
+      { "name": "ValuesEcho", "type": "int[]" }
+    ],
+    "operations": [
+      { "kind": "setOutput", "parameter": "Sum", "value": { "kind": "binary", "operator": "add", "left": { "kind": "input", "name": "A" }, "right": { "kind": "input", "name": "B" } } },
+      { "kind": "setOutput", "parameter": "ValuesEcho", "value": { "kind": "input", "name": "Values" } }
+    ],
+    "dependencies": []
+  }],
+  "connections": []
+}

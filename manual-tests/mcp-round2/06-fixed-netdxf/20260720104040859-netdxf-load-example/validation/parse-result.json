@@ -1,0 +1,84 @@
+﻿{
+  "formatVersion": 7,
+  "sourceFile": "D:\\project\\2023\\VM操作集合\\vm-script-solution-compiler\\manual-tests\\mcp-round2\\06-fixed-netdxf\\20260720104040859-netdxf-load-example\\result.sol",
+  "parseTime": "2026-07-20T18:40:42",
+  "parserVersion": "vm-sol-format v2.3.0",
+  "solution": {
+    "globalModules": [
+    ],
+    "procedures": [
+      {
+        "procedureId": 10000,
+        "displayName": "流程1",
+        "properties": {
+          "continueExecuteTimGap": 100,
+          "stopWhenNG": false,
+          "runTimeout": 0,
+          "shieldGlobalCtrl": false
+        },
+        "modules": [
+          {
+            "moduleId": 1,
+            "name": "ShellModule",
+            "displayName": "netDxf读取示例",
+            "type": "Module",
+            "typeId": 0,
+            "isEnabled": true,
+            "fullPath": "流程1.netDxf读取示例",
+            "frameNameSlot": "1-ShellModule.mdata",
+            "enableCallBack": true,
+            "guid": "8D9CA9A5BE144C039A0925D9DA686946",
+            "algoriParams": [
+            ],
+            "binaryParams": [
+              {"name": "Version", "valueLen": 6, "parsed": "V3.2.0"},
+              {"name": "Input", "valueLen": 311, "parsed": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ArrayOfModuleParamItem>\n    <ModuleParamItem>\n        <Name>%DxfPath%</Name>\n        <StructName>%DxfPath%</StructName>\n        <ValueType>string</ValueType>\n        <IsForce>true</IsForce>\n        <IsShow>true</IsShow>\n    </ModuleParamItem>\n</ArrayOfModuleParamItem>\n"},
+              {"name": "Output", "valueLen": 967, "parsed": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ArrayOfModuleParamItem>\n    <ModuleParamItem>\n        <Name>ModuRunTime</Name>\n        <StructName>ModuRunTime</StructName>\n        <ValueType>float</ValueType>\n        <IsForce>true</IsForce>\n        <IsShow>true</IsShow>\n    </ModuleParamItem>\n    <ModuleParamItem>\n        <Name>ResultShow</Name>\n        <StructName>ResultShow</StructName>\n        <ValueType>string</ValueType>\n        <IsForce>true</IsForce>\n        <IsShow>true</IsShow>\n    </ModulePara..."},
+              {"name": "ShellRefrences", "valueLen": 107, "parsed": "mscorlib.dll\n0\rSystem.dll\n0\rSystem.Core.dll\n0\rSystem.Windows.Forms.dll\n0\rScript.Methods.dll\n3\rnetDxf.dll\n4\r"},
+              {"name": "ShellContent", "valueLen": 510, "parsed": "using System;\nusing netDxf;\nusing Script.Methods;\n\npublic partial class UserScript : ScriptMethods, IProcessMethods\n{\n    public void Init() { }\n\n    public bool Process()\n    {\n        try\n        {\n            DxfDocument document = DxfDocument.Load(DxfPath);\n            Loaded = document != null ? 1 : 0;\n            return document != null;\n        }\n        catch (Exception error)\n        {\n            Loaded = 0;\n            ConsoleWrite(error.ToString());\n            return false;\n        ..."},
+              {"name": "AssemblyGuid", "valueLen": 36, "parsed": "f5c08303-1136-5003-a07a-9644536862ef"},
+              {"name": "DynamicInData", "valueLen": 495, "parsed": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ParamRoot>\n    <Categorys>\n        <Category Name=\"Input\">\n            <Items>\n                <Filter Name=\"%DxfPath%\" ValueType=\"string\" Others=\"CustomVisible=True;IsForce=False;CanSubscribe=True;IsPrefer=False;Visible=True;VisibleInResultTree=True;IsPrivate=False;IsReturnRelateValue=True;AllowAutoSubscribe=True;AutoSubscribeByOther=True;IsResultShow=False;AutoSubscribeName=\"/>\n            </Items>\n        </Category>\n    </Categorys>\n</ParamRoot>\n"},
+              {"name": "DynamicOutData", "valueLen": 1762, "parsed": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ParamRoot>\n    <Categorys>\n        <Category Name=\"Output\">\n            <Items>\n                <Filter Name=\"fArrivalTimeStampLow\" ValueType=\"float\" Others=\"CustomVisible=False;IsForce=False;CanSubscribe=False;IsPrefer=False;Visible=False;VisibleInResultTree=False;IsPrivate=False;IsReturnRelateValue=True;AllowAutoSubscribe=True;AutoSubscribeByOther=True;IsResultShow=False;AutoSubscribeName=\"/>\n                <Filter Name=\"fArrivalTimeStampHigh\" ValueType..."}
+            ],
+            "connections": {
+              "frontModules": [],
+              "followModules": []
+            },
+            "subscriptions": [
+            ],
+            "uiParams": [
+              {"name": "GUID", "inferredType": "guid", "value": "2207E067-9681-45F9-A37C-C30675BD313E"},
+              {"name": "IsReady", "inferredType": "bool", "value": "True"},
+              {"name": "Position", "inferredType": "position", "value": "(315.0, 130.0)"},
+              {"name": "[ParamRoot]_%Data Record%Type", "inferredType": "string", "value": "datarecord"},
+              {"name": "[ParamRoot]_%Data Record%IsDisplay", "inferredType": "string", "value": "True"},
+              {"name": "DynamicObject_%Data Record%_[Child]", "inferredType": "string", "value": "Content"},
+              {"name": "[ParamRoot]_%Data Record%.Content.Value", "inferredType": "string", "value": "Loaded:{0}"},
+              {"name": "[ParamRoot]_%Data Record%.Content.Mapping", "inferredType": "string", "value": "%Loaded%"},
+              {"name": "DynamicObject", "inferredType": "string", "value": "%Data Record%"}
+            ],
+            "scriptText": "using System;\nusing netDxf;\nusing Script.Methods;\n\npublic partial class UserScript : ScriptMethods, IProcessMethods\n{\n    public void Init() { }\n\n    public bool Process()\n    {\n        try\n        {\n            DxfDocument document = DxfDocument.Load(DxfPath);\n            Loaded = document != null ? 1 : 0;\n            return document != null;\n        }\n        catch (Exception error)\n        {\n            Loaded = 0;\n            ConsoleWrite(error.ToString());\n            return false;\n        }\n    }\n}\n",
+            "assemblyGuid": "f5c08303-1136-5003-a07a-9644536862ef",
+            "references": [
+              {"dll": "mscorlib.dll", "type": 0},
+              {"dll": "System.dll", "type": 0},
+              {"dll": "System.Core.dll", "type": 0},
+              {"dll": "System.Windows.Forms.dll", "type": 0},
+              {"dll": "Script.Methods.dll", "type": 3},
+              {"dll": "netDxf.dll", "type": 4}
+            ]          }
+        ]
+      }
+    ],
+    "globalScript": {
+      "version": "V3.4.0",
+      "scriptLength": 2941,
+      "hasPassword": false,
+      "references": [
+      ]
+    },
+    "moduleParamBindings": [
+    ],
+    "warnings": null
+  }
+}

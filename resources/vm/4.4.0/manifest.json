@@ -1,0 +1,62 @@
+{
+  "resourceVersion": "1.0.0",
+  "visionMasterVersion": "4.4.0",
+  "formatVersion": 7,
+  "architecture": "x64",
+  "containsSolFiles": false,
+  "scriptBase": {
+    "path": "script-base/SolutionFile",
+    "procedureCount": 1,
+    "modules": [
+      {
+        "type": "PyShellModule",
+        "displayName": "Python脚本1",
+        "moduleId": 0
+      },
+      {
+        "type": "ShellModule",
+        "displayName": "脚本1",
+        "moduleId": 1,
+        "version": "V3.2.0"
+      }
+    ]
+  },
+  "hashes": {
+    "script-base/SolutionFile/MoudleFrame": "B2F62F5111E82034B3991A477B661DD82031DB508B8A66969B8F23DE7197BF90",
+    "script-base/SolutionFile/VmServer.xml": "05BF7A418DE07A4CF13B72DFC951680D757F6C4FD5AEC75ED69F4CCA5C0F84A5",
+    "script-base/SolutionFile/GlobalScript_0": "114F0AAF98FD6493327EE2776E78C05F23BDCFCAB3D7C2C8CE1A5607D4B183CE",
+    "script-base/SolutionFile/UiParamData/_0+0+PyShellModule": "7AC1D50DBF45A361EA4819935422D9995FC460E8310CB4CDBFCC3190C016D1F8",
+    "script-base/SolutionFile/UiParamData/_1+0+ShellModule": "BF4F0B9CCEC83295E3031A4BBD7AECEB34A22853511FB12240C60189A756FF38",
+    "script-base/SolutionFile/UiParamData/_10000+1+IMVSProcessControl": "847C34B49DF58730A0493ECE3C19688D78DFD8CE052C67093ADA7645E25129D9",
+    "script-base/SolutionFile/UiParamData/_70000+100+solution": "847C34B49DF58730A0493ECE3C19688D78DFD8CE052C67093ADA7645E25129D9",
+    "script-templates/shell-module.cs": "B2314A7848CE156787C12B96972D933E8AF4A03E5AE25548F829330045B99D1B",
+    "script-templates/py-shell-module.py": "70C2ADE458CF73D774F8F0D907A933FFEF49DAD3219E181AE82AC93C4BE3CB26",
+    "global-script/GlobalScript.txt": "8D2100CE27A1DDD084975C0D8A708FEA910E08CF7C4F8A9388C4ECC57B84B61D",
+    "global-script/project-template/GlobalUserScript.csproj": "253A3CA8259EACA72A47A04AA71CAFC106FD4C443C440C6BF6C24828E31D5488",
+    "global-script/project-template/UserGlobalScript.cs": "8D2100CE27A1DDD084975C0D8A708FEA910E08CF7C4F8A9388C4ECC57B84B61D",
+    "global-script/samples-ch-4x/全局脚本_模块参数配置.cs": "3DE0B4513831D74C4A3782411E154AA64719CDBCA25F29DAB661C3295514FBEE",
+    "global-script/samples-ch-4x/全局脚本_模块输入参数.cs": "46D9EBEBBB4804DD9E86E8BFCE42B3725E0FB50179544E606FDCF0168B43529F",
+    "global-script/samples-ch-4x/全局脚本_通信接收.cs": "ADE32EA7CA49EFB69CD6FA0E379A9C4F204BDFE35F6A23147E47B824DDC94F06",
+    "type-system.json": "A1F241900076A3E1B78B23893D487913F32CAAC281D87E1B41D3933AF0351DC9",
+    "api-catalog.json": "69954B83DBE0A7A86AE6141C9190DB1FC7CA29D7B710515EA555C1E5E9B3140A",
+    "module-parameter-catalog.json": "1BCD5B34877193E8E59F0E9B03506CD4843D80A97F7A666F7AD2076C41E19F9E",
+    "shell-reference-catalog.json": "D0030184935221F11C55221CA74E1E6B59A7071E86C10EA58C6B7D1FC6BD114F",
+    "csharp-io-layout-evidence.json": "FAD962CEC7445EB9736D428DF75E9625A214E36C8824D2CD9FE234D2C71A898E"
+  },
+  "validation": {
+    "parser": "VMSolutionParser.Cli",
+    "parseWarnings": 0,
+    "vmRuntimeValidated": true,
+    "userRuntimeEvidence": {
+      "reportedDate": "2026-07-15",
+      "report": "3个脚本载体和已验基础端口正常；四个默认值在 UI 可见；保存、关闭、重新打开后仍正常",
+      "carriers": ["global-csharp", "csharp-module", "python-module"]
+    },
+    "complexBindingEvidence": {
+      "reportedDate": "2026-07-17",
+      "report": "用户确认 V3 复杂端口数据源已能正常绑定；Circle 在 VM 4.4 ShellModule 输入类型列表中不可选择，注入后显示空类型，因此已从端口契约移除；随后确认 V4 版本正常",
+      "circleVariableApiRetained": ["GetVarCircle", "SetVarCircle"]
+    },
+    "pending": []
+  }
+}

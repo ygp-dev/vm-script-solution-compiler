@@ -1,0 +1,178 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GlobalCameraModuleCs</name>
+    </assembly>
+    <members>
+        <member name="P:GlobalCameraModuleCs.GlobalCameraModuleTool.ModuParams">
+            <summary>
+            CH: 模块参数对象 | EN: Module Param Object
+            </summary>
+        </member>
+        <member name="M:GlobalCameraModuleCs.GlobalCameraModuleTool.SetTriggerProcessEnable(System.Boolean)">
+            <summary>
+            设置出图是否触发流程运行
+            </summary>
+            <param name="value">触发流程：true, 不触发流程：false</param>
+        </member>
+        <member name="M:GlobalCameraModuleCs.GlobalCameraModuleTool.GetTriggerProcessEnable">
+            <summary>
+            获取出图触发流程使能状态
+            </summary>
+            <returns>触发流程：true, 不触发流程：false</returns>
+        </member>
+        <member name="M:GlobalCameraModuleCs.GlobalCameraModuleTool.bIsCameraConnect">
+            <summary>
+            相机是否处于连接状态
+            </summary>
+            <returns>连接状态：true, 断开状态：false</returns>
+        </member>
+        <member name="M:GlobalCameraModuleCs.GlobalCameraModuleTool.SaveParamToUser1">
+            <summary>
+            保存参数到用户集1
+            </summary>
+        </member>
+        <member name="P:GlobalCameraModuleCs.GlobalCameraModuleTool.Name">
+            <summary>
+            模块显示名称
+            </summary>
+        </member>
+        <member name="M:GlobalCameraModuleCs.GlobalCameraParamItem.#ctor(VM.PlatformSDKCS.CModuleParamBase,System.String,System.Double,System.Double)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="moduParams">所属模块参数</param>
+            <param name="paramName">参数名称</param>
+        </member>
+        <member name="M:GlobalCameraModuleCs.GlobalCameraParamItem.GetGlobalCameraIntValue">
+            <summary>
+            获取int类型参数
+            </summary>
+        </member>
+        <member name="M:GlobalCameraModuleCs.GlobalCameraParamItem.GetGlobalCameraDoubleValue">
+            <summary>
+            获取double类型参数
+            </summary>
+        </member>
+        <member name="M:GlobalCameraModuleCs.GlobalCameraParamItem.GetGlobalCameraEnumValue">
+            <summary>
+            获取enum类型参数
+            </summary>
+        </member>
+        <member name="T:GlobalCameraModuleCs.GlobalCameraParam">
+            <summary>
+            CH: 全局相机 | EN: Global Camera
+            </summary>
+        </member>
+        <member name="P:GlobalCameraModuleCs.GlobalCameraParam.Width">
+            <summary>
+            CH: 图像宽度 | EN: Image Width
+            </summary>
+        </member>
+        <member name="P:GlobalCameraModuleCs.GlobalCameraParam.Height">
+            <summary>
+            CH: 图像高度 | EN: Image Height
+            </summary>
+        </member>
+        <member name="P:GlobalCameraModuleCs.GlobalCameraParam.ExposureTime">
+            <summary>
+            CH: 曝光时间 | EN: Exposure Time
+            </summary>
+        </member>
+        <member name="P:GlobalCameraModuleCs.GlobalCameraParam.PixelFormat">
+            <summary>
+            CH: 像素格式 | EN: Pixel Format
+            </summary>
+        </member>
+        <member name="P:GlobalCameraModuleCs.GlobalCameraParam.TriggerSource">
+            <summary>
+            CH: 触发源 | EN: Trigger Source
+            </summary>
+        </member>
+        <member name="P:GlobalCameraModuleCs.GlobalCameraParam.TriggerDelay">
+            <summary>
+            CH: 触发延迟 | EN: Trigger Delay
+            </summary>
+        </member>
+        <member name="P:GlobalCameraModuleCs.GlobalCameraParam.Gain">
+            <summary>
+            CH: 增益 | EN: Gain
+            </summary>
+        </member>
+        <member name="P:GlobalCameraModuleCs.GlobalCameraParam.GammaEnable">
+            <summary>
+            CH: Gamma使能 | EN: Gamma Enable
+            </summary>
+        </member>
+        <member name="P:GlobalCameraModuleCs.GlobalCameraParam.GammaSelector">
+            <summary>
+            CH: 选择器 | EN: Selector
+            </summary>
+        </member>
+        <member name="F:GlobalCameraModuleCs.GlobalCameraParam.GammaSelectorEnum.USER">
+            <summary>
+            USER
+            </summary>
+        </member>
+        <member name="F:GlobalCameraModuleCs.GlobalCameraParam.GammaSelectorEnum.SRGB">
+            <summary>
+            SRGB
+            </summary>
+        </member>
+        <member name="P:GlobalCameraModuleCs.GlobalCameraParam.CameraMold">
+            <summary>
+            CH: 相机类型 | EN: Camera Type
+            </summary>
+        </member>
+        <member name="F:GlobalCameraModuleCs.GlobalCameraParam.CameraMoldEnum.CommonCamera">
+            <summary>
+            CH: 普通相机 | EN: Common Camera
+            </summary>
+        </member>
+        <member name="F:GlobalCameraModuleCs.GlobalCameraParam.CameraMoldEnum.SmartCamera">
+            <summary>
+            CH: 智能相机 | EN: Smart Camera
+            </summary>
+        </member>
+        <member name="F:GlobalCameraModuleCs.GlobalCameraParam.CameraMoldEnum.DalsaCamera">
+            <summary>
+            CH: 线阵相机 | EN: Dalsa Camera
+            </summary>
+        </member>
+        <member name="P:GlobalCameraModuleCs.GlobalCameraParam.ElectricalLevel">
+            <summary>
+            CH: 电平类型 | EN: ElectricalLevel Type
+            </summary>
+        </member>
+        <member name="F:GlobalCameraModuleCs.GlobalCameraParam.ElectricalLevelEnum.High">
+            <summary>
+            CH: 高电平有效 | EN: Active High
+            </summary>
+        </member>
+        <member name="F:GlobalCameraModuleCs.GlobalCameraParam.ElectricalLevelEnum.Low">
+            <summary>
+            CH: 低电平有效 | EN: Active Low
+            </summary>
+        </member>
+        <member name="M:GlobalCameraModuleCs.GlobalCameraParam.GetCameraInfoList">
+            <summary>
+            CH: 获取相机信息列表 | EN: Get Camera Info List
+            </summary>
+        </member>
+        <member name="M:GlobalCameraModuleCs.GlobalCameraParam.GetChosenCameraSN">
+            <summary>
+            CH: 获取选择相机SN | EN: Get Chosen Camera SN
+            </summary>
+        </member>
+        <member name="M:GlobalCameraModuleCs.GlobalCameraParam.SetChosenCameraSN(System.String)">
+            <summary>
+            CH: 设置选择相机SN | EN: Set Chosen Camera SN
+            </summary>
+        </member>
+        <member name="M:GlobalCameraModuleCs.GlobalCameraParam.#ctor(System.UInt32)">
+            <summary>
+            CH: 构造函数 | EN: Constructor
+            </summary>
+        </member>
+    </members>
+</doc>

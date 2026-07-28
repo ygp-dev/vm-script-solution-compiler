@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "1.0",
+  "task": { "name": "mixed-scripts", "mode": "create", "vmVersion": "4.4.0" },
+  "scripts": [
+    {
+      "id": "first-csharp", "carrier": "csharp-module", "name": "第一步", "procedure": "流程1",
+      "execution": { "mode": "once", "order": 0 }, "inputs": [], "outputs": [], "operations": [], "dependencies": []
+    },
+    {
+      "id": "second-python", "carrier": "python-module", "name": "第二步", "procedure": "流程1",
+      "execution": { "mode": "once", "order": 1 }, "inputs": [], "outputs": [], "operations": [], "dependencies": []
+    }
+  ]
+}

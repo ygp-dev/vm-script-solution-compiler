@@ -1,0 +1,197 @@
+using System;
+using System.Text;
+using System.Windows.Forms;
+using Script.Methods;
+using System.Runtime.InteropServices;
+using HalconDotNet;
+using static System.Net.Mime.MediaTypeNames;
+/************************************
+Shell Module default code: using .NET Framwwork 4.6.1
+*************************************/
+public partial class UserScript:ScriptMethods,IProcessMethods
+{
+    //the count of process
+	//执行次数计数
+    int processCount ;  
+
+    /// <summary>
+    /// Initialize the field's value when compiling
+	/// 预编译时变量初始化
+    /// </summary>
+    public void Init()
+    {
+        //You can add other global fields here
+		//变量初始化，其余变量可在该函数中添加
+        processCount = 0;
+       
+    }
+
+    /// <summary>
+    /// Enter the process function when running code once
+	/// 流程执行一次进入Process函数
+    /// </summary>
+    /// <returns></returns>
+    public bool Process()
+    {
+        //You can add your codes here, for realizing your desired function
+        //每次执行将进入该函数，此处添加所需的逻辑流程处理
+
+        HObject Himg = ImageDataToHalconImage(img);
+        HOperatorSet.GetObjClass(Himg, out HTuple objectClass);
+        if (objectClass.S == "image") 
+        {
+            HOperatorSet.CountChannels(Himg, out HTuple channels);
+            HObject saveImage;
+
+            if (channels == 3)  // 如果是彩色图像（3通道）
+            {
+                HObject channelR, channelG, channelB;
+                HOperatorSet.Decompose3(Himg, out channelR, out channelG, out channelB);
+                HOperatorSet.Compose3(channelR, channelG, channelB, out saveImage);
+            }
+            else
+            {
+                saveImage = Himg;  // 如果是灰度图像，直接保存
+            }
+            HOperatorSet.WriteImage(saveImage, "png", 0, "output_image.png");
+        }
+       return true;
+    }
+
+
+    public static ImageData HalconImageToImageData(HObject hImageObj)
+    {
+        try
+        {
+            ImageData imageData = new ImageData();
+            HTuple imageWidth = 0;
+            HTuple imageHeight = 0;
+            HTuple objClass = hImageObj.GetObjClass();
+            if (objClass.S.Equals("image"))
+            {
+                HTuple imageType;
+                HOperatorSet.GetImageType(hImageObj, out imageType);
+                if (imageType.S.Equals("byte"))
+                {
+                    //获取图像通道数
+                    HTuple channels = 0;
+                    HOperatorSet.CountChannels(hImageObj, out channels);
+                    //如果是单通道
+                    if (channels.I == 1)
+                    {
+                        HTuple imagePointer;
+                        HOperatorSet.GetImagePointer1(hImageObj, out imagePointer, out imageType, out imageWidth, out imageHeight);
+                        imageData.Width = imageWidth.I;
+                        imageData.Heigth = imageHeight.I;
+                        imageData.PixelFormat = ImagePixelFormate.MONO8;
+                        imageData.Buffer = new byte[imageWidth.I * imageHeight.I];
+                        Marshal.Copy(imagePointer, imageData.Buffer, 0, imageWidth.I * imageHeight.I);
+                    }
+                    //如果是三通道
+                    else if (channels.I == 3)
+                    {
+                        HTuple redChannel;
+                        HTuple greenChannel;
+                        HTuple blueChannel;
+                        HOperatorSet.GetImagePointer3(hImageObj, out redChannel, out greenChannel, out blueChannel, out imageType, out imageWidth, out imageHeight);
+                        imageData.Width = imageWidth.I;
+                        imageData.Heigth = imageHeight.I;
+                        imageData.PixelFormat = ImagePixelFormate.RGB24;
+                        imageData.Buffer = new byte[imageWidth.I * imageHeight.I * 3];
+                        byte[] imageRedBuffer = new byte[imageWidth.I * imageHeight.I];
+                        byte[] imageGreenBuffer = new byte[imageWidth.I * imageHeight.I];
+                        byte[] imageBlueBuffer = new byte[imageWidth.I * imageHeight.I];
+                        Marshal.Copy(redChannel.IP, imageRedBuffer, 0, imageRedBuffer.Length);
+                        Marshal.Copy(greenChannel.IP, imageGreenBuffer, 0, imageGreenBuffer.Length);
+                        Marshal.Copy(blueChannel.IP, imageBlueBuffer, 0, imageBlueBuffer.Length);
+                        int nImageWidth = imageData.Width;
+                        for (int row = 0; row < imageHeight.I; row++)
+                        {
+                            for (int col = 0; col < imageWidth.I; col++)
+                            {
+                                imageData.Buffer[row * nImageWidth * 3 + col * 3 + 0] = imageRedBuffer[row * imageWidth + col];
+                                imageData.Buffer[row * nImageWidth * 3 + col * 3 + 1] = imageGreenBuffer[row * imageWidth + col];
+                                imageData.Buffer[row * nImageWidth * 3 + col * 3 + 2] = imageBlueBuffer[row * imageWidth + col];
+                            }
+                        }
+                    }
+                    else
+                    {
+                        hImageObj?.Dispose();
+                        throw new Exception("不支持单通道，三通道以外的图像");
+                    }
+                }
+                else
+                {
+                    hImageObj?.Dispose();
+                    throw new Exception("不支持8bit以外的位深度图像");
+                }
+            }
+            else
+            {
+                hImageObj?.Dispose();
+                throw new Exception("HObject非图像类型对象");
+            }
+            return imageData;
+        }
+        catch (Exception ex)
+        {
+            hImageObj?.Dispose();
+            throw new Exception(ex.Message);
+        }
+    }
+
+    public static HObject ImageDataToHalconImage(ImageData image)
+    {
+        IntPtr imagePointer = IntPtr.Zero;
+        IntPtr redChannel = IntPtr.Zero;
+        IntPtr greenChannel = IntPtr.Zero;
+        IntPtr blueChannel = IntPtr.Zero;
+        try
+        {
+            HObject imageObj = new HObject();
+            HTuple width = image.Width;
+            HTuple height = image.Heigth;
+            int nImageWidth = image.Width;
+            int nImageHeight = image.Heigth;
+            if (image.PixelFormat == ImagePixelFormate.MONO8)
+            {
+                imagePointer = Marshal.AllocHGlobal(image.Buffer.Length);
+                Marshal.Copy(image.Buffer, 0, imagePointer, image.Buffer.Length);
+                HOperatorSet.GenImage1(out imageObj, "byte", width, height, imagePointer);
+            }
+            else if (image.PixelFormat == ImagePixelFormate.RGB24)
+            {
+                byte[] imageRedBuffer = new byte[image.Buffer.Length / 3];
+                byte[] imageGreBuffer = new byte[image.Buffer.Length / 3];
+                byte[] imageBluBuffer = new byte[image.Buffer.Length / 3]; 
+
+                for (int i = 0; i < nImageHeight; i++)
+                {
+                    for (int j = 0; j < nImageWidth; j++)
+                    {
+                        imageRedBuffer[i * nImageWidth + j] = image.Buffer[i * nImageWidth * 3 + j * 3 + 0];
+                        imageGreBuffer[i * nImageWidth + j] = image.Buffer[i * nImageWidth * 3 + j * 3 + 1];
+                        imageBluBuffer[i * nImageWidth + j] = image.Buffer[i * nImageWidth * 3 + j * 3 + 2];
+                    }
+                }
+                redChannel = Marshal.AllocHGlobal(imageRedBuffer.Length);
+                greenChannel = Marshal.AllocHGlobal(imageGreBuffer.Length);
+                blueChannel = Marshal.AllocHGlobal(imageBluBuffer.Length);
+                Marshal.Copy(imageRedBuffer, 0, redChannel, imageRedBuffer.Length);
+                Marshal.Copy(imageGreBuffer, 0, greenChannel, imageGreBuffer.Length);
+                Marshal.Copy(imageBluBuffer, 0, blueChannel, imageBluBuffer.Length);
+                HOperatorSet.GenImage3(out imageObj, "byte", width, height, redChannel, greenChannel, blueChannel);
+            }
+            return imageObj;
+        }
+        catch (Exception ex)
+        {
+            Marshal.FreeHGlobal(imagePointer);
+            Marshal.FreeHGlobal(redChannel);
+            Marshal.FreeHGlobal(greenChannel);
+            Marshal.FreeHGlobal(blueChannel);
+            throw new Exception(ex.Message);
+        }
+    }
+}

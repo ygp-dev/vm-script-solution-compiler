@@ -1,0 +1,2452 @@
+[
+    {
+        "file":  "20250226百川_数组逆序脚本.sol",
+        "sha256":  "54581821FD896971B240DB5B9B8CA1343D7C259E5B9ACB18B8F1ACD5703E4D34",
+        "parseExitCode":  0,
+        "warnings":  [
+                         "未知的 ModuleFrame 版本 5，可能无法正确解析名称槽位"
+                     ],
+        "procedures":  [
+                           {
+                               "name":  "流程1",
+                               "modules":  [
+                                               {
+                                                   "type":  "IMVSHPFeatureMatchModu",
+                                                   "name":  "高精度匹配1",
+                                                   "fullPath":  "流程1.高精度匹配1",
+                                                   "front":  [
+                                                                 1
+                                                             ],
+                                                   "follow":  [
+                                                                  2
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "ImageSourceModule",
+                                                   "name":  "图像源1",
+                                                   "fullPath":  "流程1.图像源1",
+                                                   "front":  [
+
+                                                             ],
+                                                   "follow":  [
+                                                                  0
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "ShellModule",
+                                                   "name":  "脚本1",
+                                                   "fullPath":  "流程1.脚本1",
+                                                   "front":  [
+                                                                 0
+                                                             ],
+                                                   "follow":  [
+
+                                                              ]
+                                               }
+                                           ]
+                           }
+                       ],
+        "scripts":  [
+                        {
+                            "carrier":  "csharp-module",
+                            "fullPath":  "流程1.脚本1",
+                            "inputs":  [
+                                           {
+                                               "name":  "InX",
+                                               "valueType":  "float[]",
+                                               "builtIn":  false
+                                           },
+                                           {
+                                               "name":  "InY",
+                                               "valueType":  "float[]",
+                                               "builtIn":  false
+                                           },
+                                           {
+                                               "name":  "num",
+                                               "valueType":  "int",
+                                               "builtIn":  false
+                                           }
+                                       ],
+                            "outputs":  [
+                                            {
+                                                "name":  "ModuRunTime",
+                                                "valueType":  "float",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "ResultShow",
+                                                "valueType":  "string",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "ModuStatus",
+                                                "valueType":  "int",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "OutX",
+                                                "valueType":  "float[]",
+                                                "builtIn":  false
+                                            },
+                                            {
+                                                "name":  "OutY",
+                                                "valueType":  "float[]",
+                                                "builtIn":  false
+                                            }
+                                        ],
+                            "subscriptions":  [
+                                                  {
+                                                      "paramName":  "%num%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  0,
+                                                      "targetParamName":  "MatchNum",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "2 . %num% . 0 . MatchNum . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%InX%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  0,
+                                                      "targetParamName":  "MatchPointX",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "2 . %InX% . 0 . MatchPointX . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%InY%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  0,
+                                                      "targetParamName":  "MatchPointY",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "2 . %InY% . 0 . MatchPointY . 0 . 0 . All . 1"
+                                                  }
+                                              ],
+                            "sourceFile":  "scripts/20250226百川_数组逆序脚本/流程1_脚本1.cs",
+                            "sourceLength":  1972
+                        }
+                    ],
+        "globalScript":  {
+                             "version":  "V3.4.0",
+                             "scriptLength":  3187,
+                             "hasPassword":  false,
+                             "references":  [
+
+                                            ]
+                         }
+    },
+    {
+        "file":  "JPT脚本HSL.sol",
+        "sha256":  "65F747228EBA6715B939C604863B8E4D7CFEDF2CB81964785B920EBF79AE525F",
+        "parseExitCode":  0,
+        "warnings":  [
+                         "未知的 ModuleFrame 版本 4，可能无法正确解析名称槽位"
+                     ],
+        "procedures":  [
+                           {
+                               "name":  "流程1",
+                               "modules":  [
+                                               {
+                                                   "type":  "ImageSourceModule",
+                                                   "name":  "图像源1",
+                                                   "fullPath":  "流程1.图像源1",
+                                                   "front":  [
+
+                                                             ],
+                                                   "follow":  [
+                                                                  4,
+                                                                  6
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "ImageSourceModule",
+                                                   "name":  "图像源2",
+                                                   "fullPath":  "流程1.图像源2",
+                                                   "front":  [
+
+                                                             ],
+                                                   "follow":  [
+
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "ShellModule",
+                                                   "name":  "脚本2",
+                                                   "fullPath":  "流程1.脚本2",
+                                                   "front":  [
+                                                                 0
+                                                             ],
+                                                   "follow":  [
+                                                                  1
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "IMVSImageFilterModu",
+                                                   "name":  "图像滤波1",
+                                                   "fullPath":  "流程1.图像滤波1",
+                                                   "front":  [
+                                                                 4
+                                                             ],
+                                                   "follow":  [
+
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "IMVSColorTransformModu",
+                                                   "name":  "颜色转换1",
+                                                   "fullPath":  "流程1.颜色转换1",
+                                                   "front":  [
+                                                                 6
+                                                             ],
+                                                   "follow":  [
+                                                                  5
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "IMVSBinaryModu",
+                                                   "name":  "图像二值化1",
+                                                   "fullPath":  "流程1.图像二值化1",
+                                                   "front":  [
+                                                                 2
+                                                             ],
+                                                   "follow":  [
+
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "IMVSImageFilterModu",
+                                                   "name":  "图像滤波2",
+                                                   "fullPath":  "流程1.图像滤波2",
+                                                   "front":  [
+                                                                 0
+                                                             ],
+                                                   "follow":  [
+                                                                  2
+                                                              ]
+                                               }
+                                           ]
+                           }
+                       ],
+        "scripts":  [
+                        {
+                            "carrier":  "csharp-module",
+                            "fullPath":  "流程1.脚本2",
+                            "inputs":  [
+                                           {
+                                               "name":  "Img",
+                                               "valueType":  "IMAGE",
+                                               "builtIn":  false
+                                           }
+                                       ],
+                            "outputs":  [
+                                            {
+                                                "name":  "ResultShow",
+                                                "valueType":  "string",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "ModuStatus",
+                                                "valueType":  "int",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "outImg",
+                                                "valueType":  "IMAGE",
+                                                "builtIn":  false
+                                            }
+                                        ],
+                            "subscriptions":  [
+                                                  {
+                                                      "paramName":  "%Image0%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  0,
+                                                      "targetParamName":  "Image",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "4 . %Image0% . 0 . Image . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%ImageWidth0%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  0,
+                                                      "targetParamName":  "Width",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "4 . %ImageWidth0% . 0 . Width . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%ImageHeight0%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  0,
+                                                      "targetParamName":  "Height",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "4 . %ImageHeight0% . 0 . Height . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%ImagePixelFormat0%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  0,
+                                                      "targetParamName":  "PixelFormat",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "4 . %ImagePixelFormat0% . 0 . PixelFormat . 0 . 0 . All . 1"
+                                                  }
+                                              ],
+                            "sourceFile":  "scripts/JPT脚本HSL/流程1_脚本2.cs",
+                            "sourceLength":  2003
+                        }
+                    ],
+        "globalScript":  {
+                             "version":  "V3.4.0",
+                             "scriptLength":  3187,
+                             "hasPassword":  false,
+                             "references":  [
+
+                                            ]
+                         }
+    },
+    {
+        "file":  "保存DXF.sol",
+        "sha256":  "402895475FFDA4AD7D90BD21024406CC7DD78E8392AC5EFFD16F095228CB39EE",
+        "parseExitCode":  0,
+        "warnings":  [
+                         null
+                     ],
+        "procedures":  [
+                           {
+                               "name":  "流程1",
+                               "modules":  [
+                                               {
+                                                   "type":  "ImageSourceModule",
+                                                   "name":  "图像源1",
+                                                   "fullPath":  "流程1.图像源1",
+                                                   "front":  [
+
+                                                             ],
+                                                   "follow":  [
+                                                                  3
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "ShellModule",
+                                                   "name":  "脚本1",
+                                                   "fullPath":  "流程1.脚本1",
+                                                   "front":  [
+                                                                 3
+                                                             ],
+                                                   "follow":  [
+
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "IMVSBlobFindModu",
+                                                   "name":  "Blob分析1",
+                                                   "fullPath":  "流程1.Blob分析1",
+                                                   "front":  [
+                                                                 0
+                                                             ],
+                                                   "follow":  [
+                                                                  2
+                                                              ]
+                                               }
+                                           ]
+                           }
+                       ],
+        "scripts":  [
+                        {
+                            "carrier":  "csharp-module",
+                            "fullPath":  "流程1.脚本1",
+                            "inputs":  [
+                                           {
+                                               "name":  "point",
+                                               "valueType":  "pointset",
+                                               "builtIn":  false
+                                           },
+                                           {
+                                               "name":  "strPath",
+                                               "valueType":  "string",
+                                               "builtIn":  false
+                                           },
+                                           {
+                                               "name":  "W",
+                                               "valueType":  "int",
+                                               "builtIn":  false
+                                           },
+                                           {
+                                               "name":  "H",
+                                               "valueType":  "int",
+                                               "builtIn":  false
+                                           },
+                                           {
+                                               "name":  "Scale",
+                                               "valueType":  "float",
+                                               "builtIn":  false
+                                           },
+                                           {
+                                               "name":  "pointCount",
+                                               "valueType":  "int",
+                                               "builtIn":  false
+                                           }
+                                       ],
+                            "outputs":  [
+                                            {
+                                                "name":  "ModuRunTime",
+                                                "valueType":  "float",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "ResultShow",
+                                                "valueType":  "string",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "ModuStatus",
+                                                "valueType":  "int",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "out0",
+                                                "valueType":  "int",
+                                                "builtIn":  false
+                                            }
+                                        ],
+                            "subscriptions":  [
+                                                  {
+                                                      "paramName":  "%strPath%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  13000,
+                                                      "targetParamName":  "%DXF路径%",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "2 . %strPath% . 13000 . %DXF路径% . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%W%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  0,
+                                                      "targetParamName":  "Width",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "2 . %W% . 0 . Width . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%H%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  0,
+                                                      "targetParamName":  "Height",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "2 . %H% . 0 . Height . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%Scale%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  13000,
+                                                      "targetParamName":  "%缩放比例%",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "2 . %Scale% . 13000 . %缩放比例% . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%point%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  3,
+                                                      "targetParamName":  "ContourInfo",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "2 . %point% . 3 . ContourInfo . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%pointCount%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  3,
+                                                      "targetParamName":  "ContourNum",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "2 . %pointCount% . 3 . ContourNum . 0 . 0 . All . 1"
+                                                  }
+                                              ],
+                            "sourceFile":  "scripts/保存DXF/流程1_脚本1.cs",
+                            "sourceLength":  1346
+                        }
+                    ],
+        "globalScript":  {
+                             "version":  "V3.4.0",
+                             "scriptLength":  2941,
+                             "hasPassword":  false,
+                             "references":  [
+
+                                            ]
+                         }
+    },
+    {
+        "file":  "方案.sol",
+        "sha256":  "3D155B8AF75F493AB3ED14D5409B42FC699DC257413AC90DA3B27F67C8EBE3FB",
+        "parseExitCode":  0,
+        "warnings":  [
+                         null
+                     ],
+        "procedures":  [
+                           {
+                               "name":  "02左下相机",
+                               "modules":  [
+                                               {
+                                                   "type":  "ShellModule",
+                                                   "name":  "脚本2",
+                                                   "fullPath":  "02左下相机.脚本2",
+                                                   "front":  [
+                                                                 16
+                                                             ],
+                                                   "follow":  [
+                                                                  6
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "IfBranchModule",
+                                                   "name":  "条件分支1",
+                                                   "fullPath":  "02左下相机.条件分支1",
+                                                   "front":  [
+                                                                 5
+                                                             ],
+                                                   "follow":  [
+                                                                  17,
+                                                                  130
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "SendDatasModule",
+                                                   "name":  "发送数据3",
+                                                   "fullPath":  "02左下相机.发送数据3",
+                                                   "front":  [
+                                                                 130
+                                                             ],
+                                                   "follow":  [
+
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "ImageSourceModule",
+                                                   "name":  "相机2",
+                                                   "fullPath":  "02左下相机.相机2",
+                                                   "front":  [
+
+                                                             ],
+                                                   "follow":  [
+                                                                  301
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "IMVSCircleFindModu",
+                                                   "name":  "圆查找1",
+                                                   "fullPath":  "02左下相机.圆查找1",
+                                                   "front":  [
+                                                                 48
+                                                             ],
+                                                   "follow":  [
+                                                                  304
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "ReadDatasModule",
+                                                   "name":  "接收数据1",
+                                                   "fullPath":  "02左下相机.接收数据1",
+                                                   "front":  [
+
+                                                             ],
+                                                   "follow":  [
+                                                                  13
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "DataAnalysisModule",
+                                                   "name":  "协议解析1",
+                                                   "fullPath":  "02左下相机.协议解析1",
+                                                   "front":  [
+                                                                 12
+                                                             ],
+                                                   "follow":  [
+                                                                  301
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "BranchModule_STD",
+                                                   "name":  "分支模块1",
+                                                   "fullPath":  "02左下相机.分支模块1",
+                                                   "front":  [
+                                                                 304
+                                                             ],
+                                                   "follow":  [
+                                                                  5,
+                                                                  24,
+                                                                  25,
+                                                                  56
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "TranslationCalibModu",
+                                                   "name":  "平移旋转标定1",
+                                                   "fullPath":  "02左下相机.平移旋转标定1",
+                                                   "front":  [
+                                                                 6
+                                                             ],
+                                                   "follow":  [
+                                                                  52
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "PointSetMODU_STD",
+                                                   "name":  "点集1",
+                                                   "fullPath":  "02左下相机.点集1",
+                                                   "front":  [
+                                                                 16
+                                                             ],
+                                                   "follow":  [
+                                                                  136
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "IMVSCalibTransformModu",
+                                                   "name":  "标定转换1",
+                                                   "fullPath":  "02左下相机.标定转换1",
+                                                   "front":  [
+                                                                 16
+                                                             ],
+                                                   "follow":  [
+                                                                  26
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "CalculatorModule",
+                                                   "name":  "变量计算1",
+                                                   "fullPath":  "02左下相机.变量计算1",
+                                                   "front":  [
+                                                                 25
+                                                             ],
+                                                   "follow":  [
+                                                                  9
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "FormatModule",
+                                                   "name":  "格式化1",
+                                                   "fullPath":  "02左下相机.格式化1",
+                                                   "front":  [
+                                                                 9
+                                                             ],
+                                                   "follow":  [
+                                                                  29
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "SendDatasModule",
+                                                   "name":  "发送数据1",
+                                                   "fullPath":  "02左下相机.发送数据1",
+                                                   "front":  [
+                                                                 27
+                                                             ],
+                                                   "follow":  [
+
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "IMVSContourMatchModu",
+                                                   "name":  "轮廓匹配1",
+                                                   "fullPath":  "02左下相机.轮廓匹配1",
+                                                   "front":  [
+                                                                 301
+                                                             ],
+                                                   "follow":  [
+                                                                  11
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "IfModule",
+                                                   "name":  "条件检测1",
+                                                   "fullPath":  "02左下相机.条件检测1",
+                                                   "front":  [
+                                                                 17
+                                                             ],
+                                                   "follow":  [
+                                                                  53
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "FormatModule",
+                                                   "name":  "格式化3",
+                                                   "fullPath":  "02左下相机.格式化3",
+                                                   "front":  [
+                                                                 52
+                                                             ],
+                                                   "follow":  [
+                                                                  54
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "SendDatasModule",
+                                                   "name":  "发送数据2",
+                                                   "fullPath":  "02左下相机.发送数据2",
+                                                   "front":  [
+                                                                 53
+                                                             ],
+                                                   "follow":  [
+
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "SendDatasModule",
+                                                   "name":  "发送数据4",
+                                                   "fullPath":  "02左下相机.发送数据4",
+                                                   "front":  [
+                                                                 136
+                                                             ],
+                                                   "follow":  [
+
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "IMVSCircleFindModu",
+                                                   "name":  "圆查找2",
+                                                   "fullPath":  "02左下相机.圆查找2",
+                                                   "front":  [
+                                                                 16
+                                                             ],
+                                                   "follow":  [
+                                                                  57
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "IMVSCircleEdgeInspModu",
+                                                   "name":  "圆弧边缘缺陷检测1",
+                                                   "fullPath":  "02左下相机.圆弧边缘缺陷检测1",
+                                                   "front":  [
+                                                                 56
+                                                             ],
+                                                   "follow":  [
+                                                                  298
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "IMVSLineFindModu",
+                                                   "name":  "直线查找1",
+                                                   "fullPath":  "02左下相机.直线查找1",
+                                                   "front":  [
+                                                                 57
+                                                             ],
+                                                   "follow":  [
+                                                                  300
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "ShellModule",
+                                                   "name":  "脚本1",
+                                                   "fullPath":  "02左下相机.脚本1",
+                                                   "front":  [
+                                                                 300
+                                                             ],
+                                                   "follow":  [
+                                                                  9
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "IMVSVerticalLineFindModu",
+                                                   "name":  "垂线查找1",
+                                                   "fullPath":  "02左下相机.垂线查找1",
+                                                   "front":  [
+                                                                 298
+                                                             ],
+                                                   "follow":  [
+                                                                  299
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "BranchModule_STD",
+                                                   "name":  "分支模块2",
+                                                   "fullPath":  "02左下相机.分支模块2",
+                                                   "front":  [
+                                                                 13,
+                                                                 10
+                                                             ],
+                                                   "follow":  [
+                                                                  48,
+                                                                  303
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "IMVSCircleFindModu",
+                                                   "name":  "圆查找3",
+                                                   "fullPath":  "02左下相机.圆查找3",
+                                                   "front":  [
+                                                                 303
+                                                             ],
+                                                   "follow":  [
+                                                                  304
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "IMVSContourMatchModu",
+                                                   "name":  "轮廓匹配2",
+                                                   "fullPath":  "02左下相机.轮廓匹配2",
+                                                   "front":  [
+                                                                 301
+                                                             ],
+                                                   "follow":  [
+                                                                  302
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "ShellModule",
+                                                   "name":  "脚本3",
+                                                   "fullPath":  "02左下相机.脚本3",
+                                                   "front":  [
+                                                                 302,
+                                                                 11
+                                                             ],
+                                                   "follow":  [
+                                                                  16
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "FormatModule",
+                                                   "name":  "格式化4",
+                                                   "fullPath":  "02左下相机.格式化4",
+                                                   "front":  [
+                                                                 6
+                                                             ],
+                                                   "follow":  [
+                                                                  7
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "FormatModule",
+                                                   "name":  "格式化5",
+                                                   "fullPath":  "02左下相机.格式化5",
+                                                   "front":  [
+                                                                 24
+                                                             ],
+                                                   "follow":  [
+                                                                  55
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "ShellModule",
+                                                   "name":  "脚本4",
+                                                   "fullPath":  "02左下相机.脚本4",
+                                                   "front":  [
+                                                                 299,
+                                                                 26
+                                                             ],
+                                                   "follow":  [
+                                                                  27
+                                                              ]
+                                               }
+                                           ]
+                           }
+                       ],
+        "scripts":  [
+                        {
+                            "carrier":  "csharp-module",
+                            "fullPath":  "02左下相机.脚本2",
+                            "inputs":  [
+                                           {
+                                               "name":  "resetvar",
+                                               "valueType":  "int",
+                                               "builtIn":  false
+                                           },
+                                           {
+                                               "name":  "count",
+                                               "valueType":  "int",
+                                               "builtIn":  false
+                                           },
+                                           {
+                                               "name":  "imgX",
+                                               "valueType":  "float",
+                                               "builtIn":  false
+                                           },
+                                           {
+                                               "name":  "imgY",
+                                               "valueType":  "float",
+                                               "builtIn":  false
+                                           },
+                                           {
+                                               "name":  "MachineX",
+                                               "valueType":  "float",
+                                               "builtIn":  false
+                                           },
+                                           {
+                                               "name":  "MachineY",
+                                               "valueType":  "float",
+                                               "builtIn":  false
+                                           },
+                                           {
+                                               "name":  "strName",
+                                               "valueType":  "string",
+                                               "builtIn":  false
+                                           },
+                                           {
+                                               "name":  "strSolDir",
+                                               "valueType":  "string",
+                                               "builtIn":  false
+                                           }
+                                       ],
+                            "outputs":  [
+                                            {
+                                                "name":  "ModuRunTime",
+                                                "valueType":  "float",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "ResultShow",
+                                                "valueType":  "string",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "ModuStatus",
+                                                "valueType":  "int",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "state",
+                                                "valueType":  "int",
+                                                "builtIn":  false
+                                            },
+                                            {
+                                                "name":  "outIMGPoint",
+                                                "valueType":  "POINT",
+                                                "builtIn":  false
+                                            },
+                                            {
+                                                "name":  "outMachinePoint",
+                                                "valueType":  "POINT",
+                                                "builtIn":  false
+                                            },
+                                            {
+                                                "name":  "outCalibPath",
+                                                "valueType":  "string",
+                                                "builtIn":  false
+                                            }
+                                        ],
+                            "subscriptions":  [
+                                                  {
+                                                      "paramName":  "%resetvar%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  24000,
+                                                      "targetParamName":  "%ReSetVar%",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "5 . %resetvar% . 24000 . %ReSetVar% . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%count%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  24000,
+                                                      "targetParamName":  "%Count%",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "5 . %count% . 24000 . %Count% . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%MachineX%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  13,
+                                                      "targetParamName":  "%X%",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "5 . %MachineX% . 13 . %X% . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%MachineY%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  13,
+                                                      "targetParamName":  "%Y%",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "5 . %MachineY% . 13 . %Y% . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%strName%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  24000,
+                                                      "targetParamName":  "%ProcessName%",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "5 . %strName% . 24000 . %ProcessName% . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%strSolDir%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  13000,
+                                                      "targetParamName":  "%SolutionDir%",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "5 . %strSolDir% . 13000 . %SolutionDir% . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%imgX%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  304,
+                                                      "targetParamName":  "%pointx2%",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "5 . %imgX% . 304 . %pointx2% . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%imgY%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  304,
+                                                      "targetParamName":  "%pointy2%",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "5 . %imgY% . 304 . %pointy2% . 0 . 0 . All . 1"
+                                                  }
+                                              ],
+                            "sourceFile":  "scripts/方案/02左下相机_脚本2.cs",
+                            "sourceLength":  2003
+                        },
+                        {
+                            "carrier":  "csharp-module",
+                            "fullPath":  "02左下相机.脚本1",
+                            "inputs":  [
+                                           {
+                                               "name":  "StartPoint",
+                                               "valueType":  "POINT",
+                                               "builtIn":  false
+                                           },
+                                           {
+                                               "name":  "EndPoint",
+                                               "valueType":  "POINT",
+                                               "builtIn":  false
+                                           }
+                                       ],
+                            "outputs":  [
+                                            {
+                                                "name":  "ModuRunTime",
+                                                "valueType":  "float",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "ResultShow",
+                                                "valueType":  "string",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "ModuStatus",
+                                                "valueType":  "int",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "outLineAngle",
+                                                "valueType":  "float",
+                                                "builtIn":  false
+                                            }
+                                        ],
+                            "subscriptions":  [
+                                                  {
+                                                      "paramName":  "%pointx0%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  300,
+                                                      "targetParamName":  "PointProjx",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "299 . %pointx0% . 300 . PointProjx . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%pointy0%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  300,
+                                                      "targetParamName":  "PointProjy",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "299 . %pointy0% . 300 . PointProjy . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%pointx1%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  56,
+                                                      "targetParamName":  "CircleCenterX",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "299 . %pointx1% . 56 . CircleCenterX . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%pointy1%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  56,
+                                                      "targetParamName":  "CircleCenterY",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "299 . %pointy1% . 56 . CircleCenterY . 0 . 0 . All . 1"
+                                                  }
+                                              ],
+                            "sourceFile":  "scripts/方案/02左下相机_脚本1.cs",
+                            "sourceLength":  1621
+                        },
+                        {
+                            "carrier":  "csharp-module",
+                            "fullPath":  "02左下相机.脚本3",
+                            "inputs":  [
+                                           {
+                                               "name":  "Point1",
+                                               "valueType":  "POINT",
+                                               "builtIn":  false
+                                           },
+                                           {
+                                               "name":  "Point2",
+                                               "valueType":  "POINT",
+                                               "builtIn":  false
+                                           },
+                                           {
+                                               "name":  "Rad1",
+                                               "valueType":  "float",
+                                               "builtIn":  false
+                                           },
+                                           {
+                                               "name":  "Rad2",
+                                               "valueType":  "float",
+                                               "builtIn":  false
+                                           },
+                                           {
+                                               "name":  "model",
+                                               "valueType":  "int",
+                                               "builtIn":  false
+                                           }
+                                       ],
+                            "outputs":  [
+                                            {
+                                                "name":  "ModuRunTime",
+                                                "valueType":  "float",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "ResultShow",
+                                                "valueType":  "string",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "ModuStatus",
+                                                "valueType":  "int",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "outRad",
+                                                "valueType":  "float",
+                                                "builtIn":  false
+                                            },
+                                            {
+                                                "name":  "outPoint",
+                                                "valueType":  "POINT",
+                                                "builtIn":  false
+                                            }
+                                        ],
+                            "subscriptions":  [
+                                                  {
+                                                      "paramName":  "%pointx0%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  11,
+                                                      "targetParamName":  "CircleCenterX",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "304 . %pointx0% . 11 . CircleCenterX . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%pointy0%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  11,
+                                                      "targetParamName":  "CircleCenterY",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "304 . %pointy0% . 11 . CircleCenterY . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%pointx1%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  302,
+                                                      "targetParamName":  "CircleCenterX",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "304 . %pointx1% . 302 . CircleCenterX . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%pointy1%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  302,
+                                                      "targetParamName":  "CircleCenterY",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "304 . %pointy1% . 302 . CircleCenterY . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%Rad1%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  11,
+                                                      "targetParamName":  "CircleRadius",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "304 . %Rad1% . 11 . CircleRadius . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%Rad2%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  302,
+                                                      "targetParamName":  "CircleRadius",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "304 . %Rad2% . 302 . CircleRadius . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%model%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  13,
+                                                      "targetParamName":  "%Model%",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "304 . %model% . 13 . %Model% . 0 . 0 . All . 1"
+                                                  }
+                                              ],
+                            "sourceFile":  "scripts/方案/02左下相机_脚本3.cs",
+                            "sourceLength":  1011
+                        },
+                        {
+                            "carrier":  "csharp-module",
+                            "fullPath":  "02左下相机.脚本4",
+                            "inputs":  [
+                                           {
+                                               "name":  "modelType",
+                                               "valueType":  "int",
+                                               "builtIn":  false
+                                           },
+                                           {
+                                               "name":  "PosStatus",
+                                               "valueType":  "int",
+                                               "builtIn":  false
+                                           },
+                                           {
+                                               "name":  "AngleStatus",
+                                               "valueType":  "int",
+                                               "builtIn":  false
+                                           },
+                                           {
+                                               "name":  "angle",
+                                               "valueType":  "float",
+                                               "builtIn":  false
+                                           }
+                                       ],
+                            "outputs":  [
+                                            {
+                                                "name":  "ModuRunTime",
+                                                "valueType":  "float",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "ResultShow",
+                                                "valueType":  "string",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "ModuStatus",
+                                                "valueType":  "int",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "outStatus",
+                                                "valueType":  "string",
+                                                "builtIn":  false
+                                            },
+                                            {
+                                                "name":  "outAngle",
+                                                "valueType":  "float",
+                                                "builtIn":  false
+                                            }
+                                        ],
+                            "subscriptions":  [
+                                                  {
+                                                      "paramName":  "%modelType%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  13,
+                                                      "targetParamName":  "%Model%",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "9 . %modelType% . 13 . %Model% . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%PosStatus%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  25,
+                                                      "targetParamName":  "ModuStatus",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "9 . %PosStatus% . 25 . ModuStatus . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%AngleStatus%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  300,
+                                                      "targetParamName":  "ModuStatus",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "9 . %AngleStatus% . 300 . ModuStatus . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%angle%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  299,
+                                                      "targetParamName":  "%outLineAngle%",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "9 . %angle% . 299 . %outLineAngle% . 0 . 0 . All . 1"
+                                                  }
+                                              ],
+                            "sourceFile":  "scripts/方案/02左下相机_脚本4.cs",
+                            "sourceLength":  1339
+                        }
+                    ],
+        "globalScript":  {
+                             "version":  "V3.4.0",
+                             "scriptLength":  3938,
+                             "hasPassword":  false,
+                             "references":  [
+
+                                            ]
+                         }
+    },
+    {
+        "file":  "共享内存传给VM图/VM4.4_共享内存.sol",
+        "sha256":  "FCFED9AA9B215B4700339541773D12860CFB5D8F0F4F3483DD97FF6B42694AAC",
+        "parseExitCode":  0,
+        "warnings":  [
+                         null
+                     ],
+        "procedures":  [
+                           {
+                               "name":  "流程1",
+                               "modules":  [
+                                               {
+                                                   "type":  "ShellModule",
+                                                   "name":  "脚本1",
+                                                   "fullPath":  "流程1.脚本1",
+                                                   "front":  [
+
+                                                             ],
+                                                   "follow":  [
+
+                                                              ]
+                                               }
+                                           ]
+                           }
+                       ],
+        "scripts":  [
+                        {
+                            "carrier":  "csharp-module",
+                            "fullPath":  "流程1.脚本1",
+                            "inputs":  [
+                                           {
+                                               "name":  "in0",
+                                               "valueType":  "int",
+                                               "builtIn":  false
+                                           }
+                                       ],
+                            "outputs":  [
+                                            {
+                                                "name":  "ModuRunTime",
+                                                "valueType":  "float",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "ResultShow",
+                                                "valueType":  "string",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "ModuStatus",
+                                                "valueType":  "int",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "out0",
+                                                "valueType":  "IMAGE",
+                                                "builtIn":  false
+                                            }
+                                        ],
+                            "subscriptions":  [
+
+                                              ],
+                            "sourceFile":  "scripts/VM4.4_共享内存/流程1_脚本1.cs",
+                            "sourceLength":  2003
+                        }
+                    ],
+        "globalScript":  {
+                             "version":  "V3.4.0",
+                             "scriptLength":  2941,
+                             "hasPassword":  false,
+                             "references":  [
+
+                                            ]
+                         }
+    },
+    {
+        "file":  "获取dxf轮廓点_V1.0/netdxf.sol",
+        "sha256":  "A30AE77F10AAD1BA36981C78280E99A2B9139D7887AA01244828347CB4A4BD64",
+        "parseExitCode":  0,
+        "warnings":  [
+                         null
+                     ],
+        "procedures":  [
+                           {
+                               "name":  "流程1",
+                               "modules":  [
+                                               {
+                                                   "type":  "ShellModule",
+                                                   "name":  "脚本1",
+                                                   "fullPath":  "流程1.脚本1",
+                                                   "front":  [
+                                                                 1
+                                                             ],
+                                                   "follow":  [
+                                                                  2
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "PointSetMODU_STD",
+                                                   "name":  "点集1",
+                                                   "fullPath":  "流程1.点集1",
+                                                   "front":  [
+
+                                                             ],
+                                                   "follow":  [
+                                                                  0
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "PointSetMODU_STD",
+                                                   "name":  "点集2",
+                                                   "fullPath":  "流程1.点集2",
+                                                   "front":  [
+                                                                 0
+                                                             ],
+                                                   "follow":  [
+
+                                                              ]
+                                               }
+                                           ]
+                           }
+                       ],
+        "scripts":  [
+                        {
+                            "carrier":  "csharp-module",
+                            "fullPath":  "流程1.脚本1",
+                            "inputs":  [
+                                           {
+                                               "name":  "width",
+                                               "valueType":  "int",
+                                               "builtIn":  false
+                                           },
+                                           {
+                                               "name":  "height",
+                                               "valueType":  "int",
+                                               "builtIn":  false
+                                           },
+                                           {
+                                               "name":  "dxfPath",
+                                               "valueType":  "string",
+                                               "builtIn":  false
+                                           },
+                                           {
+                                               "name":  "BasePoint",
+                                               "valueType":  "POINT",
+                                               "builtIn":  false
+                                           },
+                                           {
+                                               "name":  "RunPoint",
+                                               "valueType":  "POINT",
+                                               "builtIn":  false
+                                           },
+                                           {
+                                               "name":  "BaseAngle",
+                                               "valueType":  "float",
+                                               "builtIn":  false
+                                           },
+                                           {
+                                               "name":  "RunAngle",
+                                               "valueType":  "float",
+                                               "builtIn":  false
+                                           }
+                                       ],
+                            "outputs":  [
+                                            {
+                                                "name":  "ModuRunTime",
+                                                "valueType":  "float",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "ResultShow",
+                                                "valueType":  "string",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "ModuStatus",
+                                                "valueType":  "int",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "outImage",
+                                                "valueType":  "IMAGE",
+                                                "builtIn":  false
+                                            },
+                                            {
+                                                "name":  "outPoint",
+                                                "valueType":  "POINT",
+                                                "builtIn":  false
+                                            }
+                                        ],
+                            "subscriptions":  [
+                                                  {
+                                                      "paramName":  "%width%",
+                                                      "isBound":  false,
+                                                      "targetModuleId":  0,
+                                                      "targetParamName":  "5000",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "0 . %width% . 0 . 5000 . 1 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%height%",
+                                                      "isBound":  false,
+                                                      "targetModuleId":  0,
+                                                      "targetParamName":  "5000",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "0 . %height% . 0 . 5000 . 1 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%dxfPath%",
+                                                      "isBound":  false,
+                                                      "targetModuleId":  0,
+                                                      "targetParamName":  "测试1",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "0 . %dxfPath% . 0 . 测试1 . 1 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%pointx0%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  1,
+                                                      "targetParamName":  "PointX",
+                                                      "indexMode":  "0",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "0 . %pointx0% . 1 . PointX . 0 . 0 . 0 . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%pointy0%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  1,
+                                                      "targetParamName":  "PointY",
+                                                      "indexMode":  "0",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "0 . %pointy0% . 1 . PointY . 0 . 0 . 0 . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%pointx1%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  1,
+                                                      "targetParamName":  "PointX",
+                                                      "indexMode":  "1",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "0 . %pointx1% . 1 . PointX . 0 . 0 . 1 . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%pointy1%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  1,
+                                                      "targetParamName":  "PointY",
+                                                      "indexMode":  "1",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "0 . %pointy1% . 1 . PointY . 0 . 0 . 1 . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%BaseAngle%",
+                                                      "isBound":  false,
+                                                      "targetModuleId":  0,
+                                                      "targetParamName":  "0",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "0 . %BaseAngle% . 0 . 0 . 1 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%RunAngle%",
+                                                      "isBound":  false,
+                                                      "targetModuleId":  0,
+                                                      "targetParamName":  "45",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "0 . %RunAngle% . 0 . 45 . 1 . 0 . All . 1"
+                                                  }
+                                              ],
+                            "sourceFile":  "scripts/netdxf/流程1_脚本1.cs",
+                            "sourceLength":  2003
+                        }
+                    ],
+        "globalScript":  {
+                             "version":  "V3.4.0",
+                             "scriptLength":  2941,
+                             "hasPassword":  false,
+                             "references":  [
+
+                                            ]
+                         }
+    },
+    {
+        "file":  "基础.sol",
+        "sha256":  "168696AEE249319A790FF71AD01B24323F08DB094E869F723EE9C2C9F9CFE214",
+        "parseExitCode":  0,
+        "warnings":  [
+                         "未知的 ModuleFrame 版本 4，可能无法正确解析名称槽位"
+                     ],
+        "procedures":  [
+                           {
+                               "name":  "流程1_标定点位清空",
+                               "modules":  [
+                                               {
+                                                   "type":  "ImageSourceModule",
+                                                   "name":  "图像源1",
+                                                   "fullPath":  "流程1_标定点位清空.图像源1",
+                                                   "front":  [
+                                                                 3
+                                                             ],
+                                                   "follow":  [
+                                                                  1
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "IMVSContourMatchModu",
+                                                   "name":  "轮廓匹配1",
+                                                   "fullPath":  "流程1_标定点位清空.轮廓匹配1",
+                                                   "front":  [
+                                                                 0
+                                                             ],
+                                                   "follow":  [
+                                                                  2
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "IMVSNPointCalibModu",
+                                                   "name":  "N点标定1",
+                                                   "fullPath":  "流程1_标定点位清空.N点标定1",
+                                                   "front":  [
+                                                                 1
+                                                             ],
+                                                   "follow":  [
+                                                                  4
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "ShellModule",
+                                                   "name":  "清理标定点",
+                                                   "fullPath":  "流程1_标定点位清空.清理标定点",
+                                                   "front":  [
+
+                                                             ],
+                                                   "follow":  [
+                                                                  0
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "CalculatorModule",
+                                                   "name":  "变量计算1",
+                                                   "fullPath":  "流程1_标定点位清空.变量计算1",
+                                                   "front":  [
+                                                                 2
+                                                             ],
+                                                   "follow":  [
+                                                                  5
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "SendDatasModule",
+                                                   "name":  "发送数据1",
+                                                   "fullPath":  "流程1_标定点位清空.发送数据1",
+                                                   "front":  [
+                                                                 4
+                                                             ],
+                                                   "follow":  [
+                                                                  6
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "IfBranchModule",
+                                                   "name":  "条件分支1",
+                                                   "fullPath":  "流程1_标定点位清空.条件分支1",
+                                                   "front":  [
+                                                                 5
+                                                             ],
+                                                   "follow":  [
+                                                                  7
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "SendDatasModule",
+                                                   "name":  "发送数据2",
+                                                   "fullPath":  "流程1_标定点位清空.发送数据2",
+                                                   "front":  [
+                                                                 6
+                                                             ],
+                                                   "follow":  [
+
+                                                              ]
+                                               }
+                                           ]
+                           },
+                           {
+                               "name":  "流程2_自定义图像输出文件名",
+                               "modules":  [
+                                               {
+                                                   "type":  "ImageSourceModule",
+                                                   "name":  "图像源1",
+                                                   "fullPath":  "流程2_自定义图像输出文件名.图像源1",
+                                                   "front":  [
+
+                                                             ],
+                                                   "follow":  [
+                                                                  9
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "IMVSContourMatchModu",
+                                                   "name":  "轮廓匹配1",
+                                                   "fullPath":  "流程2_自定义图像输出文件名.轮廓匹配1",
+                                                   "front":  [
+                                                                 8
+                                                             ],
+                                                   "follow":  [
+                                                                  10
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "IMVSFixtureModu",
+                                                   "name":  "位置修正1",
+                                                   "fullPath":  "流程2_自定义图像输出文件名.位置修正1",
+                                                   "front":  [
+                                                                 9
+                                                             ],
+                                                   "follow":  [
+                                                                  11
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "SaveImage",
+                                                   "name":  "输出图像1",
+                                                   "fullPath":  "流程2_自定义图像输出文件名.输出图像1",
+                                                   "front":  [
+                                                                 13
+                                                             ],
+                                                   "follow":  [
+
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "ShellModule",
+                                                   "name":  "脚本1",
+                                                   "fullPath":  "流程2_自定义图像输出文件名.脚本1",
+                                                   "front":  [
+                                                                 11
+                                                             ],
+                                                   "follow":  [
+                                                                  12
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "IMVSCnnCodeRecgModuC",
+                                                   "name":  "DL读码C1",
+                                                   "fullPath":  "流程2_自定义图像输出文件名.DL读码C1",
+                                                   "front":  [
+                                                                 10
+                                                             ],
+                                                   "follow":  [
+                                                                  13,
+                                                                  14
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "SaveImage",
+                                                   "name":  "输出图像_二次开发代码用",
+                                                   "fullPath":  "流程2_自定义图像输出文件名.输出图像_二次开发代码用",
+                                                   "front":  [
+                                                                 11
+                                                             ],
+                                                   "follow":  [
+
+                                                              ]
+                                               }
+                                           ]
+                           },
+                           {
+                               "name":  "流程3_区域生成",
+                               "modules":  [
+                                               {
+                                                   "type":  "ImageSourceModule",
+                                                   "name":  "图像源1",
+                                                   "fullPath":  "流程3_区域生成.图像源1",
+                                                   "front":  [
+
+                                                             ],
+                                                   "follow":  [
+                                                                  16
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "IMVSBlobFindModu",
+                                                   "name":  "BLOB分析1",
+                                                   "fullPath":  "流程3_区域生成.BLOB分析1",
+                                                   "front":  [
+                                                                 15
+                                                             ],
+                                                   "follow":  [
+                                                                  18,
+                                                                  19,
+                                                                  20
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "ImageSourceModule",
+                                                   "name":  "图像源2",
+                                                   "fullPath":  "流程3_区域生成.图像源2",
+                                                   "front":  [
+
+                                                             ],
+                                                   "follow":  [
+                                                                  25,
+                                                                  26
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "IMVSBlobFindModu",
+                                                   "name":  "BLOB分析2",
+                                                   "fullPath":  "流程3_区域生成.BLOB分析2",
+                                                   "front":  [
+                                                                 16
+                                                             ],
+                                                   "follow":  [
+                                                                  23
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "IMVSBlobFindModu",
+                                                   "name":  "BLOB分析3",
+                                                   "fullPath":  "流程3_区域生成.BLOB分析3",
+                                                   "front":  [
+                                                                 16
+                                                             ],
+                                                   "follow":  [
+                                                                  21
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "IMVSBlobFindModu",
+                                                   "name":  "BLOB分析4",
+                                                   "fullPath":  "流程3_区域生成.BLOB分析4",
+                                                   "front":  [
+                                                                 16
+                                                             ],
+                                                   "follow":  [
+                                                                  22
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "IMVSImageMorphModu",
+                                                   "name":  "形态学处理1",
+                                                   "fullPath":  "流程3_区域生成.形态学处理1",
+                                                   "front":  [
+                                                                 19
+                                                             ],
+                                                   "follow":  [
+                                                                  24
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "IMVSImageMorphModu",
+                                                   "name":  "形态学处理2",
+                                                   "fullPath":  "流程3_区域生成.形态学处理2",
+                                                   "front":  [
+                                                                 20
+                                                             ],
+                                                   "follow":  [
+                                                                  24
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "ShellModule",
+                                                   "name":  "脚本1",
+                                                   "fullPath":  "流程3_区域生成.脚本1",
+                                                   "front":  [
+                                                                 18
+                                                             ],
+                                                   "follow":  [
+                                                                  25
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "IMVSImageMathModu",
+                                                   "name":  "图像运算1",
+                                                   "fullPath":  "流程3_区域生成.图像运算1",
+                                                   "front":  [
+                                                                 21,
+                                                                 22
+                                                             ],
+                                                   "follow":  [
+                                                                  26
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "IMVSBlobFindModu",
+                                                   "name":  "BLOB分析5",
+                                                   "fullPath":  "流程3_区域生成.BLOB分析5",
+                                                   "front":  [
+                                                                 23,
+                                                                 17
+                                                             ],
+                                                   "follow":  [
+
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "IMVSBlobFindModu",
+                                                   "name":  "BLOB分析6",
+                                                   "fullPath":  "流程3_区域生成.BLOB分析6",
+                                                   "front":  [
+                                                                 24,
+                                                                 17
+                                                             ],
+                                                   "follow":  [
+
+                                                              ]
+                                               }
+                                           ]
+                           }
+                       ],
+        "scripts":  [
+                        {
+                            "carrier":  "csharp-module",
+                            "fullPath":  "流程1_标定点位清空.清理标定点",
+                            "inputs":  [
+                                           {
+                                               "name":  "Index",
+                                               "valueType":  "int",
+                                               "builtIn":  false
+                                           }
+                                       ],
+                            "outputs":  [
+                                            {
+                                                "name":  "ResultShow",
+                                                "valueType":  "string",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "ModuStatus",
+                                                "valueType":  "int",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "out0",
+                                                "valueType":  "int",
+                                                "builtIn":  false
+                                            }
+                                        ],
+                            "subscriptions":  [
+                                                  {
+                                                      "paramName":  "%Index%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  13000,
+                                                      "targetParamName":  "%iCalibIndex%",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "3 . %Index% . 13000 . %iCalibIndex% . 0 . 0 . All . 1"
+                                                  }
+                                              ],
+                            "sourceFile":  "scripts/基础/流程1_标定点位清空_清理标定点.cs",
+                            "sourceLength":  1029
+                        },
+                        {
+                            "carrier":  "csharp-module",
+                            "fullPath":  "流程2_自定义图像输出文件名.脚本1",
+                            "inputs":  [
+                                           {
+                                               "name":  "BarCode",
+                                               "valueType":  "string",
+                                               "builtIn":  false
+                                           }
+                                       ],
+                            "outputs":  [
+                                            {
+                                                "name":  "ResultShow",
+                                                "valueType":  "string",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "ModuStatus",
+                                                "valueType":  "int",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "out0",
+                                                "valueType":  "int",
+                                                "builtIn":  false
+                                            }
+                                        ],
+                            "subscriptions":  [
+                                                  {
+                                                      "paramName":  "%BarCode%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  11,
+                                                      "targetParamName":  "CodeStr",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "13 . %BarCode% . 11 . CodeStr . 0 . 0 . All . 1"
+                                                  }
+                                              ],
+                            "sourceFile":  "scripts/基础/流程2_自定义图像输出文件名_脚本1.cs",
+                            "sourceLength":  1320
+                        },
+                        {
+                            "carrier":  "csharp-module",
+                            "fullPath":  "流程3_区域生成.脚本1",
+                            "inputs":  [
+                                           {
+                                               "name":  "img1",
+                                               "valueType":  "IMAGE",
+                                               "builtIn":  false
+                                           }
+                                       ],
+                            "outputs":  [
+                                            {
+                                                "name":  "ResultShow",
+                                                "valueType":  "string",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "ModuStatus",
+                                                "valueType":  "int",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "outIMG",
+                                                "valueType":  "IMAGE",
+                                                "builtIn":  false
+                                            }
+                                        ],
+                            "subscriptions":  [
+                                                  {
+                                                      "paramName":  "%Image0%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  18,
+                                                      "targetParamName":  "BlobImage",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "23 . %Image0% . 18 . BlobImage . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%ImageWidth0%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  18,
+                                                      "targetParamName":  "BlobImageWidth",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "23 . %ImageWidth0% . 18 . BlobImageWidth . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%ImageHeight0%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  18,
+                                                      "targetParamName":  "BlobImageHeight",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "23 . %ImageHeight0% . 18 . BlobImageHeight . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%ImagePixelFormat0%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  18,
+                                                      "targetParamName":  "BlobImagePixelFormat",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "23 . %ImagePixelFormat0% . 18 . BlobImagePixelFormat . 0 . 0 . All . 1"
+                                                  }
+                                              ],
+                            "sourceFile":  "scripts/基础/流程3_区域生成_脚本1.cs",
+                            "sourceLength":  2003
+                        }
+                    ],
+        "globalScript":  {
+                             "version":  "V3.4.0",
+                             "scriptLength":  3187,
+                             "hasPassword":  false,
+                             "references":  [
+
+                                            ]
+                         }
+    },
+    {
+        "file":  "家辉脚本DLL_VM4.3.sol",
+        "sha256":  "A17366C25D0C9A57A3E042D6E29F1B7D85A647B2B458E26B80CABAE07B77D5F2",
+        "parseExitCode":  0,
+        "warnings":  [
+                         "未知的 ModuleFrame 版本 4，可能无法正确解析名称槽位"
+                     ],
+        "procedures":  [
+                           {
+                               "name":  "流程1",
+                               "modules":  [
+                                               {
+                                                   "type":  "ShellModule",
+                                                   "name":  "脚本1",
+                                                   "fullPath":  "流程1.脚本1",
+                                                   "front":  [
+
+                                                             ],
+                                                   "follow":  [
+
+                                                              ]
+                                               }
+                                           ]
+                           }
+                       ],
+        "scripts":  [
+                        {
+                            "carrier":  "csharp-module",
+                            "fullPath":  "流程1.脚本1",
+                            "inputs":  [
+                                           {
+                                               "name":  "in0",
+                                               "valueType":  "int",
+                                               "builtIn":  false
+                                           }
+                                       ],
+                            "outputs":  [
+                                            {
+                                                "name":  "ResultShow",
+                                                "valueType":  "string",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "ModuStatus",
+                                                "valueType":  "int",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "out0",
+                                                "valueType":  "int",
+                                                "builtIn":  false
+                                            }
+                                        ],
+                            "subscriptions":  [
+
+                                              ],
+                            "sourceFile":  "scripts/家辉脚本DLL_VM4.3/流程1_脚本1.cs",
+                            "sourceLength":  2003
+                        }
+                    ],
+        "globalScript":  {
+                             "version":  "V3.4.0",
+                             "scriptLength":  0,
+                             "hasPassword":  false,
+                             "references":  [
+
+                                            ]
+                         }
+    },
+    {
+        "file":  "脚本位置修正_4.4.sol",
+        "sha256":  "834A665AF3C7975A2A144901F8F5B6AFD928A9A480E1D1E7DCFCD475A5170607",
+        "parseExitCode":  0,
+        "warnings":  [
+                         null
+                     ],
+        "procedures":  [
+                           {
+                               "name":  "流程1",
+                               "modules":  [
+                                               {
+                                                   "type":  "ShellModule",
+                                                   "name":  "脚本1",
+                                                   "fullPath":  "流程1.脚本1",
+                                                   "front":  [
+                                                                 3
+                                                             ],
+                                                   "follow":  [
+                                                                  4
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "ImageSourceModule",
+                                                   "name":  "图像源1",
+                                                   "fullPath":  "流程1.图像源1",
+                                                   "front":  [
+
+                                                             ],
+                                                   "follow":  [
+                                                                  2
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "IMVSContourMatchModu",
+                                                   "name":  "轮廓匹配1",
+                                                   "fullPath":  "流程1.轮廓匹配1",
+                                                   "front":  [
+                                                                 1
+                                                             ],
+                                                   "follow":  [
+                                                                  3
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "GeometryCreate",
+                                                   "name":  "几何创建1",
+                                                   "fullPath":  "流程1.几何创建1",
+                                                   "front":  [
+                                                                 2
+                                                             ],
+                                                   "follow":  [
+                                                                  0
+                                                              ]
+                                               },
+                                               {
+                                                   "type":  "IMVSLineFindModu",
+                                                   "name":  "直线查找1",
+                                                   "fullPath":  "流程1.直线查找1",
+                                                   "front":  [
+                                                                 0
+                                                             ],
+                                                   "follow":  [
+
+                                                              ]
+                                               }
+                                           ]
+                           }
+                       ],
+        "scripts":  [
+                        {
+                            "carrier":  "csharp-module",
+                            "fullPath":  "流程1.脚本1",
+                            "inputs":  [
+                                           {
+                                               "parseError":  "Cannot convert value \"\u003c?xml version=\"1.0\" encoding=\"UTF-8\"?\u003e\n\u003cArrayOfModuleParamItem\u003e\n    \u003cModuleParamItem\u003e\n        \u003cName\u003e%BaseX%\u003c/Name\u003e\n        \u003cStructName\u003e%BaseX%\u003c/StructName\u003e\n        \u003cValueType\u003efloat\u003c/ValueType\u003e\n        \u003cIsForce\u003etrue\u003c/IsForce\u003e\n        \u003cIsShow\u003etrue\u003c/IsShow\u003e\n    \u003c/ModuleParamItem\u003e\n    \u003cModuleParamItem\u003e\n        \u003cName\u003e%BaseY%\u003c/Name\u003e\n        \u003cStructName\u003e%BaseY%\u003c/StructName\u003e\n        \u003cValueType\u003efloat\u003c/ValueType\u003e\n        \u003cIsForce\u003etrue\u003c/IsForce\u003e\n        \u003cIsShow\u003etrue\u003c/IsShow\u003e\n    \u003c/ModuleParamItem\u003e\n    \u003cModuleParamItem\u003e\n        \u003cName\u003e%BaseAngle%\u003c/Name\u003e\n        \u003cStructName\u003e%BaseAngle%\u003c/StructName\u003e\n        \u003cValueType\u003efloat\u003c/ValueType\u003e\n        \u003cIsForce\u003etrue\u003c/IsForce\u003e\n        \u003cIsShow\u003etrue\u003c/IsShow\u003e\n    \u003c/ModuleParamItem\u003e\n    \u003cModuleParamItem\u003e\n        \u003cName\u003e%BaseROI%\u003c/Name\u003e\n        \u003cStructName\u003e%roicenterx0%\r%roicentery0%\r%roiwidth0%\r%roiheight0%\r%roiangle0%\u003c/StructName\u003e\n        \u003cValueType\u003eROIBOX\u003c/ValueType\u003e\n        \u003cIsForce\u003etrue\u003c/IsForce\u003e\n        \u003cIsShow\u003etrue\u003c/IsShow\u003e\n    \u003c/ModuleParamItem\u003e\n    \u003cModuleParamItem\u003e\n        \u003cName\u003e%RunX%\u003c/Name\u003e\n        \u003cStructName\u003e%RunX%\u003c/StructName\u003e\n        \u003cValueType\u003efloat\u003c/ValueType\u003e\n        \u003cIsForce\u003etrue\u003c/IsForce\u003e\n        \u003cIsShow\u003etrue\u003c/IsShow\u003e\n    \u003c/ModuleParamItem\u003e\n    \u003cModuleParamItem\u003e\n        \u003cName\u003e%RunY%\u003c/Name\u003e\n        \u003cStructName\u003e%RunY%\u003c/StructName\u003e\n        \u003cValueType\u003efloat\u003c/ValueType\u003e\n        \u003cIsForce\u003etrue\u003c/IsForce\u003e\n        \u003cIsShow\u003etrue\u003c/IsShow\u003e\n    \u003c/ModuleParamItem\u003e\n    \u003cModuleParamItem\u003e\n        \u003cName\u003e%RunAngle%\u003c/Name\u003e\n        \u003cStructName\u003e%RunAngle%\u003c/StructName\u003e\n        \u003cValueType\u003efloat\u003c/ValueType\u003e\n        \u003cIsForce\u003etrue\u003c/IsForce\u003e\n        \u003cIsShow\u003etrue\u003c/IsShow\u003e\n    \u003c/ModuleParamItem\u003e\n    \u003cModuleParamItem\u003e\n        \u003cName\u003e%ImgWidth%\u003c/Name\u003e\n        \u003cStructName\u003e%ImgWidth%\u003c/StructName\u003e\n        \u003cValueType\u003eint\u003c/ValueType\u003e\n        \u003cIsForce\u003etrue\u003c/IsForce\u003e\n        \u003cIsShow\u003etrue\u003c/IsShow\u003e\n    \u003c/ModuleParamItem\u003e\n    \u003cModuleParamItem\u003e\n        \u003cName\u003e%ImgHeight%\u003c/Name\u003e\n        \u003cStructName\u003e%ImgHeight%\u003c/StructName\u003e\n        \u003cValueType\u003eint\u003c/ValueType\u003e\n        \u003cIsForce\u003etrue\u003c/IsForce\u003e\n        \u003cIsShow\u003etrue\u003c/IsShow\u003e\n \" to type \"System.Xml.XmlDocument\". Error: \"Unexpected end of file has occurred. The following elements are not closed: ModuleParamItem, ArrayOfModuleParamItem. Line 69, position 2.\""
+                                           }
+                                       ],
+                            "outputs":  [
+                                            {
+                                                "name":  "ModuRunTime",
+                                                "valueType":  "float",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "ResultShow",
+                                                "valueType":  "string",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "ModuStatus",
+                                                "valueType":  "int",
+                                                "builtIn":  true
+                                            },
+                                            {
+                                                "name":  "outROI",
+                                                "valueType":  "ROIBOX",
+                                                "builtIn":  false
+                                            }
+                                        ],
+                            "subscriptions":  [
+                                                  {
+                                                      "paramName":  "%BaseX%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  13000,
+                                                      "targetParamName":  "%X%",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "0 . %BaseX% . 13000 . %X% . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%BaseY%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  13000,
+                                                      "targetParamName":  "%Y%",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "0 . %BaseY% . 13000 . %Y% . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%BaseAngle%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  13000,
+                                                      "targetParamName":  "%A%",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "0 . %BaseAngle% . 13000 . %A% . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%roicenterx0%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  3,
+                                                      "targetParamName":  "ListBoxCenterX",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "0 . %roicenterx0% . 3 . ListBoxCenterX . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%roicentery0%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  3,
+                                                      "targetParamName":  "ListBoxCenterY",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "0 . %roicentery0% . 3 . ListBoxCenterY . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%roiwidth0%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  3,
+                                                      "targetParamName":  "ListBoxWidth",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "0 . %roiwidth0% . 3 . ListBoxWidth . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%roiheight0%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  3,
+                                                      "targetParamName":  "ListBoxHeight",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "0 . %roiheight0% . 3 . ListBoxHeight . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%roiangle0%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  3,
+                                                      "targetParamName":  "ListBoxAngle",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "0 . %roiangle0% . 3 . ListBoxAngle . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%RunX%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  2,
+                                                      "targetParamName":  "MatchPointX",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "0 . %RunX% . 2 . MatchPointX . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%RunY%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  2,
+                                                      "targetParamName":  "MatchPointY",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "0 . %RunY% . 2 . MatchPointY . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%RunAngle%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  2,
+                                                      "targetParamName":  "MatchBoxAngle",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "0 . %RunAngle% . 2 . MatchBoxAngle . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%ImgWidth%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  1,
+                                                      "targetParamName":  "Width",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "0 . %ImgWidth% . 1 . Width . 0 . 0 . All . 1"
+                                                  },
+                                                  {
+                                                      "paramName":  "%ImgHeight%",
+                                                      "isBound":  true,
+                                                      "targetModuleId":  1,
+                                                      "targetParamName":  "Height",
+                                                      "indexMode":  "All",
+                                                      "isIndexBind":  false,
+                                                      "indexTargetModuleId":  0,
+                                                      "relationString":  "0 . %ImgHeight% . 1 . Height . 0 . 0 . All . 1"
+                                                  }
+                                              ],
+                            "sourceFile":  "scripts/脚本位置修正_4.4/流程1_脚本1.cs",
+                            "sourceLength":  2003
+                        }
+                    ],
+        "globalScript":  {
+                             "version":  "V3.4.0",
+                             "scriptLength":  0,
+                             "hasPassword":  false,
+                             "references":  [
+
+                                            ]
+                         }
+    }
+]

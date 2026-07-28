@@ -1,0 +1,21 @@
+﻿using System;
+
+namespace Script.Algorithm
+{
+	// Token: 0x0200002F RID: 47
+	public enum PARAM_VALUE_TYPE
+	{
+		// Token: 0x0400017C RID: 380
+		PARAM_VALUE_TYPE_INT,
+		// Token: 0x0400017D RID: 381
+		PARAM_VALUE_TYPE_FLOAT,
+		// Token: 0x0400017E RID: 382
+		PARAM_VALUE_TYPE_STRING,
+		// Token: 0x0400017F RID: 383
+		PARAM_VALUE_TYPE_BYTES,
+		// Token: 0x04000180 RID: 384
+		PARAM_VALUE_TYPE_IMAGE,
+		// Token: 0x04000181 RID: 385
+		PARAM_VALUE_TYPE_UNKNOW
+	}
+}

@@ -1,0 +1,22 @@
+{
+  "version": "1.0.0",
+  "format": "assembly-name\\nreference-type\\r",
+  "defaultReferences": [
+    { "name": "mscorlib.dll", "referenceType": 0, "role": "system" },
+    { "name": "System.dll", "referenceType": 0, "role": "system" },
+    { "name": "System.Core.dll", "referenceType": 0, "role": "system" },
+    { "name": "System.Windows.Forms.dll", "referenceType": 0, "role": "system" },
+    { "name": "Script.Methods.dll", "referenceType": 3, "role": "system" }
+  ],
+  "verifiedReferences": {
+    "System.Drawing.dll": { "referenceType": 0, "role": "system", "evidence": "docs/SOL/JPT脚本HSL.sol" },
+    "VM.Core.dll": { "referenceType": 6, "role": "vm-sdk", "evidence": "docs/SOL/获取dxf轮廓点_V1.0/netdxf.sol" },
+    "VM.PlatformSDKCS.dll": { "referenceType": 6, "role": "vm-sdk", "evidence": "docs/SOL/获取dxf轮廓点_V1.0/netdxf.sol" },
+    "VMControls.BaseInterface.dll": { "referenceType": 6, "role": "vm-sdk", "evidence": "docs/SOL/获取dxf轮廓点_V1.0/netdxf.sol" },
+    "VMControls.Interface.dll": { "referenceType": 6, "role": "vm-sdk", "evidence": "docs/SOL/获取dxf轮廓点_V1.0/netdxf.sol" },
+    "netDxf.dll": { "referenceType": 4, "role": "third-party", "evidence": "docs/SOL/获取dxf轮廓点_V1.0/netdxf.sol" },
+    "MVDPositionFix.Net.dll": { "referenceType": 4, "role": "operator-sdk", "evidence": "docs/SOL/获取dxf轮廓点_V1.0/netdxf.sol" },
+    "MVDCore.Net.dll": { "referenceType": 4, "role": "operator-sdk", "evidence": "docs/SOL/获取dxf轮廓点_V1.0/netdxf.sol" },
+    "MVDShape.Net.dll": { "referenceType": 4, "role": "operator-sdk", "evidence": "docs/SOL/获取dxf轮廓点_V1.0/netdxf.sol" }
+  }
+}

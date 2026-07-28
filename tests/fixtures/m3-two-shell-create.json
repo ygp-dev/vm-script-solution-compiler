@@ -1,0 +1,8 @@
+{
+  "schemaVersion": "1.0",
+  "task": { "name": "two-shell", "mode": "create", "vmVersion": "4.4.0" },
+  "scripts": [
+    { "id": "shell-one", "carrier": "csharp-module", "name": "脚本A", "procedure": "流程1", "execution": { "mode": "once", "order": 0 }, "inputs": [], "outputs": [], "operations": [], "dependencies": [] },
+    { "id": "shell-two", "carrier": "csharp-module", "name": "脚本B", "procedure": "流程1", "execution": { "mode": "once", "order": 1 }, "inputs": [], "outputs": [], "operations": [], "dependencies": [] }
+  ]
+}

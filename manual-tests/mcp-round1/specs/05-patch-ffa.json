@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "1.0",
+  "task": { "name": "mcp-patch-ffa", "mode": "patch", "vmVersion": "4.4.0" },
+  "scripts": [{
+    "id": "patch-check", "carrier": "csharp-module", "name": "MCP注入验证", "procedure": "流程1",
+    "execution": { "mode": "once", "order": 100 },
+    "inputs": [{ "name": "Value", "type": "int", "default": 11, "required": true }],
+    "outputs": [{ "name": "Doubled", "type": "int", "default": 0 }],
+    "operations": [{ "kind": "setOutput", "parameter": "Doubled", "value": { "kind": "binary", "operator": "multiply", "left": { "kind": "input", "name": "Value" }, "right": 2 } }],
+    "dependencies": []
+  }],
+  "connections": []
+}

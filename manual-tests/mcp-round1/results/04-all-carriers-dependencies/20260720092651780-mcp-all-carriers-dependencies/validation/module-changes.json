@@ -1,0 +1,100 @@
+{
+  "changes": [
+    {
+      "action": "setDisplayName",
+      "target": "\u6D41\u7A0B1.\u811A\u672C1",
+      "paramName": null,
+      "value": "CSharp\u4F9D\u8D56\u9A8C\u8BC1",
+      "templateFile": null,
+      "templateModule": null
+    },
+    {
+      "action": "setDisplayName",
+      "target": "\u6D41\u7A0B1.Python\u811A\u672C1",
+      "paramName": null,
+      "value": "Python\u4F9D\u8D56\u9A8C\u8BC1",
+      "templateFile": null,
+      "templateModule": null
+    },
+    {
+      "action": "setBinaryParam",
+      "target": "\u6D41\u7A0B1.CSharp\u4F9D\u8D56\u9A8C\u8BC1",
+      "paramName": "ShellContent",
+      "value": "using System;\nusing System.Drawing;\nusing Script.Methods;\npublic partial class UserScript : ScriptMethods, IProcessMethods\n{\n    private Color color;\n    public void Init() { color = Color.Lime; }\n    public bool Process() { ColorName = color.Name; return true; }\n}\n",
+      "templateFile": null,
+      "templateModule": null
+    },
+    {
+      "action": "setBinaryParam",
+      "target": "\u6D41\u7A0B1.CSharp\u4F9D\u8D56\u9A8C\u8BC1",
+      "paramName": "Input",
+      "value": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022UTF-8\u0022?\u003E\n\u003CArrayOfModuleParamItem\u003E\n    \u003CModuleParamItem\u003E\n        \u003CName\u003E%__CompilerPortAnchor%\u003C/Name\u003E\n        \u003CStructName\u003E%__CompilerPortAnchor%\u003C/StructName\u003E\n        \u003CValueType\u003Eint\u003C/ValueType\u003E\n        \u003CIsForce\u003Etrue\u003C/IsForce\u003E\n        \u003CIsShow\u003Efalse\u003C/IsShow\u003E\n    \u003C/ModuleParamItem\u003E\n\u003C/ArrayOfModuleParamItem\u003E\n\u0000\u0000",
+      "templateFile": null,
+      "templateModule": null
+    },
+    {
+      "action": "setBinaryParam",
+      "target": "\u6D41\u7A0B1.CSharp\u4F9D\u8D56\u9A8C\u8BC1",
+      "paramName": "Output",
+      "value": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022UTF-8\u0022?\u003E\n\u003CArrayOfModuleParamItem\u003E\n    \u003CModuleParamItem\u003E\n        \u003CName\u003EModuRunTime\u003C/Name\u003E\n        \u003CStructName\u003EModuRunTime\u003C/StructName\u003E\n        \u003CValueType\u003Efloat\u003C/ValueType\u003E\n        \u003CIsForce\u003Etrue\u003C/IsForce\u003E\n        \u003CIsShow\u003Etrue\u003C/IsShow\u003E\n    \u003C/ModuleParamItem\u003E\n    \u003CModuleParamItem\u003E\n        \u003CName\u003EResultShow\u003C/Name\u003E\n        \u003CStructName\u003EResultShow\u003C/StructName\u003E\n        \u003CValueType\u003Estring\u003C/ValueType\u003E\n        \u003CIsForce\u003Etrue\u003C/IsForce\u003E\n        \u003CIsShow\u003Etrue\u003C/IsShow\u003E\n    \u003C/ModuleParamItem\u003E\n    \u003CModuleParamItem\u003E\n        \u003CName\u003EModuStatus\u003C/Name\u003E\n        \u003CStructName\u003EModuStatus\u003C/StructName\u003E\n        \u003CValueType\u003Eint\u003C/ValueType\u003E\n        \u003CIsForce\u003Etrue\u003C/IsForce\u003E\n        \u003CIsShow\u003Etrue\u003C/IsShow\u003E\n    \u003C/ModuleParamItem\u003E\n    \u003CModuleParamItem\u003E\n        \u003CName\u003E%ColorName%\u003C/Name\u003E\n        \u003CStructName\u003E%ColorName%\u003C/StructName\u003E\n        \u003CValueType\u003Estring\u003C/ValueType\u003E\n        \u003CIsForce\u003Etrue\u003C/IsForce\u003E\n        \u003CIsShow\u003Etrue\u003C/IsShow\u003E\n    \u003C/ModuleParamItem\u003E\n\u003C/ArrayOfModuleParamItem\u003E\n\u0000\u0000",
+      "templateFile": null,
+      "templateModule": null
+    },
+    {
+      "action": "setBinaryParam",
+      "target": "\u6D41\u7A0B1.CSharp\u4F9D\u8D56\u9A8C\u8BC1",
+      "paramName": "DynamicInData",
+      "value": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022UTF-8\u0022?\u003E\n\u003CParamRoot\u003E\n    \u003CCategorys\u003E\n        \u003CCategory Name=\u0022Input\u0022\u003E\n            \u003CItems\u003E\n                \u003CFilter Name=\u0022%__CompilerPortAnchor%\u0022 ValueType=\u0022int\u0022 Others=\u0022CustomVisible=False;IsForce=False;CanSubscribe=False;IsPrefer=False;Visible=False;VisibleInResultTree=False;IsPrivate=False;IsReturnRelateValue=True;AllowAutoSubscribe=True;AutoSubscribeByOther=True;IsResultShow=False;AutoSubscribeName=\u0022/\u003E\n            \u003C/Items\u003E\n        \u003C/Category\u003E\n    \u003C/Categorys\u003E\n\u003C/ParamRoot\u003E\n\u0000",
+      "templateFile": null,
+      "templateModule": null
+    },
+    {
+      "action": "setBinaryParam",
+      "target": "\u6D41\u7A0B1.CSharp\u4F9D\u8D56\u9A8C\u8BC1",
+      "paramName": "DynamicOutData",
+      "value": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022UTF-8\u0022?\u003E\n\u003CParamRoot\u003E\n    \u003CCategorys\u003E\n        \u003CCategory Name=\u0022Output\u0022\u003E\n            \u003CItems\u003E\n                \u003CFilter Name=\u0022fArrivalTimeStampLow\u0022 ValueType=\u0022float\u0022 Others=\u0022CustomVisible=False;IsForce=False;CanSubscribe=False;IsPrefer=False;Visible=False;VisibleInResultTree=False;IsPrivate=False;IsReturnRelateValue=True;AllowAutoSubscribe=True;AutoSubscribeByOther=True;IsResultShow=False;AutoSubscribeName=\u0022/\u003E\n                \u003CFilter Name=\u0022fArrivalTimeStampHigh\u0022 ValueType=\u0022float\u0022 Others=\u0022CustomVisible=False;IsForce=False;CanSubscribe=False;IsPrefer=False;Visible=False;VisibleInResultTree=False;IsPrivate=False;IsReturnRelateValue=True;AllowAutoSubscribe=True;AutoSubscribeByOther=True;IsResultShow=False;AutoSubscribeName=\u0022/\u003E\n                \u003CFilter Name=\u0022fLeaveTimeStampLow\u0022 ValueType=\u0022float\u0022 Others=\u0022CustomVisible=False;IsForce=False;CanSubscribe=False;IsPrefer=False;Visible=False;VisibleInResultTree=False;IsPrivate=False;IsReturnRelateValue=True;AllowAutoSubscribe=True;AutoSubscribeByOther=True;IsResultShow=False;AutoSubscribeName=\u0022/\u003E\n                \u003CFilter Name=\u0022fLeaveTimeStampHigh\u0022 ValueType=\u0022float\u0022 Others=\u0022CustomVisible=False;IsForce=False;CanSubscribe=False;IsPrefer=False;Visible=False;VisibleInResultTree=False;IsPrivate=False;IsReturnRelateValue=True;AllowAutoSubscribe=True;AutoSubscribeByOther=True;IsResultShow=False;AutoSubscribeName=\u0022/\u003E\n                \u003CFilter Name=\u0022%ColorName%\u0022 ValueType=\u0022string\u0022 Others=\u0022CustomVisible=True;IsForce=False;CanSubscribe=True;IsPrefer=False;Visible=True;VisibleInResultTree=True;IsPrivate=False;IsReturnRelateValue=True;AllowAutoSubscribe=True;AutoSubscribeByOther=True;IsResultShow=False;AutoSubscribeName=\u0022/\u003E\n            \u003C/Items\u003E\n        \u003C/Category\u003E\n    \u003C/Categorys\u003E\n\u003C/ParamRoot\u003E\n\u0000",
+      "templateFile": null,
+      "templateModule": null
+    },
+    {
+      "action": "setBinaryParam",
+      "target": "\u6D41\u7A0B1.Python\u4F9D\u8D56\u9A8C\u8BC1",
+      "paramName": "ShellContent",
+      "value": "# coding: utf-8\nimport json\nfrom ioHelper import *\ndef Process(data) -\u003E int:\n    moduleVar = IoHelper(data, INIT_MODULE_VAR)\n    globalVar = IoHelper(data, INIT_GLOBAL_VAR)\n    localVar = IoHelper(data, INIT_LOCAL_VAR)\n    moduleVar.JsonText = json.dumps({\u0027ok\u0027: True})\n    return 0\n",
+      "templateFile": null,
+      "templateModule": null
+    },
+    {
+      "action": "setBinaryParam",
+      "target": "\u6D41\u7A0B1.Python\u4F9D\u8D56\u9A8C\u8BC1",
+      "paramName": "Input",
+      "value": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022UTF-8\u0022?\u003E\n\u003CArrayOfModuleParamItem\u003E\n\u003C/ArrayOfModuleParamItem\u003E\n\u0000",
+      "templateFile": null,
+      "templateModule": null
+    },
+    {
+      "action": "setBinaryParam",
+      "target": "\u6D41\u7A0B1.Python\u4F9D\u8D56\u9A8C\u8BC1",
+      "paramName": "Output",
+      "value": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022UTF-8\u0022?\u003E\n\u003CArrayOfModuleParamItem\u003E\n    \u003CModuleParamItem\u003E\n        \u003CName\u003EModuRunTime\u003C/Name\u003E\n        \u003CStructName\u003EModuRunTime\u003C/StructName\u003E\n        \u003CValueType\u003Efloat\u003C/ValueType\u003E\n        \u003CIsForce\u003Etrue\u003C/IsForce\u003E\n        \u003CIsShow\u003Etrue\u003C/IsShow\u003E\n    \u003C/ModuleParamItem\u003E\n    \u003CModuleParamItem\u003E\n        \u003CName\u003EModuStatus\u003C/Name\u003E\n        \u003CStructName\u003EModuStatus\u003C/StructName\u003E\n        \u003CValueType\u003Eint\u003C/ValueType\u003E\n        \u003CIsForce\u003Etrue\u003C/IsForce\u003E\n        \u003CIsShow\u003Etrue\u003C/IsShow\u003E\n    \u003C/ModuleParamItem\u003E\n    \u003CModuleParamItem\u003E\n        \u003CName\u003E%JsonText%\u003C/Name\u003E\n        \u003CStructName\u003E%JsonText%\u003C/StructName\u003E\n        \u003CValueType\u003Estring\u003C/ValueType\u003E\n        \u003CIsForce\u003Etrue\u003C/IsForce\u003E\n        \u003CIsShow\u003Etrue\u003C/IsShow\u003E\n    \u003C/ModuleParamItem\u003E\n\u003C/ArrayOfModuleParamItem\u003E\n\u0000",
+      "templateFile": null,
+      "templateModule": null
+    },
+    {
+      "action": "setBinaryParam",
+      "target": "\u6D41\u7A0B1.Python\u4F9D\u8D56\u9A8C\u8BC1",
+      "paramName": "DynamicInData",
+      "value": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022UTF-8\u0022?\u003E\n\u003CParamRoot\u003E\n    \u003CCategorys\u003E\n        \u003CCategory Name=\u0022Input\u0022\u003E\n            \u003CItems\u003E\n            \u003C/Items\u003E\n        \u003C/Category\u003E\n    \u003C/Categorys\u003E\n\u003C/ParamRoot\u003E\n\u0000",
+      "templateFile": null,
+      "templateModule": null
+    },
+    {
+      "action": "setBinaryParam",
+      "target": "\u6D41\u7A0B1.Python\u4F9D\u8D56\u9A8C\u8BC1",
+      "paramName": "DynamicOutData",
+      "value": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022UTF-8\u0022?\u003E\n\u003CParamRoot\u003E\n    \u003CCategorys\u003E\n        \u003CCategory Name=\u0022Output\u0022\u003E\n            \u003CItems\u003E\n                \u003CFilter Name=\u0022fArrivalTimeStampLow\u0022 ValueType=\u0022float\u0022 Others=\u0022CustomVisible=False;IsForce=False;CanSubscribe=False;IsPrefer=False;Visible=False;VisibleInResultTree=False;IsPrivate=False;IsReturnRelateValue=True;AllowAutoSubscribe=True;AutoSubscribeByOther=True;IsResultShow=False;AutoSubscribeName=\u0022/\u003E\n                \u003CFilter Name=\u0022fArrivalTimeStampHigh\u0022 ValueType=\u0022float\u0022 Others=\u0022CustomVisible=False;IsForce=False;CanSubscribe=False;IsPrefer=False;Visible=False;VisibleInResultTree=False;IsPrivate=False;IsReturnRelateValue=True;AllowAutoSubscribe=True;AutoSubscribeByOther=True;IsResultShow=False;AutoSubscribeName=\u0022/\u003E\n                \u003CFilter Name=\u0022fLeaveTimeStampLow\u0022 ValueType=\u0022float\u0022 Others=\u0022CustomVisible=False;IsForce=False;CanSubscribe=False;IsPrefer=False;Visible=False;VisibleInResultTree=False;IsPrivate=False;IsReturnRelateValue=True;AllowAutoSubscribe=True;AutoSubscribeByOther=True;IsResultShow=False;AutoSubscribeName=\u0022/\u003E\n                \u003CFilter Name=\u0022fLeaveTimeStampHigh\u0022 ValueType=\u0022float\u0022 Others=\u0022CustomVisible=False;IsForce=False;CanSubscribe=False;IsPrefer=False;Visible=False;VisibleInResultTree=False;IsPrivate=False;IsReturnRelateValue=True;AllowAutoSubscribe=True;AutoSubscribeByOther=True;IsResultShow=False;AutoSubscribeName=\u0022/\u003E\n                \u003CFilter Name=\u0022%JsonText%\u0022 ValueType=\u0022string\u0022 Others=\u0022CustomVisible=True;IsForce=False;CanSubscribe=True;IsPrefer=False;Visible=True;VisibleInResultTree=True;IsPrivate=False;IsReturnRelateValue=True;AllowAutoSubscribe=True;AutoSubscribeByOther=True;IsResultShow=False;AutoSubscribeName=\u0022/\u003E\n            \u003C/Items\u003E\n        \u003C/Category\u003E\n    \u003C/Categorys\u003E\n\u003C/ParamRoot\u003E\n\u0000",
+      "templateFile": null,
+      "templateModule": null
+    }
+  ]
+}

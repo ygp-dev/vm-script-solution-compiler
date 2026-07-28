@@ -1,0 +1,32 @@
+{
+  "ok": true,
+  "scriptTargetFramework": ".NET Framework 4.6.1",
+  "acceptedDependencyRuntime": "CLR 4 .NET Framework; final loadability is verified by Framework64 csc and VM runtime visibility",
+  "targetArchitecture": "x64",
+  "runtimeDllDirectory": "C:\\Program Files\\VisionMaster4.4.0\\Applications\\Module(sp)\\x64\\Logic\\ShellModule\\DLL",
+  "scripts": [
+    {
+      "scriptId": "drawing-dependency",
+      "scriptName": "CSharp\u4F9D\u8D56\u9A8C\u8BC1",
+      "assemblies": [
+        {
+          "name": "System.Drawing.dll",
+          "declaredName": "System.Drawing.dll",
+          "referenceType": 0,
+          "role": "system",
+          "source": "framework",
+          "sourcePath": null,
+          "packagedPath": null,
+          "deploymentTarget": null,
+          "runtimeVisible": true,
+          "assemblyVersion": null,
+          "clrMetadataVersion": "v4.0.30319",
+          "targetFramework": ".NET Framework 4.6.1 runtime reference",
+          "architecture": "anycpu",
+          "sha256": null,
+          "assemblyReferences": []
+        }
+      ]
+    }
+  ]
+}

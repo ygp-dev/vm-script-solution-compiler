@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "1.0",
+  "task": { "name": "mcp-complex-bindings", "mode": "create", "vmVersion": "4.4.0" },
+  "scripts": [{
+    "id": "complex-bindings", "carrier": "csharp-module", "name": "复杂类型绑定验证", "procedure": "流程1",
+    "execution": { "mode": "once", "order": 0 },
+    "inputs": [
+      { "name": "SourceImage", "type": "image" },
+      { "name": "SourcePoint", "type": "point" },
+      { "name": "SourceBox", "type": "roibox" },
+      { "name": "SourceLine", "type": "line" },
+      { "name": "SourceRect", "type": "rect" },
+      { "name": "SourceEllipse", "type": "ellipse" }
+    ],
+    "outputs": [
+      { "name": "ImageEcho", "type": "image" },
+      { "name": "PointEcho", "type": "point" },
+      { "name": "BoxEcho", "type": "roibox" },
+      { "name": "LineEcho", "type": "line" },
+      { "name": "RectEcho", "type": "rect" },
+      { "name": "EllipseEcho", "type": "ellipse" }
+    ],
+    "operations": [
+      { "kind": "setOutput", "parameter": "ImageEcho", "value": { "kind": "input", "name": "SourceImage" } },
+      { "kind": "setOutput", "parameter": "PointEcho", "value": { "kind": "input", "name": "SourcePoint" } },
+      { "kind": "setOutput", "parameter": "BoxEcho", "value": { "kind": "input", "name": "SourceBox" } },
+      { "kind": "setOutput", "parameter": "LineEcho", "value": { "kind": "input", "name": "SourceLine" } },
+      { "kind": "setOutput", "parameter": "RectEcho", "value": { "kind": "input", "name": "SourceRect" } },
+      { "kind": "setOutput", "parameter": "EllipseEcho", "value": { "kind": "input", "name": "SourceEllipse" } }
+    ],
+    "dependencies": []
+  }],
+  "connections": []
+}

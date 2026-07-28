@@ -1,0 +1,1 @@
+1.3.9 全局脚本：VM加载方案后自动执行的方法 VM 加载方案后自动执行的方法 描述 环境： VM4.0.0 现象： 如何让VM在方案加载后自动执行流程？ 解答 可以通过全局脚本控制方案加载之后希望执行的操作，将如下代码添加到全局脚本中。 public override int InitAfterLoadSol() { //加载方案完成信号 Sleep(500); //控制流程1执行一次 ImvsPlatformSDK_API.IMVS_PF_ExecuteOnce_V30_CS(m_operateHandle, 10000, null); return 0; } 问题根因 不熟悉全局脚本的方案控制。

@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "1.0",
+  "task": {
+    "name": "m2-global-patch",
+    "mode": "patch",
+    "vmVersion": "4.4.0"
+  },
+  "scripts": [
+    {
+      "id": "default-global",
+      "carrier": "global-csharp",
+      "name": "默认全局执行",
+      "execution": { "mode": "once", "order": 0 },
+      "inputs": [],
+      "outputs": [],
+      "operations": [],
+      "dependencies": []
+    }
+  ]
+}

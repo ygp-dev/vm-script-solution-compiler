@@ -1,0 +1,8 @@
+{
+  "ok": true,
+  "scriptTargetFramework": ".NET Framework 4.6.1",
+  "acceptedDependencyRuntime": "CLR 4 .NET Framework; final loadability is verified by Framework64 csc and VM runtime visibility",
+  "targetArchitecture": "x64",
+  "runtimeDllDirectory": "C:\\Program Files\\VisionMaster4.4.0\\Applications\\Module(sp)\\x64\\Logic\\ShellModule\\DLL",
+  "scripts": []
+}

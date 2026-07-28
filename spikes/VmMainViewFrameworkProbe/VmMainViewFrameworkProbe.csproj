@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net461</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>latest</LangVersion>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="VMControls.WPF">
+      <HintPath>C:\Program Files\VisionMaster4.4.0\Applications\myLibs\VMControls.WPF.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="C:\Program Files\VisionMaster4.4.0\Applications\myLibs\Apps.BaseLog.config" Link="myLibs\Apps.BaseLog.config" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="C:\Program Files\VisionMaster4.4.0\Applications\myLibs\Librarys.Config" Link="myLibs\Librarys.Config" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="C:\Program Files\VisionMaster4.4.0\Applications\myLibs\LibrarysEx.Config" Link="myLibs\LibrarysEx.Config" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

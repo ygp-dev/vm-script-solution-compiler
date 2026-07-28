@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "1.0",
+  "task": { "name": "m3-shell-patch", "mode": "patch", "vmVersion": "4.4.0" },
+  "scripts": [
+    {
+      "id": "injected-shell", "carrier": "csharp-module", "name": "注入脚本", "procedure": "流程1",
+      "execution": { "mode": "once", "order": 10 }, "inputs": [], "outputs": [], "operations": [], "dependencies": []
+    }
+  ]
+}

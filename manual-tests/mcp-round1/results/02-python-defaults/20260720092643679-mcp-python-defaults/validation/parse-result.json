@@ -1,0 +1,67 @@
+﻿{
+  "formatVersion": 7,
+  "sourceFile": "D:\\project\\2023\\VM操作集合\\vm-script-solution-compiler\\manual-tests\\mcp-round1\\results\\02-python-defaults\\20260720092643679-mcp-python-defaults\\result.sol",
+  "parseTime": "2026-07-20T17:26:46",
+  "parserVersion": "vm-sol-format v2.3.0",
+  "solution": {
+    "globalModules": [
+    ],
+    "procedures": [
+      {
+        "procedureId": 10000,
+        "displayName": "流程1",
+        "properties": {
+          "continueExecuteTimGap": 100,
+          "stopWhenNG": false,
+          "runTimeout": 0,
+          "shieldGlobalCtrl": false
+        },
+        "modules": [
+          {
+            "moduleId": 0,
+            "name": "PyShellModule",
+            "displayName": "Python默认值验证",
+            "type": "Module",
+            "typeId": 0,
+            "isEnabled": true,
+            "fullPath": "流程1.Python默认值验证",
+            "frameNameSlot": "0-PyShellModule.mdata",
+            "enableCallBack": true,
+            "guid": "FD3EB89203954662B31A66504D06AD0C",
+            "algoriParams": [
+            ],
+            "binaryParams": [
+              {"name": "DynamicInData", "valueLen": 1081, "parsed": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ParamRoot>\n    <Categorys>\n        <Category Name=\"Input\">\n            <Items>\n                <Filter Name=\"%A%\" ValueType=\"int\" Others=\"CustomVisible=True;IsForce=False;CanSubscribe=True;IsPrefer=False;Visible=True;VisibleInResultTree=True;IsPrivate=False;IsReturnRelateValue=True;AllowAutoSubscribe=True;AutoSubscribeByOther=True;IsResultShow=False;AutoSubscribeName=\"/>\n                <Filter Name=\"%B%\" ValueType=\"int\" Others=\"CustomVisible=True;IsForce=..."},
+              {"name": "DynamicOutData", "valueLen": 2063, "parsed": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ParamRoot>\n    <Categorys>\n        <Category Name=\"Output\">\n            <Items>\n                <Filter Name=\"fArrivalTimeStampLow\" ValueType=\"float\" Others=\"CustomVisible=False;IsForce=False;CanSubscribe=False;IsPrefer=False;Visible=False;VisibleInResultTree=False;IsPrivate=False;IsReturnRelateValue=True;AllowAutoSubscribe=True;AutoSubscribeByOther=True;IsResultShow=False;AutoSubscribeName=\"/>\n                <Filter Name=\"fArrivalTimeStampHigh\" ValueType..."},
+              {"name": "ShellContent", "valueLen": 542, "parsed": "# coding: utf-8\nimport time\nfrom ioHelper import *\n\ndef Process(data) -> int:\n    moduleVar = IoHelper(data, INIT_MODULE_VAR)\n    globalVar = IoHelper(data, INIT_GLOBAL_VAR)\n    localVar = IoHelper(data, INIT_LOCAL_VAR)\n    try:\n        moduleVar.Sum = ((moduleVar.A if moduleVar.A is not None else 3) + (moduleVar.B if moduleVar.B is not None else 4))\r\n        moduleVar.ValuesEcho = (moduleVar.Values if moduleVar.Values is not None else [1, 2, 3])\r\n    except BaseException as error:\n        Print..."},
+              {"name": "Input", "valueLen": 715, "parsed": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ArrayOfModuleParamItem>\n    <ModuleParamItem>\n        <Name>%A%</Name>\n        <StructName>%A%</StructName>\n        <ValueType>int</ValueType>\n        <IsForce>true</IsForce>\n        <IsShow>true</IsShow>\n    </ModuleParamItem>\n    <ModuleParamItem>\n        <Name>%B%</Name>\n        <StructName>%B%</StructName>\n        <ValueType>int</ValueType>\n        <IsForce>true</IsForce>\n        <IsShow>true</IsShow>\n    </ModuleParamItem>\n    <ModuleParamItem>\n      ..."},
+              {"name": "Output", "valueLen": 963, "parsed": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ArrayOfModuleParamItem>\n    <ModuleParamItem>\n        <Name>ModuRunTime</Name>\n        <StructName>ModuRunTime</StructName>\n        <ValueType>float</ValueType>\n        <IsForce>true</IsForce>\n        <IsShow>true</IsShow>\n    </ModuleParamItem>\n    <ModuleParamItem>\n        <Name>ModuStatus</Name>\n        <StructName>ModuStatus</StructName>\n        <ValueType>int</ValueType>\n        <IsForce>true</IsForce>\n        <IsShow>true</IsShow>\n    </ModuleParamIt..."}
+            ],
+            "connections": {
+              "frontModules": [],
+              "followModules": []
+            },
+            "subscriptions": [
+              {"paramName": "%A%", "isBound": false, "targetModuleId": 0, "targetParamName": "3", "indexMode": "All", "isIndexBind": false, "indexTargetModuleId": 0, "relationString": "0 . %A% . 0 . 3 . 1 . 0 . All . 1"},
+              {"paramName": "%B%", "isBound": false, "targetModuleId": 0, "targetParamName": "4", "indexMode": "All", "isIndexBind": false, "indexTargetModuleId": 0, "relationString": "0 . %B% . 0 . 4 . 1 . 0 . All . 1"}
+            ],
+            "uiParams": [
+              {"name": "GUID", "inferredType": "guid", "value": "F1D70F9A-B615-4C94-9043-7D29667A4C8A"},
+              {"name": "IsReady", "inferredType": "bool", "value": "True"},
+              {"name": "Position", "inferredType": "position", "value": "(295.0, 195.0)"}
+            ]          }
+        ]
+      }
+    ],
+    "globalScript": {
+      "version": "V3.4.0",
+      "scriptLength": 2941,
+      "hasPassword": false,
+      "references": [
+      ]
+    },
+    "moduleParamBindings": [
+    ],
+    "warnings": null
+  }
+}

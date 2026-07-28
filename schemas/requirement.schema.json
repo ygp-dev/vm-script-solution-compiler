@@ -1,0 +1,190 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.vm-script-compiler/schemas/requirement.schema.json",
+  "title": "VM Script Compile Requirement",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "task", "scripts"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "mode", "vmVersion"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "mode": { "enum": ["create", "patch"] },
+        "vmVersion": { "type": "string", "pattern": "^4\\.4(?:\\.\\d+)?$" },
+        "baseSolution": { "type": "string", "minLength": 1 }
+      }
+    },
+    "scripts": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/script" }
+    },
+    "connections": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/connection" },
+      "default": []
+    }
+  },
+  "$defs": {
+    "connection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from", "to"],
+      "properties": {
+        "from": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+        "to": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" }
+      }
+    },
+    "io": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "type"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "type": {
+          "enum": [
+            "bool", "int", "int[]", "float", "float[]", "string", "string[]", "byte",
+            "image", "roibox", "roibox[]", "roiannulus", "roipolygon", "point", "line",
+            "fixture", "rect", "ellipse", "pointset"
+          ]
+        },
+        "default": {},
+        "required": { "type": "boolean", "default": false },
+        "description": { "type": "string" }
+      }
+    },
+    "operation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind"],
+      "properties": {
+        "kind": {
+          "enum": [
+            "getModule",
+            "getModuleArray",
+            "getModuleParam",
+            "setOutput",
+            "setModuleValue",
+            "getModuleValue",
+            "runProcedure",
+            "continuousProcedure",
+            "stopProcedure",
+            "setContinuousInterval",
+            "startGlobalCommunication",
+            "sendCommunication",
+            "log",
+            "sleep",
+            "bytesToPointset",
+            "setProcedureInput",
+            "getGlobalVariable",
+            "setGlobalVariable",
+            "getLocalVariable",
+            "setLocalVariable",
+            "saveSolution",
+            "loadSolution"
+          ]
+        },
+        "procedure": { "type": "string" },
+        "module": { "type": "string" },
+        "parameter": { "type": "string" },
+        "result": { "type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_]*$" },
+        "valueType": { "type": "string" },
+        "value": {},
+        "condition": { "$ref": "#/$defs/expression" },
+        "deviceId": { "type": "integer", "minimum": 0 },
+        "addressId": { "type": "integer", "minimum": -1 },
+        "milliseconds": { "type": "integer", "minimum": 0 },
+        "dataType": { "enum": ["string", "int", "float", "byte"] },
+        "when": { "type": "string" },
+        "onError": { "enum": ["fail", "continue", "set-output-failed"] }
+      }
+    },
+    "expression": {
+      "oneOf": [
+        { "type": ["string", "number", "boolean", "null"] },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind"],
+          "properties": {
+            "kind": { "enum": ["input", "result", "literal", "binary", "unary", "index"] },
+            "name": { "type": "string" },
+            "value": {},
+            "operator": { "enum": ["add", "subtract", "multiply", "divide", "modulo", "equal", "notEqual", "greaterThan", "greaterOrEqual", "lessThan", "lessOrEqual", "and", "or", "not", "negate"] },
+            "left": { "$ref": "#/$defs/expression" },
+            "right": { "$ref": "#/$defs/expression" },
+            "target": { "$ref": "#/$defs/expression" },
+            "index": { "$ref": "#/$defs/expression" }
+          }
+        }
+      ]
+    },
+    "dependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "name"],
+      "properties": {
+        "kind": { "enum": ["dotnet-assembly", "python-package"] },
+        "name": { "type": "string", "minLength": 1 },
+        "role": { "enum": ["system", "vm-sdk", "operator-sdk", "third-party"] },
+        "version": { "type": "string" },
+        "path": { "type": "string" },
+        "architecture": { "enum": ["x64", "anycpu", "pure-python"] },
+        "referenceType": { "enum": [0, 3, 4, 6] }
+      }
+    },
+    "script": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "carrier", "name", "execution", "inputs", "outputs"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+        "carrier": { "enum": ["global-csharp", "csharp-module", "python-module"] },
+        "name": { "type": "string", "minLength": 1 },
+        "source": { "type": "string", "minLength": 1 },
+        "procedure": { "type": "string" },
+        "execution": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode"],
+          "properties": {
+            "mode": { "enum": ["init", "once", "continuous", "callback"] },
+            "order": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "inputs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/io" }
+        },
+        "outputs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/io" }
+        },
+        "operations": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/operation" },
+          "default": []
+        },
+        "dependencies": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/dependency" },
+          "default": []
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "carrier": { "enum": ["csharp-module", "python-module"] }
+            }
+          },
+          "then": { "required": ["procedure"] }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "mode": "create",
+  "framework": ".NET Framework 4.6.1",
+  "architecture": "x64",
+  "scripts": [
+    {
+      "id": "complex-bindings",
+      "carrier": "csharp-module",
+      "procedure": "\u6D41\u7A0B1",
+      "name": "\u590D\u6742\u7C7B\u578B\u7ED1\u5B9A\u9A8C\u8BC1",
+      "source": "generated/complex-bindings.cs",
+      "inputs": [
+        "SourceImage",
+        "SourcePoint",
+        "SourceBox",
+        "SourceLine",
+        "SourceRect",
+        "SourceEllipse"
+      ],
+      "outputs": [
+        "ImageEcho",
+        "PointEcho",
+        "BoxEcho",
+        "LineEcho",
+        "RectEcho",
+        "EllipseEcho"
+      ],
+      "dependencies": [],
+      "shellReferences": {
+        "mode": "vm-implicit-defaults",
+        "declared": []
+      }
+    }
+  ],
+  "dependencyResolution": [],
+  "sourcePrecompiled": true,
+  "precompileEnvironment": "VM 4.4 method assemblies and bundled Python parser",
+  "ioMapping": "VM-4.4 saved-sample logical ports \u002B StructName backing fields \u002B DynamicIO combinations \u002B UiParamData object mappings",
+  "inputDefaults": "int/float ModuleSubscribe mapping confirmed by VM-saved round trip; bool/string structurally encoded; Python also emits deterministic None fallback",
+  "runtimeValidated": true,
+  "runtimeValidation": {
+    "baselineValidated": true,
+    "pending": []
+  }
+}

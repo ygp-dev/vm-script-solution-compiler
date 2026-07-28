@@ -1,0 +1,3 @@
+1、脚本DLL中的DLL放入C:\Program Files\VisionMaster4.3.0\Applications\Module(sp)\x64\Logic\ShellModule\DLL中
+2、MVD开头的为算子DLL
+3、VM开头的为二次开发DLL

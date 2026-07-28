@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "1.0",
+  "task": {
+    "name": "python-create-example",
+    "mode": "create",
+    "vmVersion": "4.4.0"
+  },
+  "scripts": [
+    {
+      "id": "python-example",
+      "carrier": "python-module",
+      "name": "Python示例",
+      "procedure": "流程1",
+      "execution": {
+        "mode": "once",
+        "order": 0
+      },
+      "source": "# coding: utf-8\nfrom ioHelper import *\n\ndef Process(data) -> int:\n    moduleVar = IoHelper(data, INIT_MODULE_VAR)\n    globalVar = IoHelper(data, INIT_GLOBAL_VAR)\n    localVar = IoHelper(data, INIT_LOCAL_VAR)\n    try:\n        moduleVar.Result = int(moduleVar.InputValue or 0)\n    except BaseException as error:\n        PrintMsg(error)\n        return -1\n    return 0\n",
+      "inputs": [
+        {
+          "name": "InputValue",
+          "type": "int",
+          "default": 0,
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Result",
+          "type": "int",
+          "default": 0
+        }
+      ],
+      "operations": [],
+      "dependencies": []
+    }
+  ],
+  "connections": []
+}

@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "1.0",
+  "task": { "name": "invalid", "mode": "create", "vmVersion": "4.4.0" },
+  "scripts": [
+    {
+      "id": "Invalid ID",
+      "carrier": "global-csharp",
+      "name": "invalid",
+      "execution": { "mode": "sometimes" },
+      "inputs": []
+    }
+  ]
+}

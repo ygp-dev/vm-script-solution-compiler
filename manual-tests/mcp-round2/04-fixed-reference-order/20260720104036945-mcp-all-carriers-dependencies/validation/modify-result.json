@@ -1,0 +1,9 @@
+﻿{
+  "applied": 12,
+  "errors": 0,
+  "warnings": [
+    "setDisplayName[Module]: 1 \"脚本1\" → \"CSharp依赖验证\"",
+    "setDisplayName[Module]: 0 \"Python脚本1\" → \"Python依赖验证\"",
+    "setDisplayName[Module]: 0 \"GlobalScript\" → \"Python依赖验证\""
+  ]
+}

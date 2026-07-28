@@ -1,0 +1,1 @@
+1.1.2 脚本环境：联合OpenCV开发的环境配置方法 联合OpenCV脚本模块环境配置方法 描述 环境： VM4.2 现象： 联合OpenCV进行脚本模块开发时，如何配置环境？ 解答 第一步，给脚本模块添加引用程序集，opencv可以在VM安装路径下获取； 第二步，将VM安装路径下的第三方库中的OpenCvSharpExtern.dll手动拷贝到脚本依赖目录下，即拷贝到D:\VM4.2\VisionMaster4.2.0\Applications\VmModuleProxy\x64文件中。 问题根因 不熟悉脚本模块Opencv环境配置

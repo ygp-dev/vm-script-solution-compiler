@@ -1,0 +1,6 @@
+{
+  "changes": [
+    { "action": "deleteModule", "target": "流程1.Python脚本1" },
+    { "action": "deleteModule", "target": "流程1.脚本1" }
+  ]
+}

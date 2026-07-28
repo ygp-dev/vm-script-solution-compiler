@@ -1,0 +1,115 @@
+﻿{
+  "formatVersion": 7,
+  "sourceFile": "D:\\project\\2023\\VM操作集合\\vm-script-solution-compiler\\manual-tests\\mcp-round2\\04-fixed-reference-order\\20260720104036945-mcp-all-carriers-dependencies\\result.sol",
+  "parseTime": "2026-07-20T18:40:40",
+  "parserVersion": "vm-sol-format v2.3.0",
+  "solution": {
+    "globalModules": [
+    ],
+    "procedures": [
+      {
+        "procedureId": 10000,
+        "displayName": "流程1",
+        "properties": {
+          "continueExecuteTimGap": 100,
+          "stopWhenNG": false,
+          "runTimeout": 0,
+          "shieldGlobalCtrl": false
+        },
+        "modules": [
+          {
+            "moduleId": 0,
+            "name": "PyShellModule",
+            "displayName": "Python依赖验证",
+            "type": "Module",
+            "typeId": 0,
+            "isEnabled": true,
+            "fullPath": "流程1.Python依赖验证",
+            "frameNameSlot": "0-PyShellModule.mdata",
+            "enableCallBack": true,
+            "guid": "FD3EB89203954662B31A66504D06AD0C",
+            "algoriParams": [
+            ],
+            "binaryParams": [
+              {"name": "DynamicInData", "valueLen": 191, "parsed": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ParamRoot>\n    <Categorys>\n        <Category Name=\"Input\">\n            <Items>\n            </Items>\n        </Category>\n    </Categorys>\n</ParamRoot>\n"},
+              {"name": "DynamicOutData", "valueLen": 1767, "parsed": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ParamRoot>\n    <Categorys>\n        <Category Name=\"Output\">\n            <Items>\n                <Filter Name=\"fArrivalTimeStampLow\" ValueType=\"float\" Others=\"CustomVisible=False;IsForce=False;CanSubscribe=False;IsPrefer=False;Visible=False;VisibleInResultTree=False;IsPrivate=False;IsReturnRelateValue=True;AllowAutoSubscribe=True;AutoSubscribeByOther=True;IsResultShow=False;AutoSubscribeName=\"/>\n                <Filter Name=\"fArrivalTimeStampHigh\" ValueType..."},
+              {"name": "ShellContent", "valueLen": 282, "parsed": "# coding: utf-8\nimport json\nfrom ioHelper import *\ndef Process(data) -> int:\n    moduleVar = IoHelper(data, INIT_MODULE_VAR)\n    globalVar = IoHelper(data, INIT_GLOBAL_VAR)\n    localVar = IoHelper(data, INIT_LOCAL_VAR)\n    moduleVar.JsonText = json.dumps({'ok': True})\n    return 0\n"},
+              {"name": "Input", "valueLen": 91, "parsed": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ArrayOfModuleParamItem>\n</ArrayOfModuleParamItem>\n"},
+              {"name": "Output", "valueLen": 752, "parsed": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ArrayOfModuleParamItem>\n    <ModuleParamItem>\n        <Name>ModuRunTime</Name>\n        <StructName>ModuRunTime</StructName>\n        <ValueType>float</ValueType>\n        <IsForce>true</IsForce>\n        <IsShow>true</IsShow>\n    </ModuleParamItem>\n    <ModuleParamItem>\n        <Name>ModuStatus</Name>\n        <StructName>ModuStatus</StructName>\n        <ValueType>int</ValueType>\n        <IsForce>true</IsForce>\n        <IsShow>true</IsShow>\n    </ModuleParamIt..."}
+            ],
+            "connections": {
+              "frontModules": [],
+              "followModules": []
+            },
+            "subscriptions": [
+            ],
+            "uiParams": [
+              {"name": "GUID", "inferredType": "guid", "value": "F1D70F9A-B615-4C94-9043-7D29667A4C8A"},
+              {"name": "IsReady", "inferredType": "bool", "value": "True"},
+              {"name": "Position", "inferredType": "position", "value": "(295.0, 195.0)"}
+            ]          },
+          {
+            "moduleId": 1,
+            "name": "ShellModule",
+            "displayName": "CSharp依赖验证",
+            "type": "Module",
+            "typeId": 0,
+            "isEnabled": true,
+            "fullPath": "流程1.CSharp依赖验证",
+            "frameNameSlot": "1-ShellModule.mdata",
+            "enableCallBack": true,
+            "guid": "8D9CA9A5BE144C039A0925D9DA686946",
+            "algoriParams": [
+            ],
+            "binaryParams": [
+              {"name": "Version", "valueLen": 6, "parsed": "V3.2.0"},
+              {"name": "Input", "valueLen": 335, "parsed": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ArrayOfModuleParamItem>\n    <ModuleParamItem>\n        <Name>%__CompilerPortAnchor%</Name>\n        <StructName>%__CompilerPortAnchor%</StructName>\n        <ValueType>int</ValueType>\n        <IsForce>true</IsForce>\n        <IsShow>false</IsShow>\n    </ModuleParamItem>\n</ArrayOfModuleParamItem>\n"},
+              {"name": "Output", "valueLen": 976, "parsed": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ArrayOfModuleParamItem>\n    <ModuleParamItem>\n        <Name>ModuRunTime</Name>\n        <StructName>ModuRunTime</StructName>\n        <ValueType>float</ValueType>\n        <IsForce>true</IsForce>\n        <IsShow>true</IsShow>\n    </ModuleParamItem>\n    <ModuleParamItem>\n        <Name>ResultShow</Name>\n        <StructName>ResultShow</StructName>\n        <ValueType>string</ValueType>\n        <IsForce>true</IsForce>\n        <IsShow>true</IsShow>\n    </ModulePara..."},
+              {"name": "ShellRefrences", "valueLen": 115, "parsed": "mscorlib.dll\n0\rSystem.dll\n0\rSystem.Core.dll\n0\rSystem.Windows.Forms.dll\n0\rScript.Methods.dll\n3\rSystem.Drawing.dll\n0\r"},
+              {"name": "ShellContent", "valueLen": 266, "parsed": "using System;\nusing System.Drawing;\nusing Script.Methods;\npublic partial class UserScript : ScriptMethods, IProcessMethods\n{\n    private Color color;\n    public void Init() { color = Color.Lime; }\n    public bool Process() { ColorName = color.Name; return true; }\n}\n"},
+              {"name": "AssemblyGuid", "valueLen": 36, "parsed": "1b033c4f-9498-5604-b137-18b921ebe096"},
+              {"name": "DynamicInData", "valueLen": 509, "parsed": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ParamRoot>\n    <Categorys>\n        <Category Name=\"Input\">\n            <Items>\n                <Filter Name=\"%__CompilerPortAnchor%\" ValueType=\"int\" Others=\"CustomVisible=False;IsForce=False;CanSubscribe=False;IsPrefer=False;Visible=False;VisibleInResultTree=False;IsPrivate=False;IsReturnRelateValue=True;AllowAutoSubscribe=True;AutoSubscribeByOther=True;IsResultShow=False;AutoSubscribeName=\"/>\n            </Items>\n        </Category>\n    </Categorys>\n</Par..."},
+              {"name": "DynamicOutData", "valueLen": 1768, "parsed": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ParamRoot>\n    <Categorys>\n        <Category Name=\"Output\">\n            <Items>\n                <Filter Name=\"fArrivalTimeStampLow\" ValueType=\"float\" Others=\"CustomVisible=False;IsForce=False;CanSubscribe=False;IsPrefer=False;Visible=False;VisibleInResultTree=False;IsPrivate=False;IsReturnRelateValue=True;AllowAutoSubscribe=True;AutoSubscribeByOther=True;IsResultShow=False;AutoSubscribeName=\"/>\n                <Filter Name=\"fArrivalTimeStampHigh\" ValueType..."}
+            ],
+            "connections": {
+              "frontModules": [],
+              "followModules": []
+            },
+            "subscriptions": [
+            ],
+            "uiParams": [
+              {"name": "GUID", "inferredType": "guid", "value": "2207E067-9681-45F9-A37C-C30675BD313E"},
+              {"name": "IsReady", "inferredType": "bool", "value": "True"},
+              {"name": "Position", "inferredType": "position", "value": "(315.0, 130.0)"},
+              {"name": "[ParamRoot]_%Data Record%Type", "inferredType": "string", "value": "datarecord"},
+              {"name": "[ParamRoot]_%Data Record%IsDisplay", "inferredType": "string", "value": "True"},
+              {"name": "DynamicObject_%Data Record%_[Child]", "inferredType": "string", "value": "Content"},
+              {"name": "[ParamRoot]_%Data Record%.Content.Value", "inferredType": "string", "value": "ColorName:{0}"},
+              {"name": "[ParamRoot]_%Data Record%.Content.Mapping", "inferredType": "string", "value": "%ColorName%"},
+              {"name": "DynamicObject", "inferredType": "string", "value": "%Data Record%"}
+            ],
+            "scriptText": "using System;\nusing System.Drawing;\nusing Script.Methods;\npublic partial class UserScript : ScriptMethods, IProcessMethods\n{\n    private Color color;\n    public void Init() { color = Color.Lime; }\n    public bool Process() { ColorName = color.Name; return true; }\n}\n",
+            "assemblyGuid": "1b033c4f-9498-5604-b137-18b921ebe096",
+            "references": [
+              {"dll": "mscorlib.dll", "type": 0},
+              {"dll": "System.dll", "type": 0},
+              {"dll": "System.Core.dll", "type": 0},
+              {"dll": "System.Windows.Forms.dll", "type": 0},
+              {"dll": "Script.Methods.dll", "type": 3},
+              {"dll": "System.Drawing.dll", "type": 0}
+            ]          }
+        ]
+      }
+    ],
+    "globalScript": {
+      "version": "V3.4.0",
+      "scriptLength": 791,
+      "hasPassword": false,
+      "references": [
+      ]
+    },
+    "moduleParamBindings": [
+    ],
+    "warnings": null
+  }
+}

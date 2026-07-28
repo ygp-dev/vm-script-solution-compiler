@@ -1,0 +1,87 @@
+﻿{
+  "formatVersion": 7,
+  "sourceFile": "D:\\project\\2023\\VM操作集合\\vm-script-solution-compiler\\manual-tests\\mcp-round1\\results\\03-complex-bindings\\20260720092647606-mcp-complex-bindings\\result.sol",
+  "parseTime": "2026-07-20T17:26:50",
+  "parserVersion": "vm-sol-format v2.3.0",
+  "solution": {
+    "globalModules": [
+    ],
+    "procedures": [
+      {
+        "procedureId": 10000,
+        "displayName": "流程1",
+        "properties": {
+          "continueExecuteTimGap": 100,
+          "stopWhenNG": false,
+          "runTimeout": 0,
+          "shieldGlobalCtrl": false
+        },
+        "modules": [
+          {
+            "moduleId": 1,
+            "name": "ShellModule",
+            "displayName": "复杂类型绑定验证",
+            "type": "Module",
+            "typeId": 0,
+            "isEnabled": true,
+            "fullPath": "流程1.复杂类型绑定验证",
+            "frameNameSlot": "1-ShellModule.mdata",
+            "enableCallBack": true,
+            "guid": "8D9CA9A5BE144C039A0925D9DA686946",
+            "algoriParams": [
+            ],
+            "binaryParams": [
+              {"name": "Version", "valueLen": 6, "parsed": "V3.2.0"},
+              {"name": "Input", "valueLen": 1700, "parsed": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ArrayOfModuleParamItem>\n    <ModuleParamItem>\n        <Name>%SourceImage%</Name>\n        <StructName>%Image0%\r%ImageWidth0%\r%ImageHeight0%\r%ImagePixelFormat0%</StructName>\n        <ValueType>IMAGE</ValueType>\n        <IsForce>true</IsForce>\n        <IsShow>true</IsShow>\n    </ModuleParamItem>\n    <ModuleParamItem>\n        <Name>%SourcePoint%</Name>\n        <StructName>%pointx0%\r%pointy0%</StructName>\n        <ValueType>POINT</ValueType>\n        <IsForce>tr..."},
+              {"name": "Output", "valueLen": 2349, "parsed": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ArrayOfModuleParamItem>\n    <ModuleParamItem>\n        <Name>ModuRunTime</Name>\n        <StructName>ModuRunTime</StructName>\n        <ValueType>float</ValueType>\n        <IsForce>true</IsForce>\n        <IsShow>true</IsShow>\n    </ModuleParamItem>\n    <ModuleParamItem>\n        <Name>ResultShow</Name>\n        <StructName>ResultShow</StructName>\n        <ValueType>string</ValueType>\n        <IsForce>true</IsForce>\n        <IsShow>true</IsShow>\n    </ModulePara..."},
+              {"name": "ShellContent", "valueLen": 763, "parsed": "using System;\nusing System.Globalization;\nusing System.Threading;\nusing Script.Methods;\n\npublic partial class UserScript : ScriptMethods, IProcessMethods\n{\n    public void Init()\n    {\n        try\n        {\n        }\n        catch (Exception error)\n        {\n            ConsoleWrite(error.ToString());\n        }\n    }\n\n    public bool Process()\n    {\n        try\n        {\n            ImageEcho = SourceImage;\r\n            PointEcho = SourcePoint;\r\n            BoxEcho = SourceBox;\r\n            Line..."},
+              {"name": "AssemblyGuid", "valueLen": 36, "parsed": "7b0804c4-ce81-5063-94ee-53f26144ff21"},
+              {"name": "DynamicInData", "valueLen": 10813, "parsed": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ParamRoot>\n    <Categorys>\n        <Category Name=\"Input\">\n            <Items>\n                <Combination Name=\"%SourceImage%\" Style=\"IMAGE\" Others=\"CanSubscribe=True;IsPrefer=False;Visible=True;VisibleInResultTree=True;AutoSubscribeName=\">\n                    <Filters>\n                        <Filter Name=\"%Image0%\" ValueType=\"image\" Others=\"CustomVisible=True;IsForce=False;CanSubscribe=True;IsPrefer=False;Visible=True;VisibleInResultTree=True;IsPrivate..."},
+              {"name": "DynamicOutData", "valueLen": 12072, "parsed": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ParamRoot>\n    <Categorys>\n        <Category Name=\"Output\">\n            <Items>\n                <Filter Name=\"fArrivalTimeStampLow\" ValueType=\"float\" Others=\"CustomVisible=False;IsForce=False;CanSubscribe=False;IsPrefer=False;Visible=False;VisibleInResultTree=False;IsPrivate=False;IsReturnRelateValue=True;AllowAutoSubscribe=True;AutoSubscribeByOther=True;IsResultShow=False;AutoSubscribeName=\"/>\n                <Filter Name=\"fArrivalTimeStampHigh\" ValueType..."}
+            ],
+            "connections": {
+              "frontModules": [],
+              "followModules": []
+            },
+            "subscriptions": [
+            ],
+            "uiParams": [
+              {"name": "GUID", "inferredType": "guid", "value": "2207E067-9681-45F9-A37C-C30675BD313E"},
+              {"name": "IsReady", "inferredType": "bool", "value": "True"},
+              {"name": "Position", "inferredType": "position", "value": "(315.0, 130.0)"},
+              {"name": "[ParamRoot]_%Data Record%Type", "inferredType": "string", "value": "datarecord"},
+              {"name": "[ParamRoot]_%Data Record%IsDisplay", "inferredType": "string", "value": "True"},
+              {"name": "DynamicObject_%Data Record%_[Child]", "inferredType": "string", "value": "Content"},
+              {"name": "[ParamRoot]_%Data Record%.Content.Value", "inferredType": "string", "value": "ImageWidth1:{0},ImageHeight1:{1},pointx1:{2},pointy1:{3},roicenterx1:{4},roicentery1:{5},roiwidth1:{6},roiheight1:{7},roiangle1:{8},LineStartPointX1:{9},LineStartPointY1:{10},LineEndPointX1:{11},LineE..."},
+              {"name": "[ParamRoot]_%Data Record%.Content.Mapping", "inferredType": "string", "value": "%ImageWidth1%,%ImageHeight1%,%pointx1%,%pointy1%,%roicenterx1%,%roicentery1%,%roiwidth1%,%roiheight1%,%roiangle1%,%LineStartPointX1%,%LineStartPointY1%,%LineEndPointX1%,%LineEndPointY1%,%BlobRectX1%,%..."},
+              {"name": "[ParamRoot]_%ImageEcho%Type", "inferredType": "string", "value": "image"},
+              {"name": "[ParamRoot]_%ImageEcho%IsDisplay", "inferredType": "string", "value": "True"},
+              {"name": "[ParamRoot]_%ImageEcho%okcolor", "inferredType": "string", "value": "#66ff00"},
+              {"name": "[ParamRoot]_%ImageEcho%ngcolor", "inferredType": "string", "value": "#ff0000"},
+              {"name": "[ParamRoot]_%ImageEcho%opacity", "inferredType": "string", "value": "1"},
+              {"name": "[ParamRoot]_%ImageEcho%.Image.Mapping", "inferredType": "string", "value": "%Image1%"},
+              {"name": "[ParamRoot]_%ImageEcho%.Width.Mapping", "inferredType": "string", "value": "%ImageWidth1%"},
+              {"name": "[ParamRoot]_%ImageEcho%.Height.Mapping", "inferredType": "string", "value": "%ImageHeight1%"},
+              {"name": "[ParamRoot]_%ImageEcho%.PixelFormat.Mapping", "inferredType": "string", "value": "%ImagePixelFormat1%"},
+              {"name": "DynamicObject_%ImageEcho%_[Child]", "inferredType": "string", "value": "Image;Width;Height;PixelFormat"},
+              {"name": "RelateIO_%ImageEcho%", "inferredType": "string", "value": "%ImageEcho%"},
+              {"name": "ObjectExternInfos_%ImageEcho%", "inferredType": "string", "value": "RelateIO"},
+              {"name": "DynamicObject", "inferredType": "string", "value": "%Data Record%;%ImageEcho%"}
+            ],
+            "scriptText": "using System;\nusing System.Globalization;\nusing System.Threading;\nusing Script.Methods;\n\npublic partial class UserScript : ScriptMethods, IProcessMethods\n{\n    public void Init()\n    {\n        try\n        {\n        }\n        catch (Exception error)\n        {\n            ConsoleWrite(error.ToString());\n        }\n    }\n\n    public bool Process()\n    {\n        try\n        {\n            ImageEcho = SourceImage;\r\n            PointEcho = SourcePoint;\r\n            BoxEcho = SourceBox;\r\n            LineEcho = SourceLine;\r\n            RectEcho = SourceRect;\r\n            EllipseEcho = SourceEllipse;\r\n            return true;\n        }\n        catch (Exception error)\n        {\n            ConsoleWrite(error.ToString());\n            return false;\n        }\n    }\n}\n",
+            "assemblyGuid": "7b0804c4-ce81-5063-94ee-53f26144ff21"          }
+        ]
+      }
+    ],
+    "globalScript": {
+      "version": "V3.4.0",
+      "scriptLength": 2941,
+      "hasPassword": false,
+      "references": [
+      ]
+    },
+    "moduleParamBindings": [
+    ],
+    "warnings": null
+  }
+}

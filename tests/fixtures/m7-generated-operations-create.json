@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "1.0",
+  "task": { "name": "m7-generated-operations", "mode": "create", "vmVersion": "4.4.0" },
+  "scripts": [
+    {
+      "id": "generated-csharp", "carrier": "csharp-module", "name": "CSharp确定性生成", "procedure": "流程1",
+      "execution": { "mode": "once" },
+      "inputs": [{ "name": "A", "type": "int", "default": 2 }, { "name": "B", "type": "int", "default": 5 }],
+      "outputs": [{ "name": "Sum", "type": "int" }],
+      "operations": [
+        { "kind": "setOutput", "parameter": "Sum", "value": { "kind": "binary", "operator": "add", "left": { "kind": "input", "name": "A" }, "right": { "kind": "input", "name": "B" } } },
+        { "kind": "getGlobalVariable", "parameter": "GlobalPoints", "result": "points", "valueType": "point" },
+        { "kind": "setLocalVariable", "parameter": "LastSum", "valueType": "int", "value": { "kind": "input", "name": "A" } }
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "generated-python", "carrier": "python-module", "name": "Python确定性生成", "procedure": "流程1",
+      "execution": { "mode": "once" },
+      "inputs": [{ "name": "Text", "type": "string", "default": "VM" }],
+      "outputs": [{ "name": "Echo", "type": "string" }],
+      "operations": [{ "kind": "setOutput", "parameter": "Echo", "value": { "kind": "input", "name": "Text" } }],
+      "dependencies": []
+    },
+    {
+      "id": "generated-global", "carrier": "global-csharp", "name": "全局确定性生成",
+      "execution": { "mode": "once" }, "inputs": [], "outputs": [],
+      "operations": [{ "kind": "runProcedure", "procedure": "流程1" }],
+      "dependencies": []
+    }
+  ]
+}

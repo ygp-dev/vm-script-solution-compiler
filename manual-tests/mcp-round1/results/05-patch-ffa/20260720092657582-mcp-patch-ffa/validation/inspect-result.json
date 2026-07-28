@@ -1,0 +1,19 @@
+[
+  {"fullPath": "流程1.图像源1", "name": "ImageSourceModule", "displayName": "图像源1", "moduleId": 0, "paramCount": 23},
+  {"fullPath": "流程1.轮廓匹配1", "name": "IMVSContourMatchModu", "displayName": "轮廓匹配1", "moduleId": 1, "paramCount": 59},
+  {"fullPath": "流程1.Blob分析1", "name": "IMVSBlobFindModu", "displayName": "Blob分析1", "moduleId": 2, "paramCount": 108},
+  {"fullPath": "流程1.Blob分析2", "name": "IMVSBlobFindModu", "displayName": "Blob分析2", "moduleId": 3, "paramCount": 108},
+  {"fullPath": "流程1.图像组合1", "name": "IMVSImageCombineProcessModu", "displayName": "图像组合1", "moduleId": 4, "paramCount": 3},
+  {"fullPath": "流程1.图像组合2", "name": "IMVSImageCombineProcessModu", "displayName": "图像组合2", "moduleId": 5, "paramCount": 3},
+  {"fullPath": "流程1.Blob分析3", "name": "IMVSBlobFindModu", "displayName": "Blob分析3", "moduleId": 6, "paramCount": 108},
+  {"fullPath": "流程1.Blob分析4", "name": "IMVSBlobFindModu", "displayName": "Blob分析4", "moduleId": 7, "paramCount": 108},
+  {"fullPath": "流程1.图像运算1", "name": "IMVSImageMathModu", "displayName": "图像运算1", "moduleId": 8, "paramCount": 11},
+  {"fullPath": "流程1.Blob分析5", "name": "IMVSBlobFindModu", "displayName": "Blob分析5", "moduleId": 9, "paramCount": 108},
+  {"fullPath": "流程1.形态学处理1", "name": "IMVSImageMorphModu", "displayName": "形态学处理1", "moduleId": 10, "paramCount": 8},
+  {"fullPath": "流程1.MCP注入验证", "name": "ShellModule", "displayName": "MCP注入验证", "moduleId": 11, "paramCount": 0},
+  {"fullPath": "流程1", "name": "IMVSProcessControl", "displayName": "流程1", "moduleId": 10000, "paramCount": 0},
+  {"fullPath": "GlobalVarBinding", "name": "GlobalVarBinding", "displayName": "GlobalVarBinding", "moduleId": -1, "paramCount": 0},
+  {"fullPath": "ModuleParamBinding", "name": "ModuleParamBinding", "displayName": "ModuleParamBinding", "moduleId": -1, "paramCount": 0},
+  {"fullPath": "RunningPolicy", "name": "RunningPolicy", "displayName": "RunningPolicy", "moduleId": -1, "paramCount": 0},
+  {"fullPath": "procedure", "name": "procedure", "displayName": "procedure", "moduleId": 10999, "paramCount": 0}
+]

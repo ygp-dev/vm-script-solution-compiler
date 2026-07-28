@@ -1,0 +1,76 @@
+{
+  "mode": "create",
+  "framework": ".NET Framework 4.6.1",
+  "architecture": "x64",
+  "scripts": [
+    {
+      "id": "netdxf-load",
+      "carrier": "csharp-module",
+      "procedure": "\u6D41\u7A0B1",
+      "name": "netDxf\u8BFB\u53D6\u793A\u4F8B",
+      "source": "generated/netdxf-load.cs",
+      "inputs": [
+        "DxfPath"
+      ],
+      "outputs": [
+        "Loaded"
+      ],
+      "dependencies": [
+        {
+          "kind": "dotnet-assembly",
+          "name": "netDxf.dll",
+          "role": null,
+          "version": null,
+          "path": null,
+          "architecture": "anycpu",
+          "referenceType": null
+        }
+      ],
+      "shellReferences": {
+        "mode": "explicit-shell-refrences-payload",
+        "declared": [
+          "netDxf.dll"
+        ]
+      }
+    }
+  ],
+  "dependencyResolution": [
+    {
+      "scriptId": "netdxf-load",
+      "scriptName": "netDxf\u8BFB\u53D6\u793A\u4F8B",
+      "assemblies": [
+        {
+          "name": "netDxf",
+          "declaredName": "netDxf.dll",
+          "referenceType": 4,
+          "role": "third-party",
+          "source": "vm-runtime",
+          "sourcePath": "C:\\Program Files\\VisionMaster4.4.0\\Applications\\Module(sp)\\x64\\Logic\\ShellModule\\DLL\\netDxf.dll",
+          "packagedPath": null,
+          "deploymentTarget": null,
+          "runtimeVisible": true,
+          "assemblyVersion": "2023.11.10.0",
+          "clrMetadataVersion": "v4.0.30319",
+          "targetFramework": ".NETFramework,Version=v4.8",
+          "architecture": "anycpu",
+          "sha256": "0EB365AC2AC074A371A2766A364060BD0F2B73B9F21D7ACBDAD43B1EAA1D658F",
+          "assemblyReferences": [
+            "mscorlib",
+            "System.Drawing",
+            "System",
+            "System.Core"
+          ]
+        }
+      ]
+    }
+  ],
+  "sourcePrecompiled": true,
+  "precompileEnvironment": "VM 4.4 method assemblies and bundled Python parser",
+  "ioMapping": "VM-4.4 saved-sample logical ports \u002B StructName backing fields \u002B DynamicIO combinations \u002B UiParamData object mappings",
+  "inputDefaults": "int/float ModuleSubscribe mapping confirmed by VM-saved round trip; bool/string structurally encoded; Python also emits deterministic None fallback",
+  "runtimeValidated": true,
+  "runtimeValidation": {
+    "baselineValidated": true,
+    "pending": []
+  }
+}

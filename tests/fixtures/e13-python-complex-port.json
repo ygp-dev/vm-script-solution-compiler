@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "1.0",
+  "task": { "name": "python-complex-port", "mode": "create", "vmVersion": "4.4.0" },
+  "scripts": [
+    {
+      "id": "python-image",
+      "carrier": "python-module",
+      "name": "PythonImage",
+      "procedure": "Process1",
+      "execution": { "mode": "once" },
+      "inputs": [{ "name": "Image", "type": "image" }],
+      "outputs": [{ "name": "Echo", "type": "image" }],
+      "operations": [{ "kind": "setOutput", "parameter": "Echo", "value": { "kind": "input", "name": "Image" } }],
+      "dependencies": []
+    }
+  ]
+}
