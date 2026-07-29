@@ -35,6 +35,67 @@ function compactState(state: ReturnType<VmDomainState["snapshot"]>) {
   };
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function stringValue(value: unknown, name: string): string | undefined {
+  return isRecord(value) && typeof value[name] === "string" ? value[name] : undefined;
+}
+
+function canonicalCapabilityQuery(query: string | undefined): string {
+  const value = (query ?? "").trim().toLowerCase();
+  if (!value) return "";
+  if (/(global.?csharp|globalscript|userglobal)/i.test(value)) return "global-csharp";
+  if (/(csharp|c#|shellmodule|scriptmethods|iprocessmethods)/i.test(value)) return "csharp-module";
+  if (/(python|pyshell|iohelper)/i.test(value)) return "python-module";
+  if (/netdxf/i.test(value)) return "netDxf";
+  if (/(external.?dll|user.?assembly)/i.test(value)) return "user-assembly";
+  return value;
+}
+
+function compactBuildResult(result: unknown) {
+  return {
+    ok: isRecord(result) && result.ok === true,
+    taskDirectory: stringValue(result, "taskDirectory"),
+    solutionFile: stringValue(result, "solutionFile"),
+    reportFile: stringValue(result, "reportFile"),
+    inputPreserved: isRecord(result) ? result.inputPreserved : undefined,
+  };
+}
+
+function compactSolutionValidation(result: unknown) {
+  return {
+    ok: isRecord(result) && result.ok === true,
+    parseOk: isRecord(result) && isRecord(result.parseResult),
+    inspectOk: isRecord(result) && typeof result.inspectOutput === "string",
+  };
+}
+
+function normalizeRequirement(requirement: Record<string, unknown>): Record<string, unknown> {
+  const normalized = structuredClone(requirement);
+  if (!Array.isArray(normalized.scripts)) return normalized;
+  for (const value of normalized.scripts) {
+    if (!isRecord(value) || value.carrier !== "csharp-module") continue;
+    if (typeof value.source === "string" && value.source.trim()) {
+      let source = value.source
+        .replace(/using\s+(?:VM|Vm)\.Script\.Methods\s*;/g, "using Script.Methods;")
+        .replace(/\b(?:VM|Vm)\.Script\.Methods\./g, "");
+      if (!/using\s+Script\.Methods\s*;/.test(source)) {
+        source = `using Script.Methods;\n${source}`;
+      }
+      value.source = source;
+    }
+    if (Array.isArray(value.dependencies)) {
+      value.dependencies = value.dependencies.filter((dependency) => {
+        const text = JSON.stringify(dependency).toLowerCase();
+        return !text.includes("script.methods") && !text.includes("vm.script.methods");
+      });
+    }
+  }
+  return normalized;
+}
+
 async function executeDomainTool(
   name: string,
   state: VmDomainState,
@@ -58,6 +119,7 @@ export function createVmTools(
   state: VmDomainState,
   worker: DomainWorkerClient,
 ): ToolDefinition[] {
+  const capabilityCache = new Map<string, unknown>();
   return [
     defineTool({
       name: "vm_detect_environment",
@@ -106,22 +168,38 @@ export function createVmTools(
       }, { additionalProperties: false }),
       executionMode: "parallel",
       execute: async (_id, params, signal) => {
+        const query = canonicalCapabilityQuery(params.query);
         state.beginTool("vm_query_capability");
+        if (capabilityCache.has(query)) {
+          state.completeTool("vm_query_capability");
+          return output({
+            ok: true,
+            result: {
+              cached: true,
+              query,
+              message: "This VM capability evidence is already present. Continue the workflow without re-querying.",
+            },
+            state: compactState(state.snapshot()),
+          });
+        }
         return executeDomainTool(
           "vm_query_capability",
           state,
           () => worker.call("query_capability", {
-            query: params.query ?? "",
+            query,
             vmVersion: params.vmVersion ?? "4.4.0",
           }, signal),
-          (result) => state.recordCapability(params.query, result),
+          (result) => {
+            capabilityCache.set(query, result);
+            state.recordCapability(query, result);
+          },
         );
       },
     }),
     defineTool({
       name: "vm_update_requirement",
       label: "更新 Requirement",
-      description: "创建或修订完整 Requirement IR 草稿。它只更新会话状态，不写 SOL；修改后必须调用 vm_validate_requirement。",
+      description: "创建或修订完整 Requirement IR。普通计算优先使用 operations 并省略 source；csharp-module 的 Script.Methods 是 VM 内置引用，绝不能放入 dependencies。提交后直接调用 vm_compile_solution。",
       promptSnippet: "创建或修订 Requirement IR 草稿。",
       parameters: Type.Object({
         requirement: RequirementToolSchema,
@@ -131,7 +209,7 @@ export function createVmTools(
         state.assertRequirementRetryAllowed();
         try {
           state.beginTool("vm_update_requirement", "drafting");
-          state.recordRequirement(params.requirement as Record<string, unknown>);
+          state.recordRequirement(normalizeRequirement(params.requirement as Record<string, unknown>));
           state.completeTool("vm_update_requirement");
           return output({
             ok: true,
@@ -142,6 +220,90 @@ export function createVmTools(
           const message = error instanceof Error ? error.message : String(error);
           state.recordError("REQUIREMENT_DRAFT_INVALID", message);
           throw error;
+        }
+      },
+    }),
+    defineTool({
+      name: "vm_compile_solution",
+      label: "生成并验证 SOL",
+      description: "首选的一步式确定性编译工具。使用当前 Requirement，自动完成校验、Create/Patch 构建和独立离线验证；不要再分别调用 plan/build/patch/validate 工具。",
+      promptSnippet: "一次完成 Requirement 校验、SOL 构建和独立离线验证。",
+      parameters: Type.Object({}, { additionalProperties: false }),
+      executionMode: "sequential",
+      execute: async (_id, _params, signal) => {
+        state.assertRequirementRetryAllowed();
+        const requirement = state.requireDraft();
+        state.beginTool("vm_compile_solution", "requirement-validating");
+        try {
+          const validation = await worker.call<Record<string, unknown>>(
+            "validate_requirement",
+            { requirement },
+            signal,
+          );
+          state.recordRequirementValidation(validation);
+          if (validation.ok !== true) {
+            state.completeTool("vm_compile_solution");
+            return output({
+              ok: false,
+              result: {
+                stage: "requirement-validation",
+                issues: Array.isArray(validation.issues) ? validation.issues : [],
+              },
+              state: compactState(state.snapshot()),
+            });
+          }
+
+          const snapshot = state.snapshot();
+          const outputDirectory = snapshot.outputDirectory;
+          if (!outputDirectory) throw new Error("生成任务缺少输出目录。");
+          let build: unknown;
+          if (snapshot.intent === "patch") {
+            const baseSolution = snapshot.baseSolution;
+            if (!baseSolution) throw new Error("Patch 模式缺少基底 SOL。");
+            const inspected = snapshot.capabilityEvidence.some((evidence) =>
+              evidence.kind === "solution" &&
+              isRecord(evidence.data) &&
+              stringValue(evidence.data, "file")?.toLowerCase() === baseSolution.toLowerCase()
+            );
+            if (!inspected) throw new Error("Patch 前必须先检查当前基底 SOL。");
+            build = await worker.call(
+              "patch_solution",
+              { baseSolution, requirement, output: outputDirectory },
+              signal,
+            );
+          } else if (snapshot.intent === "create") {
+            build = await worker.call(
+              "build_solution",
+              { requirement, output: outputDirectory },
+              signal,
+            );
+          } else {
+            throw new Error("Requirement task.mode 必须是 create 或 patch。");
+          }
+          state.recordBuild(build);
+
+          const solutionFile = stringValue(build, "solutionFile");
+          if (!solutionFile) throw new Error("确定性编译器没有返回 SOL 路径。");
+          const offline = await worker.call<Record<string, unknown>>(
+            "validate_solution",
+            { file: solutionFile },
+            signal,
+          );
+          state.recordOfflineValidation(solutionFile, offline);
+          state.completeTool("vm_compile_solution");
+          return output({
+            ok: true,
+            result: {
+              build: compactBuildResult(build),
+              offlineValidation: compactSolutionValidation(offline),
+            },
+            state: compactState(state.snapshot()),
+          });
+        } catch (error) {
+          const code = error instanceof DomainWorkerError ? error.code : "DOMAIN_TOOL_FAILED";
+          const message = error instanceof Error ? error.message : String(error);
+          state.recordError(code, message);
+          throw new DomainWorkerError(code, message);
         }
       },
     }),

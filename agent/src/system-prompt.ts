@@ -12,12 +12,21 @@ export function buildVmSystemPrompt(config: AgentConfiguration): string {
     path.join(config.agentRoot, "resources", "requirement-examples", "python-create.json"),
     "utf8",
   );
+  const csharpExample = fs.readFileSync(
+    path.join(config.agentRoot, "resources", "requirement-examples", "csharp-create.json"),
+    "utf8",
+  );
   return [
     base,
     "## Requirement 权威资料",
     "下列 Schema 是当前编译器实际使用的权威版本。不要猜字段、枚举或嵌套位置。",
     "```json",
     schema,
+    "```",
+    "### C# Create 最小正确示例",
+    "可由 operations 表达的逻辑必须优先使用 operations，并省略 source。Script.Methods 是 VM 内置引用，dependencies 必须为空。",
+    "```json",
+    csharpExample,
     "```",
     "### Python Create 最小正确示例",
     "注意：`source`、`operations`、`dependencies` 都是 script 顶层属性；`execution` 只能包含 `mode` 和 `order`，普通脚本使用 `mode: \"once\"`。",

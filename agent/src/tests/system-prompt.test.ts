@@ -7,7 +7,7 @@ import { buildVmSystemPrompt } from "../system-prompt.js";
 
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
 
-test("VM system prompt contains authoritative schema and Python Create example", () => {
+test("VM system prompt contains authoritative schema and C#/Python Create examples", () => {
   const config = {
     repositoryRoot,
     agentRoot: path.join(repositoryRoot, "agent"),
@@ -16,6 +16,8 @@ test("VM system prompt contains authoritative schema and Python Create example",
   assert.match(prompt, /VM Script Compile Requirement/);
   assert.match(prompt, /"mode": "once"/);
   assert.match(prompt, /"source": "# coding: utf-8/);
+  assert.match(prompt, /"kind": "binary"/);
+  assert.match(prompt, /operations 表达的逻辑必须优先使用 operations/);
   assert.match(prompt, /source.*script 顶层/s);
   assert.match(prompt, /execution.*只能包含.*mode.*order/s);
 });

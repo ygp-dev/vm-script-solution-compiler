@@ -15,6 +15,15 @@ Desktop 采用与 Codex 对齐的任务工作台布局：
 
 常规用户只面对任务对话、结果产物和设置。Requirement 路径、确定性 Core 命令及原始诊断默认隐藏，可从“设置 → 开发者工具”临时打开。
 
+## 生成快速通道
+
+信息完整的普通 Create 只使用两个领域工具步骤：
+
+1. `vm_update_requirement`：把提示转换为 Requirement IR；
+2. `vm_compile_solution`：一次完成 Requirement 校验、Create/Patch 构建和独立 SOL 离线验证。
+
+环境、资源和 VM 能力由一步式确定性编译内部校验，不再让模型换关键词反复查询。可由表达式 AST 表示的计算优先使用 `operations`，避免生成冗长的原始 C#。Patch 仍会在编译前单独检查基底 SOL。界面使用每次工具调用的唯一 ID 更新原有状态卡片，多个同名调用不会互相覆盖或遗留“运行中”卡片。
+
 ## 本地状态文件
 
 首次启动后，程序会在 `%LOCALAPPDATA%\VM Script Compiler` 创建：

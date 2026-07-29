@@ -30,16 +30,8 @@ function message(index, text) {
 }
 
 function scriptedOutput(index) {
-  if (index === 1) {
-    return [
-      functionCall(index, "vm_detect_environment", {}),
-      functionCall(index, "vm_update_requirement", { requirement: fixture }),
-    ];
-  }
-  if (index === 2) return [functionCall(index, "vm_validate_requirement", {})];
-  if (index === 3) return [functionCall(index, "vm_plan_solution", {})];
-  if (index === 4) return [functionCall(index, "vm_build_solution", { output: outputDirectory })];
-  if (index === 5) return [functionCall(index, "vm_validate_solution", {})];
+  if (index === 1) return [functionCall(index, "vm_update_requirement", { requirement: fixture })];
+  if (index === 2) return [functionCall(index, "vm_compile_solution", {})];
   return [message(index, "SOL passed deterministic offline validation. VisionMaster runtime behavior still requires user confirmation.")];
 }
 
@@ -61,12 +53,11 @@ const server = http.createServer((request, response) => {
         .map((tool) => tool.name),
     );
     const requiredTools = [
-      "vm_detect_environment",
+      "vm_inspect_solution",
       "vm_update_requirement",
-      "vm_validate_requirement",
-      "vm_plan_solution",
-      "vm_build_solution",
-      "vm_validate_solution",
+      "vm_compile_solution",
+      "vm_read_build_report",
+      "vm_record_user_validation",
     ];
     const updateTool = (body.tools ?? []).find(
       (tool) => tool.type === "function" && tool.name === "vm_update_requirement",
@@ -84,6 +75,7 @@ const server = http.createServer((request, response) => {
       updateSchema.includes('"once"') &&
       updateSchema.includes('"python-module"') &&
       requestText.includes("VM Script Compile Requirement") &&
+      requestText.includes("C# Create") &&
       requestText.includes("Python Create");
     if (!valid) {
       response.writeHead(400).end("invalid agent Responses request");
@@ -123,7 +115,7 @@ const server = http.createServer((request, response) => {
       Connection: "close",
     });
     response.end(payload);
-    if (requestCount >= 6) server.close();
+    if (requestCount >= 3) server.close();
   });
 });
 

@@ -40,3 +40,12 @@
 ## 用户体验
 
 使用简洁中文说明进展。普通用户不需要理解 SOL 二进制或 Requirement schema。提出问题时只问会改变方案的必要信息，并给出推荐选项与影响。
+
+## 快速执行规则（最高优先级）
+
+- 普通 Create 不要调用 `vm_detect_environment`：一步式编译内部已经执行环境与资源校验。
+- `vm_compile_solution` 会使用内置 VM 能力目录进行确定性校验；生成流程不要单独调用 `vm_query_capability`，更不要换关键词重复搜索。
+- 创建或修订 Requirement 后，直接调用一次 `vm_compile_solution`。它已经依次完成 Requirement 校验、Create/Patch 构建和独立 SOL 离线验证。
+- 不要把 `vm_validate_requirement`、`vm_plan_solution`、`vm_build_solution`、`vm_patch_solution`、`vm_validate_solution` 串成多次调用；这些是兼容性工具，不属于 Agent 的默认流程。
+- 不要在 SOL 生成前读取尚不存在的 `build-report.md`。成功后通常也无需再读取，因为 `vm_compile_solution` 已返回产物路径和验证结论。
+- 简单且信息完整的 Create 任务应只产生两个核心工具步骤：`vm_update_requirement` → `vm_compile_solution`。

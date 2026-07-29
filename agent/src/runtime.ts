@@ -157,6 +157,14 @@ export class VmAgentRuntime {
 
     const domain = new VmDomainState(sessionManager);
     const tools = createVmTools(domain, this.worker);
+    const primaryToolNames = new Set([
+      "vm_inspect_solution",
+      "vm_update_requirement",
+      "vm_compile_solution",
+      "vm_read_build_report",
+      "vm_record_user_validation",
+    ]);
+    const primaryTools = tools.filter((tool) => primaryToolNames.has(tool.name));
     const systemPrompt = buildVmSystemPrompt(this.config);
     const resourceLoader = new DefaultResourceLoader({
       cwd: this.config.repositoryRoot,
@@ -177,8 +185,8 @@ export class VmAgentRuntime {
       sessionManager,
       resourceLoader,
       noTools: "builtin",
-      tools: tools.map((tool) => tool.name),
-      customTools: tools,
+      tools: primaryTools.map((tool) => tool.name),
+      customTools: primaryTools,
     });
 
     this.sessionManager = sessionManager;

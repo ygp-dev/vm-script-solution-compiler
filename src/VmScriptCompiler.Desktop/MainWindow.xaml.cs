@@ -262,12 +262,21 @@ public partial class MainWindow : Window
         else if (type == "message_end") _streamingAssistant = null;
         else if (type == "tool_execution_start")
         {
-            AppendToolStatus(String(piEvent, "toolName") ?? "VM 工具", false, false);
+            var toolName = String(piEvent, "toolName") ?? "VM 工具";
+            AppendToolStatus(
+                toolName,
+                false,
+                false,
+                String(piEvent, "toolCallId") ?? toolName);
         }
         else if (type == "tool_execution_end")
         {
-            AppendToolStatus(String(piEvent, "toolName") ?? "VM 工具", true,
-                piEvent.TryGetProperty("isError", out var isError) && isError.GetBoolean());
+            var toolName = String(piEvent, "toolName") ?? "VM 工具";
+            AppendToolStatus(
+                toolName,
+                true,
+                piEvent.TryGetProperty("isError", out var isError) && isError.GetBoolean(),
+                String(piEvent, "toolCallId") ?? toolName);
         }
         else if (type == "auto_retry_start") AppendSystemStatus("Provider 暂时失败，Pi 正在重试…");
         ScrollTranscript();
@@ -360,8 +369,9 @@ public partial class MainWindow : Window
         ScrollTranscript();
     }
 
-    private void AppendToolStatus(string name, bool completed, bool error)
+    private void AppendToolStatus(string name, bool completed, bool error, string? toolCallId = null)
     {
+        var key = toolCallId ?? name;
         if (!completed)
         {
             var status = new TextBlock
@@ -405,15 +415,15 @@ public partial class MainWindow : Window
                 BorderThickness = new Thickness(1),
                 CornerRadius = new CornerRadius(8)
             };
-            _activeTools[name] = new ToolCardVisual(card, icon, status);
+            _activeTools[key] = new ToolCardVisual(card, icon, status);
             MessagesPanel.Children.Add(card);
             return;
         }
 
-        if (!_activeTools.Remove(name, out var visual))
+        if (!_activeTools.Remove(key, out var visual))
         {
-            AppendToolStatus(name, false, false);
-            _activeTools.Remove(name, out visual);
+            AppendToolStatus(name, false, false, key);
+            _activeTools.Remove(key, out visual);
         }
         if (visual is null) return;
         visual.Icon.Text = error ? "×" : "✓";
@@ -443,6 +453,7 @@ public partial class MainWindow : Window
         "vm_inspect_solution" => "检查基底 SOL",
         "vm_query_capability" => "查询 VM 能力",
         "vm_update_requirement" => "更新 Requirement",
+        "vm_compile_solution" => "生成并验证 SOL",
         "vm_validate_requirement" => "校验 Requirement",
         "vm_plan_solution" => "规划 SOL",
         "vm_build_solution" => "创建 SOL",

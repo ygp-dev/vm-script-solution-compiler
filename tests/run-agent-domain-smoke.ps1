@@ -131,15 +131,12 @@ try {
         throw "Agent Requirement carrier mismatch. Expected $ExpectedCarrier."
     }
     foreach ($requiredTool in @(
-        'vm_detect_environment',
         'vm_update_requirement',
-        'vm_validate_requirement',
-        'vm_plan_solution',
-        'vm_build_solution',
-        'vm_validate_solution'
+        'vm_compile_solution'
     )) {
         if (-not $toolNames.Contains($requiredTool)) { throw "Agent did not call $requiredTool." }
     }
+    if ($toolNames.Count -ne 2) { throw "Simple Create should use exactly two tools, actual: $($toolNames -join ', ')." }
     $solution = $runCompleted.state.state.artifacts |
         Where-Object kind -eq 'solution' |
         Select-Object -Last 1 -ExpandProperty path

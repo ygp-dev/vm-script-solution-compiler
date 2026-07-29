@@ -58,7 +58,11 @@ try {
     if (-not $smoke.ok -or $smoke.phase -ne 'offline-validated' -or -not (Test-Path -LiteralPath $smoke.solution)) {
         throw 'Desktop Agent did not complete the domain workflow.'
     }
-    if ($smoke.tools.Count -lt 6) { throw 'Desktop did not receive the complete Pi tool event stream.' }
+    if ($smoke.tools.Count -ne 2 -or
+        $smoke.tools -notcontains 'vm_update_requirement' -or
+        $smoke.tools -notcontains 'vm_compile_solution') {
+        throw 'Desktop simple Create did not use the two-step fast path.'
+    }
     $sessions = Get-ChildItem $temp -Recurse -File -Filter '*.jsonl' | Get-Content -Raw -Encoding UTF8
     if ($sessions -match 'offline-agent-key') { throw 'API Key leaked into Desktop Agent session.' }
     $smoke | ConvertTo-Json -Depth 5 -Compress
