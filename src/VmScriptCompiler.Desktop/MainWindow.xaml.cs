@@ -21,7 +21,7 @@ public partial class MainWindow : Window
     private AgentProcessClient? _agent;
     private CancellationTokenSource? _runCancellation;
     private IReadOnlyList<ArtifactRecord> _artifacts = [];
-    private TextBlock? _streamingAssistant;
+    private System.Windows.Controls.TextBox? _streamingAssistant;
     private readonly Dictionary<string, ToolCardVisual> _activeTools = new(StringComparer.Ordinal);
     private string? _lastSolution;
     private string? _lastReport;
@@ -287,13 +287,8 @@ public partial class MainWindow : Window
 
     private void AppendUserMessage(string text)
     {
-        var content = new TextBlock
-        {
-            Text = text,
-            TextWrapping = TextWrapping.Wrap,
-            FontSize = 14,
-            LineHeight = 22
-        };
+        var content = SelectableMessageText(text, 14, 22);
+        content.MaxWidth = 622;
         var bubble = new Border
         {
             Child = content,
@@ -325,12 +320,7 @@ public partial class MainWindow : Window
     {
         if (_streamingAssistant is null)
         {
-            _streamingAssistant = new TextBlock
-            {
-                TextWrapping = TextWrapping.Wrap,
-                FontSize = 14,
-                LineHeight = 22
-            };
+            _streamingAssistant = SelectableMessageText("", 14, 22);
             var container = new StackPanel { Margin = new Thickness(6, 0, 54, 22) };
             var header = new StackPanel
             {
@@ -437,14 +427,32 @@ public partial class MainWindow : Window
 
     private void AppendSystemStatus(string text)
     {
-        MessagesPanel.Children.Add(new TextBlock
+        var status = SelectableMessageText(text, 11.5, 18);
+        status.Foreground = new SolidColorBrush(Color.FromRgb(116, 116, 116));
+        status.Margin = new Thickness(40, 2, 40, 10);
+        MessagesPanel.Children.Add(status);
+    }
+
+    private static System.Windows.Controls.TextBox SelectableMessageText(string text, double fontSize, double lineHeight)
+    {
+        var control = new System.Windows.Controls.TextBox
         {
             Text = text,
-            Foreground = new SolidColorBrush(Color.FromRgb(116, 116, 116)),
-            FontSize = 11.5,
-            Margin = new Thickness(40, 2, 40, 10),
-            TextWrapping = TextWrapping.Wrap
-        });
+            IsReadOnly = true,
+            IsReadOnlyCaretVisible = true,
+            AcceptsReturn = true,
+            TextWrapping = TextWrapping.Wrap,
+            HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled,
+            VerticalScrollBarVisibility = ScrollBarVisibility.Disabled,
+            Background = Brushes.Transparent,
+            BorderThickness = new Thickness(0),
+            Padding = new Thickness(0),
+            FontSize = fontSize,
+            Foreground = Brushes.White,
+            Cursor = System.Windows.Input.Cursors.IBeam
+        };
+        TextBlock.SetLineHeight(control, lineHeight);
+        return control;
     }
 
     private static string FriendlyToolName(string name) => name switch
