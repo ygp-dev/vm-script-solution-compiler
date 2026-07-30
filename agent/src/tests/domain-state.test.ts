@@ -84,6 +84,30 @@ test("VM domain state stops repeated Requirement validation loops", () => {
   assert.doesNotThrow(() => state.assertRequirementRetryAllowed());
 });
 
+test("VM domain state stops repeated compiler-error loops after valid schema checks", () => {
+  const state = new VmDomainState(SessionManager.inMemory());
+  state.setTaskContext({ mode: "create" });
+  state.recordRequirement({
+    schemaVersion: "1.0",
+    task: { name: "bad-source", mode: "create", vmVersion: "4.4.0" },
+    scripts: [],
+  });
+
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    state.recordRequirementValidation({ ok: true, issues: [] });
+    state.recordError(
+      "SCRIPT_CONTRACT_INVALID",
+      "Generated source does not satisfy the csharp-module entry contract.",
+    );
+  }
+
+  assert.equal(state.snapshot().requirementRetry.turnValidationAttempts, 3);
+  assert.equal(state.snapshot().requirementRetry.consecutiveSameFailures, 3);
+  assert.equal(state.snapshot().requirementRetry.blocked, true);
+  assert.equal(state.snapshot().phase, "blocked");
+  assert.throws(() => state.assertRequirementRetryAllowed(), /自动修订已达到上限/);
+});
+
 test("VM domain state persists one snapshot for a successful batched tool", () => {
   const manager = SessionManager.inMemory();
   const state = new VmDomainState(manager);

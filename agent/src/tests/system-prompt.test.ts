@@ -20,4 +20,7 @@ test("VM system prompt contains authoritative schema and C#/Python Create exampl
   assert.match(prompt, /operations 表达的逻辑必须优先使用 operations/);
   assert.match(prompt, /source.*script 顶层/s);
   assert.match(prompt, /execution.*只能包含.*mode.*order/s);
+  assert.match(prompt, /public partial class UserScript : ScriptMethods, IProcessMethods/);
+  assert.match(prompt, /void Init\(\)/);
+  assert.match(prompt, /bool Process\(\)/);
 });

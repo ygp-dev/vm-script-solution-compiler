@@ -9,6 +9,28 @@ export interface ConfiguredModel {
   model: Model<any>;
 }
 
+export function configuredReasoning(
+  config: Pick<AgentConfiguration, "provider" | "endpoint">,
+): { reasoning: boolean; thinkingLevelMap?: Record<string, string> } {
+  const isDeepSeek = config.provider === "openai-compatible" &&
+    new URL(config.endpoint).hostname.toLowerCase().endsWith("deepseek.com");
+  return {
+    reasoning: config.provider === "openai-responses" || isDeepSeek,
+    ...(isDeepSeek
+      ? {
+          thinkingLevelMap: {
+            minimal: "high",
+            low: "high",
+            medium: "high",
+            high: "high",
+            xhigh: "max",
+            max: "max",
+          },
+        }
+      : {}),
+  };
+}
+
 export async function configureModel(config: AgentConfiguration): Promise<ConfiguredModel> {
   if (!config.model.trim()) {
     throw new Error("未配置模型。请在桌面配置中填写模型 ID。");
@@ -26,6 +48,7 @@ export async function configureModel(config: AgentConfiguration): Promise<Config
   const api = config.provider === "openai-compatible"
     ? "openai-completions"
     : "openai-responses";
+  const reasoningConfiguration = configuredReasoning(config);
   runtime.registerProvider(PROVIDER_ID, {
     name: "VM Script Agent Provider",
     baseUrl: config.endpoint,
@@ -35,7 +58,7 @@ export async function configureModel(config: AgentConfiguration): Promise<Config
       id: config.model,
       name: config.model,
       api,
-      reasoning: config.provider === "openai-responses",
+      ...reasoningConfiguration,
       input: ["text", "image"],
       cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
       contextWindow: config.contextWindow,

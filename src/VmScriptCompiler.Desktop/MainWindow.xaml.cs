@@ -739,6 +739,7 @@ public partial class MainWindow : Window
             SettingsStatusText.Foreground = Brushes.Firebrick;
             return;
         }
+        var previousSettings = _settings;
         _settings = new DesktopSettings
         {
             Version = 2,
@@ -756,7 +757,33 @@ public partial class MainWindow : Window
         SettingsStatusText.Text = "配置已加密保存，正在重启 Agent…";
         SettingsStatusText.Foreground = Brushes.DarkGray;
         await StartAgentAsync();
-        SettingsStatusText.Text = _agent is { IsRunning: true } ? "Agent 已使用新配置连接。" : "Agent 连接失败，请查看主界面提示。";
+        var providerChanged =
+            !string.Equals(previousSettings.AiProvider, _settings.AiProvider, StringComparison.OrdinalIgnoreCase) ||
+            !string.Equals(previousSettings.AiEndpoint.TrimEnd('/'), _settings.AiEndpoint.TrimEnd('/'), StringComparison.OrdinalIgnoreCase) ||
+            !string.Equals(previousSettings.AiModel, _settings.AiModel, StringComparison.Ordinal);
+        if (providerChanged && _agent is { IsRunning: true })
+        {
+            try
+            {
+                var snapshot = await _agent.NewSessionAsync();
+                MessagesPanel.Children.Clear();
+                WelcomePanel.Visibility = Visibility.Visible;
+                RenderSnapshot(snapshot);
+                await RefreshHistoryAsync();
+            }
+            catch (Exception error)
+            {
+                SettingsStatusText.Text = "新 Provider 已连接，但创建独立会话失败。";
+                SettingsStatusText.Foreground = Brushes.Firebrick;
+                ShowFriendlyError(error);
+                return;
+            }
+        }
+        SettingsStatusText.Text = _agent is { IsRunning: true }
+            ? providerChanged
+                ? "Agent 已使用新协议/模型连接，并创建了独立新会话。"
+                : "Agent 已使用新配置连接。"
+            : "Agent 连接失败，请查看主界面提示。";
         SettingsStatusText.Foreground = _agent is { IsRunning: true } ? Brushes.SeaGreen : Brushes.Firebrick;
     }
 

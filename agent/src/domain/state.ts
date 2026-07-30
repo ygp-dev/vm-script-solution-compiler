@@ -165,8 +165,6 @@ export class VmDomainState {
         "Requirement 尚未通过确定性校验。",
       ]);
     } else {
-      this.state.requirementRetry.consecutiveSameFailures = 0;
-      this.state.requirementRetry.lastFailureSignature = undefined;
       this.state.requirementRetry.blocked = false;
       this.state.unresolvedQuestions = this.state.unresolvedQuestions.filter(
         (question) =>
@@ -232,6 +230,9 @@ export class VmDomainState {
     this.state.completion.solutionBuilt = true;
     this.state.completion.offlineValidationPassed = false;
     this.state.completion.userValidated = false;
+    this.state.requirementRetry.consecutiveSameFailures = 0;
+    this.state.requirementRetry.lastFailureSignature = undefined;
+    this.state.requirementRetry.blocked = false;
     this.addArtifact("task-directory", stringValue(record.taskDirectory));
     this.addArtifact("solution", stringValue(record.solutionFile));
     this.addArtifact("report", stringValue(record.reportFile));
@@ -289,7 +290,29 @@ export class VmDomainState {
       recoverability,
       timestampUtc: now(),
     };
-    this.state.phase = recoverability === "automatic" ? this.state.phase : "blocked";
+    if (recoverability === "automatic") {
+      const signature = `${code}|${message}`;
+      if (signature === this.state.requirementRetry.lastFailureSignature) {
+        this.state.requirementRetry.consecutiveSameFailures += 1;
+      } else {
+        this.state.requirementRetry.consecutiveSameFailures = 1;
+        this.state.requirementRetry.lastFailureSignature = signature;
+      }
+      const retryBlocked =
+        this.state.requirementRetry.turnValidationAttempts >= 5 ||
+        this.state.requirementRetry.consecutiveSameFailures >= 3;
+      this.state.requirementRetry.blocked = retryBlocked;
+      if (retryBlocked) {
+        this.state.phase = "blocked";
+        this.state.unresolvedQuestions = unique([
+          ...this.state.unresolvedQuestions,
+          `Requirement 自动修订已停止：本回合校验 ${this.state.requirementRetry.turnValidationAttempts} 次，` +
+          `同一编译错误连续 ${this.state.requirementRetry.consecutiveSameFailures} 次。`,
+        ]);
+      }
+    } else {
+      this.state.phase = "blocked";
+    }
     if (recoverability !== "automatic") {
       this.state.unresolvedQuestions = unique([
         ...this.state.unresolvedQuestions,

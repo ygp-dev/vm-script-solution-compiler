@@ -683,11 +683,14 @@
                                     <TextBlock FontSize="15" FontWeight="SemiBold" Text="模型" />
                                     <TextBlock Margin="0,4,0,18" FontSize="11.5" Foreground="{StaticResource TextMuted}"
                                                Text="用于把自然语言转换为 Requirement，模型不能直接编辑 SOL。" />
-                                    <TextBlock Style="{StaticResource FieldLabel}" Text="Provider 协议" />
+                                    <TextBlock Style="{StaticResource FieldLabel}" Text="API 协议（决定请求路径）" />
                                     <ComboBox x:Name="SettingsProviderChoice" Height="38" Margin="0,0,0,15" Padding="7">
                                         <ComboBoxItem Tag="openai-responses" Content="OpenAI Responses（推荐）" />
                                         <ComboBoxItem Tag="openai-compatible" Content="OpenAI-compatible Chat Completions" />
                                     </ComboBox>
+                                    <TextBlock Margin="0,-9,0,15" Foreground="#8B8B8B" FontSize="11"
+                                               TextWrapping="Wrap"
+                                               Text="Responses 调用 /responses；DeepSeek 等兼容服务请选择 Chat Completions，调用 /chat/completions。当前只保存一套正在使用的地址、模型和 Key。DeepSeek 的低/中/高均映射为 high，很高映射为 max。" />
                                     <TextBlock Style="{StaticResource FieldLabel}" Text="API 基础地址" />
                                     <TextBox x:Name="SettingsEndpointText" Style="{StaticResource SettingsInput}"
                                              Margin="0,0,0,15" ToolTip="例如 https://api.openai.com/v1，不要填写 /responses" />
