@@ -1,5 +1,5 @@
 import { InMemoryCredentialStore, type Model } from "@earendil-works/pi-ai";
-import { ModelRuntime } from "@earendil-works/pi-coding-agent";
+import { ModelRuntime } from "../node_modules/@earendil-works/pi-coding-agent/dist/core/model-runtime.js";
 import type { AgentConfiguration } from "./config.js";
 
 const PROVIDER_ID = "vm-configured-provider";

@@ -1,15 +1,17 @@
 import fs from "node:fs";
 import path from "node:path";
 import {
-  createAgentSession,
-  DefaultResourceLoader,
-  SessionManager,
   type AgentSession,
   type AgentSessionEvent,
+} from "../node_modules/@earendil-works/pi-coding-agent/dist/core/agent-session.js";
+import { DefaultResourceLoader } from "../node_modules/@earendil-works/pi-coding-agent/dist/core/resource-loader.js";
+import {
+  SessionManager,
   type SessionInfo,
-} from "@earendil-works/pi-coding-agent";
+} from "../node_modules/@earendil-works/pi-coding-agent/dist/core/session-manager.js";
+import { createAgentSession } from "../node_modules/@earendil-works/pi-coding-agent/dist/core/sdk.js";
 import type { Model } from "@earendil-works/pi-ai";
-import type { ModelRuntime } from "@earendil-works/pi-coding-agent";
+import type { ModelRuntime } from "../node_modules/@earendil-works/pi-coding-agent/dist/core/model-runtime.js";
 import type { AgentConfiguration } from "./config.js";
 import { VmDomainState } from "./domain/state.js";
 import type { TaskContextInput, VmTaskState } from "./domain/types.js";

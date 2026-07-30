@@ -8,6 +8,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AssemblyName>vm-script-compiler-desktop</AssemblyName>
+    <ApplicationIcon>..\..\assets\branding\vm-script-compiler.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\VmScriptCompiler.Core\VmScriptCompiler.Core.csproj" />

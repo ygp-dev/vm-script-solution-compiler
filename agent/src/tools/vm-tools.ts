@@ -1,4 +1,7 @@
-import { defineTool, type ToolDefinition } from "@earendil-works/pi-coding-agent";
+import {
+  defineTool,
+  type ToolDefinition,
+} from "../../node_modules/@earendil-works/pi-coding-agent/dist/core/extensions/types.js";
 import { Type } from "typebox";
 import { VmDomainState } from "../domain/state.js";
 import { DomainWorkerClient, DomainWorkerError } from "./domain-worker-client.js";

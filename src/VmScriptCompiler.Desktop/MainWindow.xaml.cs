@@ -37,9 +37,11 @@ public partial class MainWindow : Window
         var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         var defaultOutput = Path.Combine(documents, "VM Script Compiler", "outputs");
         _settings = _stateStore.LoadSettings(defaultOutput);
+        _artifacts = _stateStore.LoadArtifactIndex();
         OutputPathText.Text = _settings.OutputDirectory;
         LoadSettingsForm();
         SetWorkspace(ComposerTab, "新任务");
+        ApplyArtifactFilter();
     }
 
     internal void PrepareUiSnapshot(string? requestedTab, bool conversationPreview)
@@ -71,9 +73,13 @@ public partial class MainWindow : Window
 
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
-        await RefreshArtifactIndexAsync();
-        await DetectEnvironmentAsync();
-        await StartAgentAsync();
+        var agentTask = StartAgentAsync();
+        await Task.Yield();
+        var secondaryStartupTasks = Task.WhenAll(
+            RefreshArtifactIndexAsync(),
+            DetectEnvironmentAsync());
+        await agentTask;
+        await secondaryStartupTasks;
     }
 
     private async Task StartAgentAsync()

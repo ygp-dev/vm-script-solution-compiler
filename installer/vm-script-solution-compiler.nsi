@@ -50,8 +50,8 @@ VIAddVersionKey /LANG=2052 "ProductVersion" "${VERSION}"
 VIAddVersionKey /LANG=2052 "LegalCopyright" "Copyright (c) ${PRODUCT_PUBLISHER}"
 
 !define MUI_ABORTWARNING
-!define MUI_ICON "${NSISDIR}\Contrib\Graphics\Icons\modern-install.ico"
-!define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\modern-uninstall.ico"
+!define MUI_ICON "${__FILEDIR__}\..\assets\branding\vm-script-compiler.ico"
+!define MUI_UNICON "${__FILEDIR__}\..\assets\branding\vm-script-compiler.ico"
 !define MUI_FINISHPAGE_RUN "$INSTDIR\Desktop\${PRODUCT_EXE}"
 !define MUI_FINISHPAGE_RUN_TEXT "启动 ${PRODUCT_NAME}"
 !define MUI_FINISHPAGE_LINK "打开 GitHub 项目主页"
