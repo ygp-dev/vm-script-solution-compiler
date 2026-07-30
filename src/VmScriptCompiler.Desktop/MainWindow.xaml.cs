@@ -548,6 +548,58 @@ public partial class MainWindow : Window
 
     private async void RefreshHistory_Click(object sender, RoutedEventArgs e) => await RefreshHistoryAsync();
 
+    private async void ClearHistory_Click(object sender, RoutedEventArgs e)
+    {
+        if (_agent is null || !_agent.IsRunning)
+        {
+            SidebarStatusText.Text = "Agent 未连接，无法清理历史对话。";
+            return;
+        }
+
+        var count = RecentConversationList.Items.Count;
+        if (count == 0)
+        {
+            SidebarStatusText.Text = "没有可清理的历史对话。";
+            return;
+        }
+
+        var confirmation = System.Windows.MessageBox.Show(
+            this,
+            $"确定清理全部 {count} 条历史对话吗？\n\n此操作不会删除已生成的 SOL、报告或其他结果产物。",
+            "清理历史对话",
+            MessageBoxButton.YesNo,
+            MessageBoxImage.Warning,
+            MessageBoxResult.No);
+        if (confirmation != MessageBoxResult.Yes) return;
+
+        try
+        {
+            var result = await _agent.ClearSessionsAsync();
+            var deleted = result.TryGetProperty("deleted", out var deletedElement)
+                ? deletedElement.GetInt32()
+                : count;
+            if (result.TryGetProperty("snapshot", out var snapshot)) RenderSnapshot(snapshot);
+            _conversationTitle = "新任务";
+            SetWorkspace(ComposerTab, "新任务");
+            MessagesPanel.Children.Clear();
+            WelcomePanel.Visibility = Visibility.Visible;
+            PromptText.Clear();
+            BaseSolutionText.Clear();
+            CreateModeRadio.IsChecked = true;
+            SuccessPanel.Visibility = Visibility.Collapsed;
+            FriendlyStatus.Visibility = Visibility.Collapsed;
+            _lastSolution = _lastReport = _lastDependencyDirectory = null;
+            WorkspacePhaseText.Text = "draft";
+            await RefreshHistoryAsync();
+            SidebarStatusText.Text = $"已清理 {deleted} 条历史对话";
+            PromptText.Focus();
+        }
+        catch (Exception error)
+        {
+            ShowFriendlyError(error);
+        }
+    }
+
     private async Task RefreshHistoryAsync()
     {
         if (_agent is null || !_agent.IsRunning) return;

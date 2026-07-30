@@ -119,6 +119,9 @@ internal sealed class AgentProcessClient : IAsyncDisposable
     public Task<JsonElement> ListSessionsAsync(CancellationToken cancellationToken = default)
         => SendAsync("list_sessions", new { }, cancellationToken);
 
+    public Task<JsonElement> ClearSessionsAsync(CancellationToken cancellationToken = default)
+        => SendAsync("clear_sessions", new { }, cancellationToken);
+
     public Task<JsonElement> NewSessionAsync(CancellationToken cancellationToken = default)
         => SendAsync("new_session", new { }, cancellationToken);
 

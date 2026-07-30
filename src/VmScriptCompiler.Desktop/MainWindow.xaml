@@ -272,8 +272,13 @@
 
                 <Grid Grid.Row="3" Margin="10,19,2,7">
                     <TextBlock Style="{StaticResource SectionLabel}" VerticalAlignment="Center" Text="最近任务" />
-                    <Button HorizontalAlignment="Right" Style="{StaticResource IconButton}" Width="28" Height="28"
-                            FontSize="13" Content="↻" ToolTip="刷新" Click="RefreshHistory_Click" />
+                    <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                        <Button Style="{StaticResource IconButton}" Width="28" Height="28" Margin="0,0,3,0"
+                                FontSize="12" Foreground="{StaticResource Danger}" Content="清"
+                                ToolTip="清理全部历史对话" Click="ClearHistory_Click" />
+                        <Button Style="{StaticResource IconButton}" Width="28" Height="28"
+                                FontSize="13" Content="↻" ToolTip="刷新" Click="RefreshHistory_Click" />
+                    </StackPanel>
                 </Grid>
 
                 <ListBox x:Name="RecentConversationList" Grid.Row="4"

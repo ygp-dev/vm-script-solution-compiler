@@ -136,6 +136,38 @@ export class VmAgentRuntime {
     return await SessionManager.list(this.config.repositoryRoot, this.config.sessionsDirectory);
   }
 
+  async clearSessions(): Promise<number> {
+    this.ensureIdle();
+    const sessions = await this.listSessions();
+    const sessionsRoot = path.resolve(this.config.sessionsDirectory);
+    const files = sessions.map((session) => path.resolve(session.path));
+    for (const file of files) {
+      const relative = path.relative(sessionsRoot, file);
+      if (relative === ".." || relative.startsWith(".." + path.sep) || path.isAbsolute(relative)) {
+        throw Object.assign(
+          new Error(`Refusing to delete a session outside the Agent session directory: ${file}`),
+          { code: "SESSION_PATH_INVALID" },
+        );
+      }
+    }
+
+    await this.replaceSession(SessionManager.create(
+      this.config.repositoryRoot,
+      this.config.sessionsDirectory,
+    ));
+
+    let deleted = 0;
+    for (const file of files) {
+      try {
+        fs.unlinkSync(file);
+        deleted++;
+      } catch (error) {
+        if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+      }
+    }
+    return deleted;
+  }
+
   recordUserValidation(note: string): VmTaskState {
     const state = this.requireDomain();
     state.recordUserValidation(note);

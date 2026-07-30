@@ -49,6 +49,11 @@ export class AgentRpcHost {
         case "list_sessions":
           this.success(id, await this.runtime.listSessions());
           return;
+        case "clear_sessions": {
+          const deleted = await this.runtime.clearSessions();
+          this.success(id, { deleted, snapshot: this.runtime.snapshot() });
+          return;
+        }
         case "new_session":
           await this.runtime.newSession();
           this.success(id, this.runtime.snapshot());
