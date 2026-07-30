@@ -76,6 +76,19 @@ foreach ($product in $products) {
         }
         finally { Pop-Location }
 
+        $nodeModules = Join-Path $agentPayload 'node_modules'
+        foreach ($unusedProvider in Get-ChildItem -LiteralPath $nodeModules -Recurse -Directory -Filter '@mistralai' -ErrorAction SilentlyContinue) {
+            if (-not $unusedProvider.FullName.StartsWith($nodeModules + '\', [StringComparison]::OrdinalIgnoreCase)) {
+                throw "Unexpected provider directory outside Agent payload: $($unusedProvider.FullName)"
+            }
+            Remove-Item -LiteralPath $unusedProvider.FullName -Recurse -Force
+        }
+        foreach ($developmentFile in Get-ChildItem -LiteralPath $nodeModules -Recurse -File -ErrorAction SilentlyContinue |
+            Where-Object { $_.Name.EndsWith('.map', [StringComparison]::OrdinalIgnoreCase) -or
+                           $_.Name.EndsWith('.ts', [StringComparison]::OrdinalIgnoreCase) }) {
+            [IO.File]::Delete($developmentFile.FullName)
+        }
+
         $runtime = Join-Path $staging 'runtime'
         New-Item -ItemType Directory -Force -Path $runtime | Out-Null
         Copy-Item -LiteralPath $node -Destination (Join-Path $runtime 'node.exe')

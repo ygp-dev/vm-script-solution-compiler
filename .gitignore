@@ -2,6 +2,7 @@
 **/obj/
 .vs/
 dist/
+artifacts/
 .tmp-m1-output/
 outputs/
 agent/node_modules/

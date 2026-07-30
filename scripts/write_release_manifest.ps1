@@ -27,6 +27,7 @@ foreach ($product in $products) {
         $integrityFiles += @(
             (Join-Path $output 'runtime\node.exe'),
             (Join-Path $output 'agent\dist\main.js'),
+            (Join-Path $output 'agent\package.json'),
             (Join-Path $output 'agent\package-lock.json'),
             (Join-Path $output 'agent\resources\SYSTEM.md'),
             (Join-Path $output 'worker\vm-script-domain-worker.exe'),
@@ -35,6 +36,7 @@ foreach ($product in $products) {
         $integrityFiles += @(
             Get-ChildItem (Join-Path $output 'agent\dist') -Recurse -File
             Get-ChildItem (Join-Path $output 'agent\resources') -Recurse -File
+            Get-ChildItem (Join-Path $output 'agent\node_modules') -Recurse -File
         )
     }
     $payloadLines = @($integrityFiles | Sort-Object -Unique | ForEach-Object {
@@ -59,8 +61,11 @@ if ($desktopCore -ne $workerCore -or $desktopCore -ne $mcpCore) { throw 'Desktop
 
 $nodeVersion = & (Join-Path $dist 'Desktop\runtime\node.exe') --version
 $agentPayloadFiles = @(
+    Get-Item (Join-Path $dist 'Desktop\agent\package.json')
+    Get-Item (Join-Path $dist 'Desktop\agent\package-lock.json')
     Get-ChildItem (Join-Path $dist 'Desktop\agent\dist') -Recurse -File
     Get-ChildItem (Join-Path $dist 'Desktop\agent\resources') -Recurse -File
+    Get-ChildItem (Join-Path $dist 'Desktop\agent\node_modules') -Recurse -File
 )
 $agentPayloadLines = @($agentPayloadFiles | Sort-Object FullName | ForEach-Object {
     $_.FullName.Substring((Join-Path $dist 'Desktop\agent').Length + 1).Replace('\','/') +
