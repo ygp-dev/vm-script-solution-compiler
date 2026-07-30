@@ -37,9 +37,9 @@ if (-not (Test-Path -LiteralPath $gh -PathType Leaf)) {
     if (-not $command) { throw 'GitHub CLI was not found.' }
     $gh = $command.Source
 }
-$existing = & $gh release view $tag --repo $repo --json tagName 2>$null
-if ($LASTEXITCODE -eq 0) { throw "GitHub Release already exists: $tag" }
-$global:LASTEXITCODE = 0
+$releaseTags = @(& $gh release list --repo $repo --limit 100 --json tagName --jq '.[].tagName')
+if ($LASTEXITCODE -ne 0) { throw 'Unable to query existing GitHub Releases.' }
+if ($releaseTags -contains $tag) { throw "GitHub Release already exists: $tag" }
 
 $arguments = @(
     'release', 'create', $tag,
