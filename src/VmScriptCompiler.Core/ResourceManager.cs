@@ -127,4 +127,8 @@ public static class SolArchiveValidator
             if (!names.Contains(required, StringComparer.Ordinal)) throw new CompilerException("SOL_VALIDATION_FAILED", "SOL is missing required entry: " + required);
     }
 }
-public sealed class CompilerException(string code, string message) : Exception(message) { public string Code { get; } = code; }
+public sealed class CompilerException(string code, string message, object? details = null) : Exception(message)
+{
+    public string Code { get; } = code;
+    public object? Details { get; } = details;
+}

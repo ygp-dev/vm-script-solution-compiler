@@ -19,7 +19,7 @@ public sealed class RequirementValidator
         "runProcedure", "continuousProcedure", "stopProcedure", "setContinuousInterval",
         "startGlobalCommunication", "sendCommunication", "log", "sleep", "bytesToPointset",
         "setProcedureInput", "getGlobalVariable", "setGlobalVariable", "getLocalVariable", "setLocalVariable",
-        "saveSolution", "loadSolution"
+        "saveSolution", "loadSolution", "dxfRender"
     ];
 
     public RequirementValidationResult Validate(JsonDocument document)
@@ -192,7 +192,7 @@ public sealed class RequirementValidator
             var itemPath = $"{path}[{index}]";
             Require(operation.ValueKind == JsonValueKind.Object, "REQUIREMENT_SCHEMA_INVALID", "Operation must be an object.", itemPath, issues);
             if (operation.ValueKind != JsonValueKind.Object) continue;
-            CheckOnly(operation, ["kind", "procedure", "module", "parameter", "result", "valueType", "value", "condition", "deviceId", "addressId", "milliseconds", "dataType", "when", "onError"], itemPath, issues);
+            CheckOnly(operation, ["kind", "procedure", "module", "parameter", "result", "valueType", "value", "condition", "deviceId", "addressId", "milliseconds", "dataType", "pathInput", "widthInput", "heightInput", "imageOutput", "successOutput", "errorOutput", "entityCountOutput", "renderedCountOutput", "when", "onError"], itemPath, issues);
             Require(OperationKinds.Contains(String(operation, "kind") ?? ""), "REQUIREMENT_SCHEMA_INVALID", "Operation kind is invalid.", itemPath + ".kind", issues);
             var kind = String(operation, "kind");
             var parameter = String(operation, "parameter");
@@ -249,13 +249,31 @@ public sealed class RequirementValidator
                 Require(Int(operation, "deviceId") is >= 0, "OPERATION_FIELD_REQUIRED", "sendCommunication requires deviceId.", itemPath + ".deviceId", issues);
                 Require(String(operation, "dataType") is null or "string" or "int" or "float" or "byte", "REQUIREMENT_SCHEMA_INVALID", "sendCommunication dataType is invalid.", itemPath + ".dataType", issues);
             }
+            if (kind == "dxfRender")
+            {
+                Require(carrier == "csharp-module", "OPERATION_NOT_SUPPORTED_BY_CARRIER", "dxfRender requires csharp-module.", itemPath + ".kind", issues);
+                Require(!hasSource, "SOURCE_OPERATIONS_CONFLICT", "dxfRender is deterministic and cannot be combined with explicit source.", itemPath, issues);
+                RequirePort(operation, "pathInput", "string", inputTypes, itemPath, issues);
+                RequirePort(operation, "widthInput", "int", inputTypes, itemPath, issues);
+                RequirePort(operation, "heightInput", "int", inputTypes, itemPath, issues);
+                RequirePort(operation, "imageOutput", "image", outputTypes, itemPath, issues);
+                RequirePort(operation, "successOutput", "bool", outputTypes, itemPath, issues);
+                RequirePort(operation, "errorOutput", "string", outputTypes, itemPath, issues);
+                RequirePort(operation, "entityCountOutput", "int", outputTypes, itemPath, issues);
+                RequirePort(operation, "renderedCountOutput", "int", outputTypes, itemPath, issues);
+                Require(InputDefaultInt(script, String(operation, "widthInput")) == 1920, "DXF_RENDER_DEFAULT_SIZE_INVALID", "dxfRender width input default must be 1920.", itemPath + ".widthInput", issues);
+                Require(InputDefaultInt(script, String(operation, "heightInput")) == 1080, "DXF_RENDER_DEFAULT_SIZE_INVALID", "dxfRender height input default must be 1080.", itemPath + ".heightInput", issues);
+                var hasNetDxf = Property(script, "dependencies") is { ValueKind: JsonValueKind.Array } dependencyArray &&
+                    dependencyArray.EnumerateArray().Any(x => string.Equals(String(x, "name"), "netDxf.dll", StringComparison.OrdinalIgnoreCase) || string.Equals(String(x, "name"), "netDxf", StringComparison.OrdinalIgnoreCase));
+                Require(hasNetDxf, "DXF_RENDER_DEPENDENCY_REQUIRED", "dxfRender requires a declared netDxf.dll dependency.", itemPath, issues);
+            }
             if (Property(operation, "condition") is { } condition) ValidateExpression(condition, inputs, results, itemPath + ".condition", 0, issues);
             if (Property(operation, "condition") is { } typedCondition && InferExpressionType(typedCondition, inputTypes, resultTypes) is { } conditionType && conditionType != "bool")
                 issues.Add(new("EXPRESSION_TYPE_MISMATCH", "Operation condition must be boolean; actual type is " + conditionType + ".", itemPath + ".condition"));
             if (!hasSource)
             {
                 var supported = carrier switch {
-                    "csharp-module" => kind is "getModule" or "setOutput" or "setModuleValue" or "getModuleValue" or "getModuleArray" or "getModuleParam" or "getGlobalVariable" or "setGlobalVariable" or "getLocalVariable" or "setLocalVariable" or "log" or "sleep" or "bytesToPointset",
+                    "csharp-module" => kind is "getModule" or "setOutput" or "setModuleValue" or "getModuleValue" or "getModuleArray" or "getModuleParam" or "getGlobalVariable" or "setGlobalVariable" or "getLocalVariable" or "setLocalVariable" or "log" or "sleep" or "bytesToPointset" or "dxfRender",
                     "python-module" => kind is "setOutput" or "getGlobalVariable" or "setGlobalVariable" or "getLocalVariable" or "setLocalVariable" or "log" or "sleep",
                     "global-csharp" => kind is "runProcedure" or "continuousProcedure" or "stopProcedure" or "setContinuousInterval" or "startGlobalCommunication" or "sendCommunication" or "setProcedureInput" or "saveSolution" or "loadSolution" or "getGlobalVariable" or "setGlobalVariable" or "log" or "sleep",
                     _ => false
@@ -275,6 +293,22 @@ public sealed class RequirementValidator
                 if (valueType is not null) resultTypes[result] = valueType;
             }
         }
+    }
+
+    private static void RequirePort(JsonElement operation, string field, string expectedType, Dictionary<string, string> ports, string path, List<ValidationIssue> issues)
+    {
+        var name = String(operation, field);
+        Require(!string.IsNullOrWhiteSpace(name), "OPERATION_FIELD_REQUIRED", "dxfRender requires " + field + ".", path + "." + field, issues);
+        if (!string.IsNullOrWhiteSpace(name))
+            Require(ports.TryGetValue(name, out var actual) && actual == expectedType, "DXF_RENDER_PORT_INVALID", field + " must reference a declared " + expectedType + " port.", path + "." + field, issues);
+    }
+
+    private static int? InputDefaultInt(JsonElement script, string? name)
+    {
+        if (name is null || Property(script, "inputs") is not { ValueKind: JsonValueKind.Array } inputs) return null;
+        foreach (var input in inputs.EnumerateArray())
+            if (String(input, "name") == name && Property(input, "default") is { ValueKind: JsonValueKind.Number } value && value.TryGetInt32(out var result)) return result;
+        return null;
     }
 
     private static string? InferExpressionType(JsonElement expression, Dictionary<string, string> inputs, Dictionary<string, string> results)

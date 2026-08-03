@@ -93,16 +93,16 @@ test("VM domain state stops repeated compiler-error loops after valid schema che
     scripts: [],
   });
 
-  for (let attempt = 0; attempt < 3; attempt += 1) {
+  for (let attempt = 0; attempt < 2; attempt += 1) {
     state.recordRequirementValidation({ ok: true, issues: [] });
     state.recordError(
       "SCRIPT_CONTRACT_INVALID",
-      "Generated source does not satisfy the csharp-module entry contract.",
+      `Generated source attempt ${attempt} does not satisfy the csharp-module entry contract.`,
     );
   }
 
-  assert.equal(state.snapshot().requirementRetry.turnValidationAttempts, 3);
-  assert.equal(state.snapshot().requirementRetry.consecutiveSameFailures, 3);
+  assert.equal(state.snapshot().requirementRetry.turnValidationAttempts, 2);
+  assert.equal(state.snapshot().requirementRetry.consecutiveSameFailures, 2);
   assert.equal(state.snapshot().requirementRetry.blocked, true);
   assert.equal(state.snapshot().phase, "blocked");
   assert.throws(() => state.assertRequirementRetryAllowed(), /自动修订已达到上限/);
@@ -117,7 +117,7 @@ test("VM domain state limits repeated global-script contract failures", () => {
     scripts: [],
   });
 
-  for (let attempt = 0; attempt < 3; attempt += 1) {
+  for (let attempt = 0; attempt < 2; attempt += 1) {
     state.recordRequirementValidation({ ok: true, issues: [] });
     state.recordError(
       "GLOBAL_SCRIPT_CONTRACT_INVALID",
@@ -126,7 +126,7 @@ test("VM domain state limits repeated global-script contract failures", () => {
   }
 
   assert.equal(state.snapshot().requirementRetry.blocked, true);
-  assert.equal(state.snapshot().requirementRetry.consecutiveSameFailures, 3);
+  assert.equal(state.snapshot().requirementRetry.consecutiveSameFailures, 2);
   assert.throws(() => state.assertRequirementRetryAllowed(), /自动修订已达到上限/);
 });
 
@@ -151,6 +151,48 @@ test("VM domain state rejects unrelated task-name experiments in one user turn",
     task: { name: "next-user-task", mode: "create", vmVersion: "4.4.0" },
     scripts: [],
   }));
+});
+
+test("VM domain state clears superseded compiler diagnostics on Requirement revision", () => {
+  const state = new VmDomainState(SessionManager.inMemory());
+  state.setTaskContext({ mode: "create" });
+  const requirement = {
+    schemaVersion: "1.0",
+    task: { name: "dependency-fix", mode: "create", vmVersion: "4.4.0" },
+    scripts: [],
+  };
+  state.recordRequirement(requirement);
+  state.recordError(
+    "DEPENDENCY_TARGET_FRAMEWORK_INCOMPATIBLE",
+    "External DLL targets .NET 6.",
+  );
+  assert.equal(state.snapshot().unresolvedQuestions.length, 1);
+
+  state.setTaskContext({ mode: "create" });
+  state.recordRequirement(requirement);
+  assert.deepEqual(state.snapshot().unresolvedQuestions, []);
+});
+
+test("VM domain state caps cumulative revisions for the same task across user turns", () => {
+  const state = new VmDomainState(SessionManager.inMemory());
+  const requirement = {
+    schemaVersion: "1.0",
+    task: { name: "same-dxf-task", mode: "create", vmVersion: "4.4.0" },
+    scripts: [],
+  };
+  for (let revision = 0; revision < 6; revision += 1) {
+    state.setTaskContext({ mode: "create" });
+    state.recordRequirement(requirement);
+  }
+  assert.equal(state.snapshot().requirementRetry.taskRevisions, 6);
+  state.setTaskContext({ mode: "create" });
+  assert.throws(() => state.recordRequirement(requirement), /累计最多 6 个版本/);
+
+  assert.doesNotThrow(() => state.recordRequirement({
+    ...requirement,
+    task: { ...requirement.task, name: "genuinely-new-task" },
+  }));
+  assert.equal(state.snapshot().requirementRetry.taskRevisions, 1);
 });
 
 test("VM domain state persists one snapshot for a successful batched tool", () => {

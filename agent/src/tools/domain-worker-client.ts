@@ -9,6 +9,7 @@ interface WorkerResponse<T> {
   error?: {
     code: string;
     message: string;
+    details?: unknown;
   };
 }
 
@@ -22,6 +23,7 @@ export class DomainWorkerError extends Error {
   constructor(
     public readonly code: string,
     message: string,
+    public readonly details?: unknown,
   ) {
     super(message);
     this.name = "DomainWorkerError";
@@ -150,6 +152,7 @@ export class DomainWorkerClient {
     pending.reject(new DomainWorkerError(
       response.error?.code ?? "DOMAIN_WORKER_FAILED",
       response.error?.message ?? "Domain Worker command failed.",
+      response.error?.details,
     ));
   }
 

@@ -42,7 +42,7 @@ internal sealed class DomainWorker(CompilerFacade compiler)
             }
             catch (CompilerException error)
             {
-                response = Failure(id, error.Code, error.Message);
+                response = Failure(id, error.Code, error.Message, error.Details);
             }
             catch (JsonException error)
             {
@@ -256,11 +256,11 @@ internal sealed class DomainWorker(CompilerFacade compiler)
         timestampUtc = DateTime.UtcNow
     };
 
-    private static object Failure(JsonElement id, string code, string message) => new
+    private static object Failure(JsonElement id, string code, string message, object? details = null) => new
     {
         id = IdValue(id),
         ok = false,
-        error = new { code, message },
+        error = new { code, message, details },
         timestampUtc = DateTime.UtcNow
     };
 

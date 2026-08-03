@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace VmScriptCompiler.Core;
 
@@ -92,10 +93,55 @@ public sealed class ScriptPrecompiler(string vmRoot, DotNetDependencyResolution?
         try
         {
             var result = Run(info);
-            if (result.ExitCode != 0) throw new CompilerException("SCRIPT_PRECOMPILE_FAILED", id + " C# precompile failed: " + result.StandardOutput + result.StandardError);
+            if (result.ExitCode != 0)
+            {
+                var raw = result.StandardOutput + result.StandardError;
+                var diagnostics = ParseCSharpDiagnostics(raw);
+                throw new CompilerException(
+                    "SCRIPT_PRECOMPILE_FAILED",
+                    id + " C# precompile failed with " + diagnostics.Count + " structured diagnostic(s).",
+                    new {
+                        stage = "csharp-precompile",
+                        scriptId = id,
+                        compiler = "Framework64 csc",
+                        diagnostics,
+                        retryPolicy = "Fix only the reported symbol/signature. Do not guess alternative APIs repeatedly.",
+                        rawOutput = raw.Length <= 6000 ? raw : raw[..6000]
+                    });
+            }
             return result;
         }
         finally { if (File.Exists(output)) File.Delete(output); }
+    }
+
+    private static IReadOnlyList<object> ParseCSharpDiagnostics(string text)
+    {
+        var diagnostics = new List<object>();
+        var pattern = new Regex(@"^(?<file>.+?)\((?<line>\d+),(?<column>\d+)\):\s*(?<severity>error|warning)\s+(?<code>[A-Z]+\d+):\s*(?<message>.*)$", RegexOptions.IgnoreCase);
+        foreach (var line in text.Replace("\r\n", "\n", StringComparison.Ordinal).Split('\n', StringSplitOptions.RemoveEmptyEntries))
+        {
+            var match = pattern.Match(line.Trim());
+            if (!match.Success) continue;
+            var code = match.Groups["code"].Value;
+            diagnostics.Add(new {
+                file = match.Groups["file"].Value,
+                line = int.Parse(match.Groups["line"].Value, System.Globalization.CultureInfo.InvariantCulture),
+                column = int.Parse(match.Groups["column"].Value, System.Globalization.CultureInfo.InvariantCulture),
+                severity = match.Groups["severity"].Value.ToLowerInvariant(),
+                code,
+                category = code switch {
+                    "CS0246" or "CS0234" or "CS0012" or "CS1070" => "missing-type-or-reference",
+                    "CS0103" => "unknown-symbol",
+                    "CS1061" => "missing-member",
+                    "CS1729" => "constructor-signature-mismatch",
+                    _ => "compiler-diagnostic"
+                },
+                message = match.Groups["message"].Value
+            });
+        }
+        if (diagnostics.Count == 0)
+            diagnostics.Add(new { file = (string?)null, line = 0, column = 0, severity = "error", code = "CSC", category = "compiler-output-unparsed", message = text.Trim() });
+        return diagnostics;
     }
 
     private object CompilePython(ScriptRequirement requirement, string source)

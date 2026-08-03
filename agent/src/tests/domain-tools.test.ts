@@ -112,6 +112,38 @@ test("Requirement update normalizes built-in C# Script.Methods references", asyn
   assert.deepEqual(script.dependencies, []);
 });
 
+test("Domain tool failures return compact structured results", async () => {
+  const outputDirectory = fs.mkdtempSync(path.join(os.tmpdir(), "vm-agent-error-"));
+  const state = new VmDomainState(SessionManager.inMemory(repositoryRoot));
+  const worker = new DomainWorkerClient({ workerPath, repositoryRoot });
+  const tools = createVmTools(state, worker);
+  const requirement = JSON.parse(fs.readFileSync(
+    path.join(repositoryRoot, "tests", "fixtures", "m3-shell-create.json"),
+    "utf8",
+  )) as Record<string, unknown>;
+  const task = requirement.task as Record<string, unknown>;
+  task.mode = "patch";
+  task.baseSolution = path.join(repositoryRoot, "missing-base.sol");
+
+  try {
+    state.setTaskContext({
+      mode: "patch",
+      baseSolution: String(task.baseSolution),
+      outputDirectory,
+    });
+    await invoke(tools, "vm_update_requirement", { requirement });
+    const result = await invoke(tools, "vm_compile_solution", {}) as {
+      details?: { ok?: boolean; error?: { code?: string; message?: string } };
+    };
+    assert.equal(result.details?.ok, false);
+    assert.ok(result.details?.error?.code);
+    assert.ok((result.details?.error?.message?.length ?? 0) <= 3_030);
+  } finally {
+    await worker.dispose();
+    fs.rmSync(outputDirectory, { recursive: true, force: true });
+  }
+});
+
 async function invoke(
   tools: ToolDefinition[],
   name: string,

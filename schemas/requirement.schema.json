@@ -84,6 +84,7 @@
             "setGlobalVariable",
             "getLocalVariable",
             "setLocalVariable",
+            "dxfRender",
             "saveSolution",
             "loadSolution"
           ]
@@ -99,6 +100,14 @@
         "addressId": { "type": "integer", "minimum": -1 },
         "milliseconds": { "type": "integer", "minimum": 0 },
         "dataType": { "enum": ["string", "int", "float", "byte"] },
+        "pathInput": { "type": "string" },
+        "widthInput": { "type": "string" },
+        "heightInput": { "type": "string" },
+        "imageOutput": { "type": "string" },
+        "successOutput": { "type": "string" },
+        "errorOutput": { "type": "string" },
+        "entityCountOutput": { "type": "string" },
+        "renderedCountOutput": { "type": "string" },
         "when": { "type": "string" },
         "onError": { "enum": ["fail", "continue", "set-output-failed"] }
       }

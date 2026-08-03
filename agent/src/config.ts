@@ -76,7 +76,9 @@ export function loadConfiguration(args: string[]): AgentConfiguration {
     model,
     apiKey,
     thinkingLevel,
-    contextWindow: positiveInteger(process.env.VM_SCRIPT_AI_CONTEXT_WINDOW, 128_000),
+    // Pi compacts at contextWindow - 16K. Keep long source-repair sessions
+    // below roughly 64K tokens instead of letting them grow beyond 100K.
+    contextWindow: positiveInteger(process.env.VM_SCRIPT_AI_CONTEXT_WINDOW, 80_000),
     maxTokens: positiveInteger(process.env.VM_SCRIPT_AI_MAX_TOKENS, 32_768),
   };
 }

@@ -24,7 +24,7 @@ static class Cli
             Console.WriteLine(JsonSerializer.Serialize(output, JsonDefaults.Options));
             return Task.FromResult(0);
         }
-        catch (CompilerException ex) { return Task.FromResult(Fail(ex.Code, ex.Message)); }
+        catch (CompilerException ex) { return Task.FromResult(Fail(ex.Code, ex.Message, ex.Details)); }
         catch (Exception ex) { return Task.FromResult(Fail("UNEXPECTED_ERROR", ex.Message)); }
     }
     private static object Plan(string spec)
@@ -55,6 +55,6 @@ static class Cli
         return new CompilerFacade(root).ValidateSolution(file);
     }
     private static string RequiredOption(string[] args, string name) => args.SkipWhile(x => x != name).Skip(1).FirstOrDefault() ?? throw new CompilerException("USAGE", "缺少参数 " + name);
-    private static int Fail(string code, string message) { Console.Error.WriteLine(JsonSerializer.Serialize(new { ok = false, error = code, message }, JsonDefaults.Options)); return 2; }
+    private static int Fail(string code, string message, object? details = null) { Console.Error.WriteLine(JsonSerializer.Serialize(new { ok = false, error = code, message, details }, JsonDefaults.Options)); return 2; }
     private static string Usage() => "用法: vm-script-compiler env|plan --spec <file>|build --spec <file> --output <dir>|patch --base <sol> --spec <file> --output <dir>|inspect --file <sol>|validate --file <sol>";
 }

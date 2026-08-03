@@ -30,12 +30,19 @@
 ## 错误恢复
 
 - Schema、脚本契约、依赖版本或明确的预编译错误可以修订 Requirement 后有限重试。
-- 单个用户回合最多允许 5 次 Requirement 校验；同一错误最多连续重试 3 次。达到限制后停止调用更新/校验工具，向用户报告最后错误。
+- 单个用户回合最多允许 3 次 Requirement 校验；同类编译错误最多连续修订 2 次。即使错误行号或缺失成员变化，`SCRIPT_PRECOMPILE_FAILED` 仍视为同类错误。达到限制后停止猜测 API，向用户报告最后错误并索取已验证样例。
+- 同一个 `task.name` 跨用户回合累计最多提交 6 个 Requirement 版本；新回合不会清零该计数。真正的新任务才使用新名称并重新计数。
 - `execution.mode` 只能是 `init`、`once`、`continuous`、`callback`；普通模块使用 `once`。
 - 原始脚本源码必须写在 script 顶层 `source`，`operations` 和 `dependencies` 也位于 script 顶层。不得把这些字段放进 `execution`。
 - Python 复杂类型缺少样本、目标模块/参数不存在、外部 DLL 来源不明确时必须暂停并询问用户。
 - 不要重复执行已经成功的写工具。
 - 同一错误重复发生时总结已尝试动作和证据，不要无限循环。
+- 第三方 DLL 的成员或类型首次预编译失败后，只允许依据明确错误修订一次；第二次仍为预编译错误时必须停止，不得继续轮换类名、属性名或构造函数。
+- 编译失败结果包含 `error.details.diagnostics[]`（file、line、column、code、category、message）。修订时只处理这些明确诊断，不得从压缩 message 猜 API。
+- VM 4.4 `Script.Methods.ImageData` 没有 `Bitmap` 构造函数、`FromBitmap`、`SetImage` 或 `Bitmap` 属性。需要转换时使用 `new ImageData(bitmapVariable)` 这一编译器可识别形式，由确定性 Core 展开为 RGB24 Buffer；不得自行猜转换 API。
+- netDxf 2023.11.10 的实体总入口是 `doc.Entities.All`；分类集合包含 `Polylines2D`、`Polylines3D`、`Splines`、`Inserts`、`Lines`、`Circles`、`Arcs`。二维多段线类型是 `Polyline2D`，顶点集合为 `Vertexes`，顶点坐标为 `Position`。不得使用旧版 `LwPolyline`、`LwPolylines` 或 `Polylines` 名称。
+- 图形渲染脚本必须覆盖输入文件实际存在的实体类型；若可绘制实体数为 0，应返回明确状态或错误，不能把纯背景图当作成功结果。
+- DXF 转图必须省略 `source`，使用确定性操作 `dxfRender`。输入端口固定映射 string 路径、int 宽度（默认 1920）、int 高度（默认 1080）；输出映射 image、bool 成功、string 错误、int 实体数、int 已绘制数，并声明 `netDxf.dll` 与 `System.Drawing.dll`。Core 已固定支持 Line、Circle、Arc、Ellipse、Polyline2D/3D、Spline、Insert/Block；不得让模型重新编写 DXF 绘制源码。
 - `global-csharp` 不是 ShellModule：固定入口为 `UserGlobalScript : UserGlobalMethods, IScriptMethods`、`int Init()`、`int Process()`；方案加载完成回调为 `override int InitAfterLoadSol()`。不得把 `ScriptMethods/IProcessMethods` 契约用于全局脚本。
 - 同一用户回合内不得通过更换 `task.name` 或脚本载体创建无关的试验方案；失败产物不得冒充当前需求的结果。
 

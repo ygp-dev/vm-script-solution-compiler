@@ -29,4 +29,11 @@ test("VM system prompt contains authoritative schema and all carrier Create exam
   assert.match(prompt, /dictProcessID\.Keys/);
   assert.match(prompt, /"lifecycle": \["InitSDK", "InitAfterLoadSol"\]/);
   assert.match(prompt, /不得使用 Script\.Methods、ScriptMethods、IProcessMethods/);
+  assert.match(prompt, /同类编译错误最多连续修订 2 次/);
+  assert.match(prompt, /doc\.Entities\.All/);
+  assert.match(prompt, /Polyline2D/);
+  assert.match(prompt, /new ImageData\(bitmapVariable\)/);
+  assert.match(prompt, /确定性操作 `dxfRender`/);
+  assert.match(prompt, /累计最多提交 6 个 Requirement 版本/);
+  assert.match(prompt, /error\.details\.diagnostics/);
 });

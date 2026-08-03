@@ -42,6 +42,8 @@ export interface VmCompletionState {
 }
 
 export interface RequirementRetryState {
+  taskName?: string;
+  taskRevisions: number;
   turnValidationAttempts: number;
   totalValidationAttempts: number;
   consecutiveSameFailures: number;

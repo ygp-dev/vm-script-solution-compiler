@@ -20,7 +20,8 @@ public static class DeterministicScriptGenerator
         foreach (var operation in script.Operations) body.AppendLine("            " + WithCSharpCondition(script, operation, CSharpModuleOperation(script, operation)));
         var initBody = script.Execution.Mode == "init" ? body.ToString() : "";
         var processBody = script.Execution.Mode == "init" ? "" : body.ToString();
-        return "using System;\nusing System.Globalization;\nusing System.Threading;\nusing Script.Methods;\n\npublic partial class UserScript : ScriptMethods, IProcessMethods\n{\n    public void Init()\n    {\n        try\n        {\n" + initBody + "        }\n        catch (Exception error)\n        {\n            ConsoleWrite(error.ToString());\n        }\n    }\n\n    public bool Process()\n    {\n        try\n        {\n" + processBody + "            return true;\n        }\n        catch (Exception error)\n        {\n            ConsoleWrite(error.ToString());\n            return false;\n        }\n    }\n}\n";
+        var support = script.Operations.Any(x => x.Kind == "dxfRender") ? DxfRenderOperationGenerator.SupportSource : "";
+        return "using System;\nusing System.Globalization;\nusing System.Threading;\nusing Script.Methods;\n\npublic partial class UserScript : ScriptMethods, IProcessMethods\n{\n    public void Init()\n    {\n        try\n        {\n" + initBody + "        }\n        catch (Exception error)\n        {\n            ConsoleWrite(error.ToString());\n        }\n    }\n\n    public bool Process()\n    {\n        try\n        {\n" + processBody + "            return true;\n        }\n        catch (Exception error)\n        {\n            ConsoleWrite(error.ToString());\n            return false;\n        }\n    }\n}\n" + support;
     }
 
     private static string PythonModule(ScriptRequirement script)
@@ -54,6 +55,7 @@ public static class DeterministicScriptGenerator
         "log" => "ConsoleWrite(Convert.ToString(" + CSharpExpression(script, operation.Value) + ", CultureInfo.InvariantCulture));",
         "sleep" => "Sleep(" + operation.Milliseconds!.Value.ToString(CultureInfo.InvariantCulture) + ");",
         "bytesToPointset" => "ContourPointData[] " + Identifier(operation.Result, "result") + " = null; BytesToPointset(" + CSharpExpression(script, operation.Value) + ", ref " + Identifier(operation.Result, "result") + ");",
+        "dxfRender" => DxfRenderOperationGenerator.Invocation(operation),
         _ => throw new CompilerException("OPERATION_NOT_SUPPORTED_BY_CARRIER", operation.Kind + " is not supported by csharp-module.")
     };
 

@@ -84,7 +84,7 @@ internal sealed class McpServer(CompilerFacade compiler)
             };
             return ToolResult(result);
         }
-        catch (CompilerException ex) { return ToolError(ex.Code, ex.Message); }
+        catch (CompilerException ex) { return ToolError(ex.Code, ex.Message, ex.Details); }
         catch (Exception ex) { return ToolError("UNEXPECTED_ERROR", ex.Message); }
     }
 
@@ -182,7 +182,7 @@ internal sealed class McpServer(CompilerFacade compiler)
     }
 
     private static JsonObject ToolResult(object value) => new() { ["content"] = new JsonArray(new JsonObject { ["type"] = "text", ["text"] = JsonSerializer.Serialize(value, JsonDefaults.Options) }), ["isError"] = false };
-    private static JsonObject ToolError(string code, string message) => new() { ["content"] = new JsonArray(new JsonObject { ["type"] = "text", ["text"] = JsonSerializer.Serialize(new { ok = false, error = code, message }, JsonDefaults.Options) }), ["isError"] = true };
+    private static JsonObject ToolError(string code, string message, object? details = null) => new() { ["content"] = new JsonArray(new JsonObject { ["type"] = "text", ["text"] = JsonSerializer.Serialize(new { ok = false, error = code, message, details }, JsonDefaults.Options) }), ["isError"] = true };
     private static JsonObject Result(JsonNode? id, JsonNode result) => new() { ["jsonrpc"] = "2.0", ["id"] = id?.DeepClone(), ["result"] = result };
     private static JsonObject Error(JsonNode? id, int code, string message, string data) => new() { ["jsonrpc"] = "2.0", ["id"] = id?.DeepClone(), ["error"] = new JsonObject { ["code"] = code, ["message"] = message, ["data"] = data } };
 

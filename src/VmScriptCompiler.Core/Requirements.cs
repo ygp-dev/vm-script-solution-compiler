@@ -61,6 +61,14 @@ public sealed class OperationRequirement
     public int? AddressId { get; init; }
     public int? Milliseconds { get; init; }
     public string? DataType { get; init; }
+    public string? PathInput { get; init; }
+    public string? WidthInput { get; init; }
+    public string? HeightInput { get; init; }
+    public string? ImageOutput { get; init; }
+    public string? SuccessOutput { get; init; }
+    public string? ErrorOutput { get; init; }
+    public string? EntityCountOutput { get; init; }
+    public string? RenderedCountOutput { get; init; }
     public string? When { get; init; }
     public string? OnError { get; init; }
 }

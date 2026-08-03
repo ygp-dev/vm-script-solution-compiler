@@ -20,7 +20,7 @@ if ($LASTEXITCODE -ne 0) { throw 'Pi Agent build failed.' }
 if (-not $SkipTests) {
     foreach ($test in @(
         'run-full-smoke.ps1','run-m2-smoke.ps1','run-m6-smoke.ps1','run-m8-smoke.ps1',
-        'run-m9-smoke.ps1','run-m10-smoke.ps1','run-m11-smoke.ps1','run-m12-smoke.ps1',
+        'run-m9-smoke.ps1','run-m10-smoke.ps1','run-m11-smoke.ps1','run-m12-smoke.ps1','run-m13-smoke.ps1',
         'run-audit-smoke.ps1','run-domain-worker-smoke.ps1','run-agent-domain-smoke.ps1',
         'run-agent-point-sort-smoke.ps1','run-desktop-agent-smoke.ps1'
     )) {

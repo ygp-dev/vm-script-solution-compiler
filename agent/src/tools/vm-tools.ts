@@ -11,7 +11,7 @@ interface ToolDetails {
   ok: boolean;
   state: unknown;
   result?: unknown;
-  error?: { code: string; message: string };
+  error?: { code: string; message: string; details?: unknown };
 }
 
 function output(details: ToolDetails) {
@@ -29,13 +29,24 @@ function compactState(state: ReturnType<VmDomainState["snapshot"]>) {
     targetVmVersion: state.targetVmVersion,
     phase: state.phase,
     requirementRevision: state.requirementRevision,
-    unresolvedQuestions: state.unresolvedQuestions,
-    artifacts: state.artifacts,
+    unresolvedQuestions: state.unresolvedQuestions.slice(-6),
+    artifacts: state.artifacts.slice(-6),
     lastCompilerError: state.lastCompilerError,
     lastTool: state.lastTool,
     completion: state.completion,
     requirementRetry: state.requirementRetry,
   };
+}
+
+function compactErrorMessage(message: string): string {
+  const normalized = message.replace(/\r\n/g, "\n").trim();
+  const lines = normalized.split("\n").filter(Boolean);
+  const compacted = lines.length > 8
+    ? [...lines.slice(0, 8), `... omitted ${lines.length - 8} additional diagnostic lines`].join("\n")
+    : normalized;
+  return compacted.length > 3_000
+    ? compacted.slice(0, 3_000) + "\n... diagnostic truncated"
+    : compacted;
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -112,9 +123,13 @@ async function executeDomainTool(
     return output({ ok: true, result, state: compactState(state.snapshot()) });
   } catch (error) {
     const code = error instanceof DomainWorkerError ? error.code : "DOMAIN_TOOL_FAILED";
-    const message = error instanceof Error ? error.message : String(error);
+    const message = compactErrorMessage(error instanceof Error ? error.message : String(error));
     state.recordError(code, message);
-    throw new DomainWorkerError(code, message);
+    return output({
+      ok: false,
+      error: { code, message, details: error instanceof DomainWorkerError ? error.details : undefined },
+      state: compactState(state.snapshot()),
+    });
   }
 }
 
@@ -209,10 +224,15 @@ export function createVmTools(
       }, { additionalProperties: false }),
       executionMode: "sequential",
       execute: async (_id, params) => {
-        state.assertRequirementRetryAllowed();
+        const rawRequirement = params.requirement as Record<string, unknown>;
+        const rawTask = rawRequirement.task && typeof rawRequirement.task === "object" && !Array.isArray(rawRequirement.task)
+          ? rawRequirement.task as Record<string, unknown>
+          : undefined;
+        const candidateTaskName = typeof rawTask?.name === "string" ? rawTask.name.trim() : undefined;
+        state.assertRequirementRetryAllowed(candidateTaskName);
         try {
           state.beginTool("vm_update_requirement", "drafting");
-          state.recordRequirement(normalizeRequirement(params.requirement as Record<string, unknown>));
+          state.recordRequirement(normalizeRequirement(rawRequirement));
           state.completeTool("vm_update_requirement");
           return output({
             ok: true,
@@ -304,9 +324,13 @@ export function createVmTools(
           });
         } catch (error) {
           const code = error instanceof DomainWorkerError ? error.code : "DOMAIN_TOOL_FAILED";
-          const message = error instanceof Error ? error.message : String(error);
+          const message = compactErrorMessage(error instanceof Error ? error.message : String(error));
           state.recordError(code, message);
-          throw new DomainWorkerError(code, message);
+          return output({
+            ok: false,
+            error: { code, message, details: error instanceof DomainWorkerError ? error.details : undefined },
+            state: compactState(state.snapshot()),
+          });
         }
       },
     }),

@@ -10,6 +10,9 @@ import type {
 } from "./types.js";
 
 const SESSION_ENTRY_TYPE = "vm-script-task-state";
+const MAX_TURN_VALIDATION_ATTEMPTS = 3;
+const MAX_CONSECUTIVE_FAILURES = 2;
+const MAX_TASK_REVISIONS = 6;
 
 function now(): string {
   return new Date().toISOString();
@@ -24,6 +27,7 @@ function initialState(): VmTaskState {
     phase: "idle",
     requirementRevision: 0,
     requirementRetry: {
+      taskRevisions: 0,
       turnValidationAttempts: 0,
       totalValidationAttempts: 0,
       consecutiveSameFailures: 0,
@@ -115,6 +119,7 @@ export class VmDomainState {
     }
     const taskName = typeof task?.name === "string" ? task.name.trim() : "";
     if (!taskName) throw new Error("Requirement task.name cannot be empty.");
+    this.assertRequirementRetryAllowed(taskName);
     if (this.turnTaskName && this.turnTaskName !== taskName) {
       throw new Error(
         `同一用户回合不能把任务从 ${this.turnTaskName} 改为 ${taskName}。` +
@@ -122,6 +127,20 @@ export class VmDomainState {
       );
     }
     this.turnTaskName ??= taskName;
+
+    if (this.state.requirementRetry.taskName !== taskName) {
+      this.state.requirementRetry.taskName = taskName;
+      this.state.requirementRetry.taskRevisions = 0;
+      this.state.requirementRetry.totalValidationAttempts = 0;
+      this.state.requirementRetry.blocked = false;
+    }
+    this.state.requirementRetry.taskRevisions += 1;
+
+    // A revision supersedes diagnostics from the previous draft. Validation
+    // adds them again if the revised Requirement still has the same problem.
+    this.state.unresolvedQuestions = this.state.unresolvedQuestions.filter(
+      (question) => !isCompilerDiagnosticQuestion(question),
+    );
 
     this.state.intent = mode;
     this.state.baseSolution = typeof task?.baseSolution === "string"
@@ -160,8 +179,8 @@ export class VmDomainState {
         this.state.requirementRetry.lastFailureSignature = signature;
       }
       const retryBlocked =
-        this.state.requirementRetry.turnValidationAttempts >= 5 ||
-        this.state.requirementRetry.consecutiveSameFailures >= 3;
+        this.state.requirementRetry.turnValidationAttempts >= MAX_TURN_VALIDATION_ATTEMPTS ||
+        this.state.requirementRetry.consecutiveSameFailures >= MAX_CONSECUTIVE_FAILURES;
       this.state.requirementRetry.blocked = retryBlocked;
       if (retryBlocked) {
         this.state.phase = "blocked";
@@ -302,7 +321,9 @@ export class VmDomainState {
       timestampUtc: now(),
     };
     if (recoverability === "automatic") {
-      const signature = `${code}|${message}`;
+      // Missing members and line numbers change on every source guess. The
+      // stable code is the useful signature for stopping repeated API guesses.
+      const signature = code;
       if (signature === this.state.requirementRetry.lastFailureSignature) {
         this.state.requirementRetry.consecutiveSameFailures += 1;
       } else {
@@ -310,8 +331,8 @@ export class VmDomainState {
         this.state.requirementRetry.lastFailureSignature = signature;
       }
       const retryBlocked =
-        this.state.requirementRetry.turnValidationAttempts >= 5 ||
-        this.state.requirementRetry.consecutiveSameFailures >= 3;
+        this.state.requirementRetry.turnValidationAttempts >= MAX_TURN_VALIDATION_ATTEMPTS ||
+        this.state.requirementRetry.consecutiveSameFailures >= MAX_CONSECUTIVE_FAILURES;
       this.state.requirementRetry.blocked = retryBlocked;
       if (retryBlocked) {
         this.state.phase = "blocked";
@@ -339,11 +360,13 @@ export class VmDomainState {
     return clone(this.state.requirement);
   }
 
-  assertRequirementRetryAllowed(): void {
-    if (!this.state.requirementRetry.blocked) return;
+  assertRequirementRetryAllowed(candidateTaskName?: string): void {
+    const sameTask = !candidateTaskName || candidateTaskName === this.state.requirementRetry.taskName;
+    const cumulativeLimit = sameTask && this.state.requirementRetry.taskRevisions >= MAX_TASK_REVISIONS;
+    if ((!this.state.requirementRetry.blocked || !sameTask) && !cumulativeLimit) return;
     const error = new Error(
-      "本用户回合的 Requirement 自动修订已达到上限。请停止调用更新/校验工具，" +
-      "向用户报告最后校验错误；收到用户新消息后可继续。",
+      `Requirement 自动修订已达到上限：同一任务累计最多 ${MAX_TASK_REVISIONS} 个版本，` +
+      "或当前轮次/同类错误重试过多。请停止猜测 API，并返回最后一次结构化错误。",
     );
     Object.assign(error, { code: "REQUIREMENT_RETRY_LIMIT_EXCEEDED" });
     throw error;
@@ -367,6 +390,9 @@ export class VmDomainState {
     if (!path) return;
     if (this.state.artifacts.some((artifact) => artifact.kind === kind && artifact.path === path)) return;
     this.state.artifacts.push({ kind, path, timestampUtc: now() });
+    if (this.state.artifacts.length > 18) {
+      this.state.artifacts = this.state.artifacts.slice(-18);
+    }
   }
 
   private addEvidence(evidence: CapabilityEvidence): void {
@@ -374,8 +400,8 @@ export class VmDomainState {
       ...evidence,
       data: compactEvidenceData(evidence.data),
     });
-    if (this.state.capabilityEvidence.length > 50) {
-      this.state.capabilityEvidence = this.state.capabilityEvidence.slice(-50);
+    if (this.state.capabilityEvidence.length > 12) {
+      this.state.capabilityEvidence = this.state.capabilityEvidence.slice(-12);
     }
   }
 
@@ -390,11 +416,13 @@ export class VmDomainState {
 
 function normalizeRestoredState(state: VmTaskState): VmTaskState {
   state.requirementRetry ??= {
+    taskRevisions: 0,
     turnValidationAttempts: 0,
     totalValidationAttempts: 0,
     consecutiveSameFailures: 0,
     blocked: false,
   };
+  state.requirementRetry.taskRevisions ??= 0;
   return state;
 }
 
@@ -447,6 +475,12 @@ function compactMatch(value: unknown): unknown {
 
 function unique(values: string[]): string[] {
   return [...new Set(values)];
+}
+
+function isCompilerDiagnosticQuestion(question: string): boolean {
+  return question === "Requirement 尚未通过确定性校验。" ||
+    question.startsWith("Requirement 自动修订已停止") ||
+    /^[A-Z][A-Z0-9_]+:\s/.test(question);
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

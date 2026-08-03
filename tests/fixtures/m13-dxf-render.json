@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "1.0",
+  "task": { "name": "m13-dxf-render", "mode": "create", "vmVersion": "4.4.0" },
+  "scripts": [
+    {
+      "id": "dxf-render",
+      "carrier": "csharp-module",
+      "name": "DXF图像预览",
+      "procedure": "流程1",
+      "execution": { "mode": "once", "order": 0 },
+      "inputs": [
+        { "name": "DxfPath", "type": "string", "default": "", "required": true },
+        { "name": "PreviewWidth", "type": "int", "default": 1920, "required": true },
+        { "name": "PreviewHeight", "type": "int", "default": 1080, "required": true }
+      ],
+      "outputs": [
+        { "name": "DxfImage", "type": "image" },
+        { "name": "Success", "type": "bool" },
+        { "name": "ErrorMessage", "type": "string" },
+        { "name": "EntityCount", "type": "int" },
+        { "name": "RenderedEntityCount", "type": "int" }
+      ],
+      "operations": [
+        {
+          "kind": "dxfRender",
+          "pathInput": "DxfPath",
+          "widthInput": "PreviewWidth",
+          "heightInput": "PreviewHeight",
+          "imageOutput": "DxfImage",
+          "successOutput": "Success",
+          "errorOutput": "ErrorMessage",
+          "entityCountOutput": "EntityCount",
+          "renderedCountOutput": "RenderedEntityCount"
+        }
+      ],
+      "dependencies": [
+        { "kind": "dotnet-assembly", "name": "netDxf.dll", "architecture": "anycpu" },
+        { "kind": "dotnet-assembly", "name": "System.Drawing.dll", "architecture": "anycpu" }
+      ]
+    }
+  ],
+  "connections": []
+}
