@@ -2,6 +2,8 @@ param([string]$DistDirectory)
 $ErrorActionPreference = 'Stop'
 $root = Split-Path $PSScriptRoot -Parent
 $dist = if ([string]::IsNullOrWhiteSpace($DistDirectory)) { Join-Path $root 'dist' } else { [IO.Path]::GetFullPath($DistDirectory) }
+[xml]$versionProps = Get-Content -LiteralPath (Join-Path $root 'Directory.Build.props') -Raw -Encoding UTF8
+$productVersion = [string]$versionProps.Project.PropertyGroup.Version
 $products = @(
     @{ Name='Cli'; Exe='VmScriptCompiler.Cli.exe'; Assembly='VmScriptCompiler.Cli.dll' },
     @{ Name='Desktop'; Exe='vm-script-compiler-desktop.exe'; Assembly='vm-script-compiler-desktop.dll' },
@@ -78,7 +80,7 @@ try {
 }
 finally { $agentSha.Dispose() }
 $manifest = [pscustomobject]@{
-    version='1.0.0'
+    version=$productVersion
     runtime='win-x64 self-contained desktop + bundled Node'
     generatedUtc=[DateTime]::UtcNow.ToString('o')
     products=$entries

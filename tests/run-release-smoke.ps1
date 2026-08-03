@@ -1,5 +1,7 @@
 $ErrorActionPreference = 'Stop'
 $root = Split-Path $PSScriptRoot -Parent
+[xml]$versionProps = Get-Content -LiteralPath (Join-Path $root 'Directory.Build.props') -Raw -Encoding UTF8
+$expectedVersion = [string]$versionProps.Project.PropertyGroup.Version
 $desktopRoot = Join-Path $root 'dist\Desktop'
 $desktop = Join-Path $desktopRoot 'vm-script-compiler-desktop.exe'
 $node = Join-Path $desktopRoot 'runtime\node.exe'
@@ -61,7 +63,7 @@ try {
 
         $request = '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"standalone-audit","version":"1"}}}'
         $response = $request | & (Join-Path $root 'dist\Mcp\vm-script-compiler-mcp.exe') | ConvertFrom-Json
-        if ($response.result.serverInfo.name -ne 'vm-script-solution-compiler' -or $response.result.serverInfo.version -ne '1.0.0') {
+        if ($response.result.serverInfo.name -ne 'vm-script-solution-compiler' -or $response.result.serverInfo.version -ne $expectedVersion) {
             throw 'Standalone MCP initialize failed.'
         }
 

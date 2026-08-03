@@ -1,10 +1,14 @@
 param(
     [Parameter(Mandatory=$true)][string]$Installer,
-    [string]$Version = '1.0.0'
+    [string]$Version
 )
 
 $ErrorActionPreference = 'Stop'
 $root = Split-Path $PSScriptRoot -Parent
+if ([string]::IsNullOrWhiteSpace($Version)) {
+    [xml]$versionProps = Get-Content -LiteralPath (Join-Path $root 'Directory.Build.props') -Raw -Encoding UTF8
+    $Version = [string]$versionProps.Project.PropertyGroup.Version
+}
 $installerPath = [IO.Path]::GetFullPath($Installer)
 if (-not (Test-Path -LiteralPath $installerPath -PathType Leaf)) { throw "Installer not found: $installerPath" }
 $testRoot = Join-Path ([IO.Path]::GetTempPath()) ('vm-script-installer-' + [Guid]::NewGuid().ToString('N'))
