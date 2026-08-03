@@ -72,6 +72,7 @@ try {
     Assert-Blocked 'e05-python-third-party.json' 'PYTHON_DEPENDENCY_MISSING'
     Assert-Blocked 'e07-create-external-module.json' 'EXTERNAL_MODULE_NOT_AVAILABLE'
     Assert-Blocked 'e08-io-type-mismatch.json' 'IO_TYPE_MISMATCH'
+    Assert-Blocked 'invalid-global-contract.json' 'GLOBAL_SCRIPT_CONTRACT_INVALID'
 
     $mixedParse = Get-Content -Raw (Join-Path $mixed.TaskDirectory 'validation\parse-result.json') | ConvertFrom-Json
     $modules = @($mixedParse.solution.procedures.modules)

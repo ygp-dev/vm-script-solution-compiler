@@ -7,7 +7,7 @@ import { buildVmSystemPrompt } from "../system-prompt.js";
 
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
 
-test("VM system prompt contains authoritative schema and C#/Python Create examples", () => {
+test("VM system prompt contains authoritative schema and all carrier Create examples", () => {
   const config = {
     repositoryRoot,
     agentRoot: path.join(repositoryRoot, "agent"),
@@ -23,4 +23,10 @@ test("VM system prompt contains authoritative schema and C#/Python Create exampl
   assert.match(prompt, /public partial class UserScript : ScriptMethods, IProcessMethods/);
   assert.match(prompt, /void Init\(\)/);
   assert.match(prompt, /bool Process\(\)/);
+  assert.match(prompt, /public class UserGlobalScript : UserGlobalMethods, IScriptMethods/);
+  assert.match(prompt, /public override int InitAfterLoadSol\(\)/);
+  assert.match(prompt, /VmSolution\.Instance\.SolutionPath/);
+  assert.match(prompt, /dictProcessID\.Keys/);
+  assert.match(prompt, /"lifecycle": \["InitSDK", "InitAfterLoadSol"\]/);
+  assert.match(prompt, /不得使用 Script\.Methods、ScriptMethods、IProcessMethods/);
 });

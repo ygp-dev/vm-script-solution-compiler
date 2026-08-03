@@ -28,7 +28,10 @@
     "global-csharp": {
       "contract": "public class UserGlobalScript : UserGlobalMethods, IScriptMethods",
       "entryPoints": ["int Init()", "int Process()"],
+      "lifecycle": ["InitSDK", "InitAfterLoadSol"],
       "process": ["DefaultExecuteProcess", "ExecuteProcessOnce", "ContinuousExecuteProcess", "StopProcessExecute"],
+      "solution": ["VmSolution.Instance.SolutionPath", "VmSolution.Instance[processName]"],
+      "procedures": ["dictProcessID.Keys", "VmProcedure.LocalVariable", "SetVarInt", "SetVarFloat", "SetVarString"],
       "globalVariables": ["GetGlobalVariableIntValue", "GetGlobalVariableFloatValue", "GetGlobalVariableStringValue", "SetGlobalVariableIntValue", "SetGlobalVariableFloatValue", "SetGlobalVariableStringValue"],
       "communication": ["StartGlobalCommunicate", "SendCommDeviceData", "UserGlobalMethods_OnReceiveCommunicateDataEvent"],
       "callbacks": ["ResultDataCallBack", "ExportResultCallBack"]

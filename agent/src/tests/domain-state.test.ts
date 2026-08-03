@@ -108,6 +108,51 @@ test("VM domain state stops repeated compiler-error loops after valid schema che
   assert.throws(() => state.assertRequirementRetryAllowed(), /自动修订已达到上限/);
 });
 
+test("VM domain state limits repeated global-script contract failures", () => {
+  const state = new VmDomainState(SessionManager.inMemory());
+  state.setTaskContext({ mode: "create" });
+  state.recordRequirement({
+    schemaVersion: "1.0",
+    task: { name: "global-init", mode: "create", vmVersion: "4.4.0" },
+    scripts: [],
+  });
+
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    state.recordRequirementValidation({ ok: true, issues: [] });
+    state.recordError(
+      "GLOBAL_SCRIPT_CONTRACT_INVALID",
+      "全局脚本未满足 VM 4.4 入口契约。",
+    );
+  }
+
+  assert.equal(state.snapshot().requirementRetry.blocked, true);
+  assert.equal(state.snapshot().requirementRetry.consecutiveSameFailures, 3);
+  assert.throws(() => state.assertRequirementRetryAllowed(), /自动修订已达到上限/);
+});
+
+test("VM domain state rejects unrelated task-name experiments in one user turn", () => {
+  const state = new VmDomainState(SessionManager.inMemory());
+  state.setTaskContext({ mode: "create" });
+  state.recordRequirement({
+    schemaVersion: "1.0",
+    task: { name: "global-init", mode: "create", vmVersion: "4.4.0" },
+    scripts: [],
+  });
+
+  assert.throws(() => state.recordRequirement({
+    schemaVersion: "1.0",
+    task: { name: "test-basic", mode: "create", vmVersion: "4.4.0" },
+    scripts: [],
+  }), /不能把任务从 global-init 改为 test-basic/);
+
+  state.setTaskContext({ mode: "create" });
+  assert.doesNotThrow(() => state.recordRequirement({
+    schemaVersion: "1.0",
+    task: { name: "next-user-task", mode: "create", vmVersion: "4.4.0" },
+    scripts: [],
+  }));
+});
+
 test("VM domain state persists one snapshot for a successful batched tool", () => {
   const manager = SessionManager.inMemory();
   const state = new VmDomainState(manager);

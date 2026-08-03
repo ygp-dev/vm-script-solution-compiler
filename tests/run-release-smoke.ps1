@@ -82,7 +82,8 @@ try {
         foreach ($required in @(
             'agent\dist\tools\requirement-tool-schema.js',
             'agent\dist\system-prompt.js',
-            'agent\resources\requirement-examples\python-create.json'
+            'agent\resources\requirement-examples\python-create.json',
+            'agent\resources\requirement-examples\global-csharp-create.json'
         )) {
             if (-not (Test-Path -LiteralPath (Join-Path $desktopRoot $required))) {
                 throw "Desktop Requirement guidance component missing: $required"

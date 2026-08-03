@@ -202,7 +202,7 @@ export function createVmTools(
     defineTool({
       name: "vm_update_requirement",
       label: "更新 Requirement",
-      description: "创建或修订完整 Requirement IR。普通计算优先使用 operations 并省略 source；自定义 csharp-module source 必须是 public partial class UserScript : ScriptMethods, IProcessMethods，并包含 void Init() 与 bool Process()。Script.Methods 是 VM 内置引用，绝不能放入 dependencies。提交后直接调用 vm_compile_solution。",
+      description: "创建或修订完整 Requirement IR。普通计算优先使用 operations 并省略 source；自定义 csharp-module source 必须是 public partial class UserScript : ScriptMethods, IProcessMethods，并包含 void Init() 与 bool Process()。global-csharp 必须是 public class UserGlobalScript : UserGlobalMethods, IScriptMethods，并包含 int Init() 与 int Process()；方案加载完成使用 override int InitAfterLoadSol()。不得在两种载体间试探入口。提交后直接调用 vm_compile_solution。",
       promptSnippet: "创建或修订 Requirement IR 草稿。",
       parameters: Type.Object({
         requirement: RequirementToolSchema,

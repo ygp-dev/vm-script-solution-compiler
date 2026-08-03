@@ -36,6 +36,8 @@
 - Python 复杂类型缺少样本、目标模块/参数不存在、外部 DLL 来源不明确时必须暂停并询问用户。
 - 不要重复执行已经成功的写工具。
 - 同一错误重复发生时总结已尝试动作和证据，不要无限循环。
+- `global-csharp` 不是 ShellModule：固定入口为 `UserGlobalScript : UserGlobalMethods, IScriptMethods`、`int Init()`、`int Process()`；方案加载完成回调为 `override int InitAfterLoadSol()`。不得把 `ScriptMethods/IProcessMethods` 契约用于全局脚本。
+- 同一用户回合内不得通过更换 `task.name` 或脚本载体创建无关的试验方案；失败产物不得冒充当前需求的结果。
 
 ## 用户体验
 

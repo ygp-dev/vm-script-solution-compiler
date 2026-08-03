@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "1.0",
+  "task": {
+    "name": "global-solution-metadata-example",
+    "mode": "create",
+    "vmVersion": "4.4.0"
+  },
+  "scripts": [
+    {
+      "id": "global-solution-metadata",
+      "carrier": "global-csharp",
+      "name": "方案加载后写入流程与方案信息",
+      "execution": { "mode": "init", "order": 0 },
+      "source": "using System;\nusing System.IO;\nusing VM.GlobalScript.Methods;\nusing VM.Core;\nusing VM.PlatformSDKCS;\n\npublic class UserGlobalScript : UserGlobalMethods, IScriptMethods\n{\n    public int Init()\n    {\n        return InitSDK();\n    }\n\n    public override int InitAfterLoadSol()\n    {\n        string solutionPath = VmSolution.Instance.SolutionPath;\n        SetGlobalVariableStringValue(\"SolutionName\", Path.GetFileNameWithoutExtension(solutionPath));\n        SetGlobalVariableStringValue(\"SolutionDirectory\", Path.GetDirectoryName(solutionPath));\n        foreach (string processName in dictProcessID.Keys)\n        {\n            VmProcedure procedure = VmSolution.Instance[processName] as VmProcedure;\n            if (procedure != null)\n            {\n                procedure.LocalVariable.SetVarString(\"ProcedureName\", new string[] { processName });\n            }\n        }\n        return 0;\n    }\n\n    public int Process()\n    {\n        return 0;\n    }\n}",
+      "inputs": [],
+      "outputs": [],
+      "operations": [],
+      "dependencies": []
+    }
+  ],
+  "connections": []
+}

@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "task": { "name": "invalid-global-contract", "mode": "create", "vmVersion": "4.4.0" },
+  "scripts": [
+    {
+      "id": "wrong-global",
+      "carrier": "global-csharp",
+      "name": "错误全局入口",
+      "execution": { "mode": "init", "order": 0 },
+      "source": "using Script.Methods; public partial class UserScript : ScriptMethods, IProcessMethods { public void Init() {} public bool Process() { return true; } }",
+      "inputs": [],
+      "outputs": [],
+      "operations": [],
+      "dependencies": []
+    }
+  ],
+  "connections": []
+}

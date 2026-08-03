@@ -16,6 +16,14 @@ export function buildVmSystemPrompt(config: AgentConfiguration): string {
     path.join(config.agentRoot, "resources", "requirement-examples", "csharp-create.json"),
     "utf8",
   );
+  const globalCsharpExample = fs.readFileSync(
+    path.join(config.agentRoot, "resources", "requirement-examples", "global-csharp-create.json"),
+    "utf8",
+  );
+  const apiCatalog = fs.readFileSync(
+    path.join(config.repositoryRoot, "resources", "vm", "4.4.0", "api-catalog.json"),
+    "utf8",
+  );
   return [
     base,
     "## Requirement 权威资料",
@@ -43,6 +51,16 @@ export function buildVmSystemPrompt(config: AgentConfiguration): string {
     "}",
     "```",
     "外部 DLL 必须使用用户明确提供或项目能力证据确认的绝对路径；不要靠更换类名、方法名反复试探入口契约。",
+    "### VM 4.4 全局 C# 固定契约与方案加载示例",
+    "global-csharp 与 ShellModule 完全不同。必须使用 UserGlobalScript : UserGlobalMethods, IScriptMethods、int Init() 和 int Process()；方案加载完成回调是 override int InitAfterLoadSol()。不得使用 Script.Methods、ScriptMethods、IProcessMethods、void Init()、bool Process() 或 ScriptMain()。以下示例来自项目内 VM 4.4 模板与 API 证据。",
+    "```json",
+    globalCsharpExample,
+    "```",
+    "### VM 4.4 权威能力目录",
+    "下列目录由项目内已验证模板、中文样例和反编译 API 汇总。生成 VM API 调用时只能使用这里确认的载体契约与方法；如信息仍不足，再调用 vm_query_capability，不得猜测。",
+    "```json",
+    apiCatalog,
+    "```",
     "### Python Create 最小正确示例",
     "注意：`source`、`operations`、`dependencies` 都是 script 顶层属性；`execution` 只能包含 `mode` 和 `order`，普通脚本使用 `mode: \"once\"`。",
     "```json",

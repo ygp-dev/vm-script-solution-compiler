@@ -2,6 +2,7 @@ using System.IO.Compression;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 
 namespace VmScriptCompiler.Core;
 
@@ -42,12 +43,21 @@ public sealed class GlobalScriptCompiler(string repositoryRoot)
 
     private static void ValidateSourceContract(string source)
     {
-        if (!source.Contains("UserGlobalScript", StringComparison.Ordinal) ||
-            !source.Contains("UserGlobalMethods", StringComparison.Ordinal) ||
-            !source.Contains("IScriptMethods", StringComparison.Ordinal) ||
-            !source.Contains("int Init()", StringComparison.Ordinal) ||
-            !source.Contains("int Process()", StringComparison.Ordinal))
-            throw new CompilerException("GLOBAL_SCRIPT_CONTRACT_INVALID", "全局脚本未满足 VM 4.4 入口契约。");
+        var missing = new List<string>();
+        if (!Regex.IsMatch(source, @"\bpublic\s+class\s+UserGlobalScript\s*:\s*UserGlobalMethods\s*,\s*IScriptMethods\b"))
+            missing.Add("public class UserGlobalScript : UserGlobalMethods, IScriptMethods");
+        if (!Regex.IsMatch(source, @"\bpublic\s+int\s+Init\s*\(\s*\)")) missing.Add("public int Init()");
+        if (!Regex.IsMatch(source, @"\bpublic\s+int\s+Process\s*\(\s*\)")) missing.Add("public int Process()");
+        if (missing.Count > 0)
+        {
+            throw new CompilerException(
+                "GLOBAL_SCRIPT_CONTRACT_INVALID",
+                "全局脚本未满足 VM 4.4 入口契约。缺少或签名错误：" + string.Join("；", missing) +
+                "。必须使用 VM.GlobalScript.Methods 的 UserGlobalMethods/IScriptMethods；" +
+                "不要使用 Script.Methods、ScriptMethods、IProcessMethods、void Init()、bool Process() 或 ScriptMain()。" +
+                "方案加载完成逻辑应覆写 public override int InitAfterLoadSol()。"
+            );
+        }
     }
 
     private static JsonObject ReadCarrier(string path)

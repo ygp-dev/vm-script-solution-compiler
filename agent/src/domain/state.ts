@@ -52,6 +52,7 @@ function clone<T>(value: T): T {
 export class VmDomainState {
   private state: VmTaskState;
   private batching = false;
+  private turnTaskName?: string;
 
   constructor(private readonly sessionManager: SessionManager) {
     const restored = [...sessionManager.getEntries()]
@@ -67,6 +68,7 @@ export class VmDomainState {
   }
 
   setTaskContext(input: TaskContextInput): VmTaskState {
+    this.turnTaskName = undefined;
     this.state.requirementRetry.turnValidationAttempts = 0;
     this.state.requirementRetry.consecutiveSameFailures = 0;
     this.state.requirementRetry.lastFailureSignature = undefined;
@@ -111,6 +113,15 @@ export class VmDomainState {
     if (mode !== "create" && mode !== "patch") {
       throw new Error("Requirement task.mode must be create or patch.");
     }
+    const taskName = typeof task?.name === "string" ? task.name.trim() : "";
+    if (!taskName) throw new Error("Requirement task.name cannot be empty.");
+    if (this.turnTaskName && this.turnTaskName !== taskName) {
+      throw new Error(
+        `同一用户回合不能把任务从 ${this.turnTaskName} 改为 ${taskName}。` +
+        "请修订当前任务，不要创建无关的试验方案。",
+      );
+    }
+    this.turnTaskName ??= taskName;
 
     this.state.intent = mode;
     this.state.baseSolution = typeof task?.baseSolution === "string"
@@ -456,6 +467,7 @@ function recoveryFor(code: string): DomainError["recoverability"] {
     "REQUIREMENT_DRAFT_INVALID",
     "SCRIPT_PRECOMPILE_FAILED",
     "SCRIPT_CONTRACT_INVALID",
+    "GLOBAL_SCRIPT_CONTRACT_INVALID",
     "DEPENDENCY_VERSION_MISMATCH",
   ].includes(code)) return "automatic";
   if ([
