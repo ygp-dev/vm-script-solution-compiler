@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using VmScriptCompiler.Core;
+using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
 using Color = System.Windows.Media.Color;
 using Clipboard = System.Windows.Clipboard;
@@ -61,7 +62,7 @@ public partial class MainWindow : Window
                 break;
         }
         if (!conversationPreview || WorkspaceTabs.SelectedItem != ComposerTab) return;
-        WelcomePanel.Visibility = Visibility.Collapsed;
+        WelcomeHero.Visibility = Visibility.Collapsed;
         AppendUserMessage("创建一个 C# 脚本，输入 A 和 B，输出 Sum，并设置默认值。");
         AppendAssistantDelta("我会先确认 VM 4.4 环境和端口能力，再建立 Requirement 并交给确定性编译器生成方案。");
         _streamingAssistant = null;
@@ -123,6 +124,24 @@ public partial class MainWindow : Window
             ? Visibility.Visible
             : Visibility.Collapsed;
 
+    private void PromptText_GotFocus(object sender, RoutedEventArgs e)
+    {
+        PromptComposerBorder.BorderBrush = (Brush)FindResource("AccentStrong");
+        PromptComposerBorder.Effect = new System.Windows.Media.Effects.DropShadowEffect
+        {
+            BlurRadius = 26,
+            ShadowDepth = 0,
+            Opacity = .30,
+            Color = Color.FromRgb(70, 130, 220)
+        };
+    }
+
+    private void PromptText_LostFocus(object sender, RoutedEventArgs e)
+    {
+        PromptComposerBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(56, 84, 113));
+        PromptComposerBorder.Effect = (System.Windows.Media.Effects.Effect)FindResource("CardShadow");
+    }
+
     private void PromptText_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
     {
         if (e.Key != Key.Enter || Keyboard.Modifiers.HasFlag(ModifierKeys.Shift)) return;
@@ -141,9 +160,28 @@ public partial class MainWindow : Window
     private void ToggleSidebar_Click(object sender, RoutedEventArgs e)
     {
         var collapse = SidebarColumn.Width.Value > 0;
-        SidebarColumn.Width = collapse ? new GridLength(0) : new GridLength(252);
-        SidebarPanel.Visibility = collapse ? Visibility.Collapsed : Visibility.Visible;
-        ExpandSidebarButton.Visibility = collapse ? Visibility.Visible : Visibility.Collapsed;
+        var duration = TimeSpan.FromMilliseconds(160);
+        if (collapse)
+        {
+            var fade = new System.Windows.Media.Animation.DoubleAnimation(1, 0, duration);
+            fade.Completed += (_, _) =>
+            {
+                SidebarColumn.Width = new GridLength(0);
+                SidebarPanel.Visibility = Visibility.Collapsed;
+                SidebarPanel.Opacity = 1;
+                ExpandSidebarButton.Visibility = Visibility.Visible;
+            };
+            SidebarPanel.BeginAnimation(UIElement.OpacityProperty, fade);
+            return;
+        }
+
+        SidebarColumn.Width = new GridLength(252);
+        SidebarPanel.Visibility = Visibility.Visible;
+        SidebarPanel.Opacity = 0;
+        ExpandSidebarButton.Visibility = Visibility.Collapsed;
+        SidebarPanel.BeginAnimation(
+            UIElement.OpacityProperty,
+            new System.Windows.Media.Animation.DoubleAnimation(0, 1, duration));
     }
 
     private async void Generate_Click(object sender, RoutedEventArgs e)
@@ -181,9 +219,9 @@ public partial class MainWindow : Window
             WorkspaceTitleText.Text = _conversationTitle;
         }
         PromptText.Clear();
-        WelcomePanel.Visibility = Visibility.Collapsed;
+        WelcomeHero.Visibility = Visibility.Collapsed;
         FriendlyStatus.Text = "Agent 正在检查、规划和验证…";
-        FriendlyStatus.Foreground = Brushes.DarkGray;
+        FriendlyStatus.Foreground = (Brush)FindResource("TextSecondary");
         FriendlyStatus.Visibility = Visibility.Visible;
         SuccessPanel.Visibility = Visibility.Collapsed;
         WorkspacePhaseText.Text = "处理中";
@@ -209,7 +247,7 @@ public partial class MainWindow : Window
                     : "已生成并通过离线验证：" + Path.GetFileName(_lastSolution);
                 SuccessPanel.Visibility = Visibility.Visible;
                 FriendlyStatus.Text = "离线验证已通过；请在 VisionMaster 中打开、编译和运行后再确认实机结果。";
-                FriendlyStatus.Foreground = Brushes.SeaGreen;
+                FriendlyStatus.Foreground = (Brush)FindResource("Success");
             }
             await RefreshArtifactIndexAsync();
             await RefreshHistoryAsync();
@@ -217,7 +255,7 @@ public partial class MainWindow : Window
         catch (OperationCanceledException)
         {
             FriendlyStatus.Text = "已停止当前 Agent 任务。";
-            FriendlyStatus.Foreground = Brushes.DarkOrange;
+            FriendlyStatus.Foreground = (Brush)FindResource("Accent");
         }
         catch (Exception error) { ShowFriendlyError(error); }
         finally
@@ -299,7 +337,7 @@ public partial class MainWindow : Window
         {
             Child = content,
             Padding = new Thickness(14, 10, 14, 10),
-            Background = new SolidColorBrush(Color.FromRgb(38, 38, 38)),
+            Background = (Brush)FindResource("SurfaceAccent"),
             CornerRadius = new CornerRadius(11),
             MaxWidth = 650,
             HorizontalAlignment = System.Windows.HorizontalAlignment.Right
@@ -338,12 +376,12 @@ public partial class MainWindow : Window
                 Width = 22,
                 Height = 22,
                 Margin = new Thickness(0, 0, 8, 0),
-                Background = new SolidColorBrush(Color.FromRgb(239, 239, 239)),
+                Background = (Brush)FindResource("AccentStrong"),
                 CornerRadius = new CornerRadius(6),
                 Child = new TextBlock
                 {
                     Text = "VM",
-                    Foreground = new SolidColorBrush(Color.FromRgb(17, 17, 17)),
+                    Foreground = Brushes.White,
                     FontSize = 8,
                     FontWeight = FontWeights.Bold,
                     HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
@@ -373,7 +411,7 @@ public partial class MainWindow : Window
             var status = new TextBlock
             {
                 Text = "运行中",
-                Foreground = new SolidColorBrush(Color.FromRgb(165, 165, 165)),
+                Foreground = (Brush)FindResource("TextSecondary"),
                 FontSize = 11,
                 VerticalAlignment = VerticalAlignment.Center
             };
@@ -381,7 +419,7 @@ public partial class MainWindow : Window
             {
                 Text = "◌",
                 Width = 24,
-                Foreground = new SolidColorBrush(Color.FromRgb(143, 175, 224)),
+                Foreground = (Brush)FindResource("Accent"),
                 FontSize = 15,
                 VerticalAlignment = VerticalAlignment.Center
             };
@@ -406,8 +444,8 @@ public partial class MainWindow : Window
                 Child = grid,
                 Padding = new Thickness(12, 9, 12, 9),
                 Margin = new Thickness(38, 0, 84, 8),
-                Background = new SolidColorBrush(Color.FromRgb(23, 23, 23)),
-                BorderBrush = new SolidColorBrush(Color.FromRgb(43, 43, 43)),
+                Background = (Brush)FindResource("Surface"),
+                BorderBrush = (Brush)FindResource("Border"),
                 BorderThickness = new Thickness(1),
                 CornerRadius = new CornerRadius(8)
             };
@@ -424,17 +462,17 @@ public partial class MainWindow : Window
         if (visual is null) return;
         visual.Icon.Text = error ? "×" : "✓";
         visual.Icon.Foreground = error
-            ? new SolidColorBrush(Color.FromRgb(227, 107, 107))
-            : new SolidColorBrush(Color.FromRgb(80, 182, 122));
+            ? (Brush)FindResource("Danger")
+            : (Brush)FindResource("Success");
         visual.Status.Text = error ? "失败" : "完成";
         visual.Status.Foreground = visual.Icon.Foreground;
-        visual.Card.Background = new SolidColorBrush(Color.FromRgb(20, 20, 20));
+        visual.Card.Background = (Brush)FindResource("SurfaceRaised");
     }
 
     private void AppendSystemStatus(string text)
     {
         var status = SelectableMessageText(text, 11.5, 18);
-        status.Foreground = new SolidColorBrush(Color.FromRgb(116, 116, 116));
+        status.Foreground = (Brush)FindResource("TextMuted");
         status.Margin = new Thickness(40, 2, 40, 10);
         MessagesPanel.Children.Add(status);
     }
@@ -487,7 +525,7 @@ public partial class MainWindow : Window
         if (!snapshot.TryGetProperty("messages", out var messages) || messages.ValueKind != JsonValueKind.Array) return;
         MessagesPanel.Children.Clear();
         _activeTools.Clear();
-        WelcomePanel.Visibility = messages.GetArrayLength() == 0 ? Visibility.Visible : Visibility.Collapsed;
+        WelcomeHero.Visibility = messages.GetArrayLength() == 0 ? Visibility.Visible : Visibility.Collapsed;
         foreach (var message in messages.EnumerateArray())
         {
             var role = String(message, "role");
@@ -531,7 +569,7 @@ public partial class MainWindow : Window
         {
             var snapshot = await _agent.NewSessionAsync();
             MessagesPanel.Children.Clear();
-            WelcomePanel.Visibility = Visibility.Visible;
+            WelcomeHero.Visibility = Visibility.Visible;
             PromptText.Clear();
             BaseSolutionText.Clear();
             CreateModeRadio.IsChecked = true;
@@ -582,7 +620,7 @@ public partial class MainWindow : Window
             _conversationTitle = "新任务";
             SetWorkspace(ComposerTab, "新任务");
             MessagesPanel.Children.Clear();
-            WelcomePanel.Visibility = Visibility.Visible;
+            WelcomeHero.Visibility = Visibility.Visible;
             PromptText.Clear();
             BaseSolutionText.Clear();
             CreateModeRadio.IsChecked = true;
@@ -612,6 +650,7 @@ public partial class MainWindow : Window
             _selectingSession = true;
             RecentConversationList.ItemsSource = items;
             _selectingSession = false;
+            RecentEmptyPanel.Visibility = items.Length == 0 ? Visibility.Visible : Visibility.Collapsed;
             SidebarStatusText.Text = $"共 {items.Length} 个可恢复会话";
         }
         catch (Exception error) { SidebarStatusText.Text = error.Message; }
@@ -696,15 +735,15 @@ public partial class MainWindow : Window
         if (WorkspaceTabs is null) return;
         WorkspaceTabs.SelectedItem = tab;
         WorkspaceTitleText.Text = string.IsNullOrWhiteSpace(title) ? "新任务" : title;
-        ChatNavButton.Background = tab == ComposerTab
-            ? new SolidColorBrush(Color.FromRgb(41, 41, 41))
-            : Brushes.Transparent;
-        ArtifactsNavButton.Background = tab == ArtifactsTab
-            ? new SolidColorBrush(Color.FromRgb(41, 41, 41))
-            : Brushes.Transparent;
-        SettingsNavButton.Background = tab == SettingsTab
-            ? new SolidColorBrush(Color.FromRgb(41, 41, 41))
-            : Brushes.Transparent;
+        var activeBackground = (Brush)FindResource("SurfaceAccent");
+        var activeForeground = (Brush)FindResource("TextPrimary");
+        var inactiveForeground = (Brush)FindResource("TextSecondary");
+        ChatNavButton.Background = tab == ComposerTab ? activeBackground : Brushes.Transparent;
+        ChatNavButton.Foreground = tab == ComposerTab ? activeForeground : inactiveForeground;
+        ArtifactsNavButton.Background = tab == ArtifactsTab ? activeBackground : Brushes.Transparent;
+        ArtifactsNavButton.Foreground = tab == ArtifactsTab ? activeForeground : inactiveForeground;
+        SettingsNavButton.Background = tab == SettingsTab ? activeBackground : Brushes.Transparent;
+        SettingsNavButton.Foreground = tab == SettingsTab ? activeForeground : inactiveForeground;
     }
 
     private void BrowseSpec_Click(object sender, RoutedEventArgs e)
@@ -802,7 +841,7 @@ public partial class MainWindow : Window
             string.IsNullOrWhiteSpace(SettingsApiKeyBox.Password))
         {
             SettingsStatusText.Text = "输出目录、API 地址、模型和 API Key 都必须填写。";
-            SettingsStatusText.Foreground = Brushes.Firebrick;
+            SettingsStatusText.Foreground = (Brush)FindResource("Danger");
             return;
         }
         var previousSettings = _settings;
@@ -821,7 +860,7 @@ public partial class MainWindow : Window
         OutputPathText.Text = _settings.OutputDirectory;
         await RefreshArtifactIndexAsync();
         SettingsStatusText.Text = "配置已加密保存，正在重启 Agent…";
-        SettingsStatusText.Foreground = Brushes.DarkGray;
+        SettingsStatusText.Foreground = (Brush)FindResource("TextSecondary");
         await StartAgentAsync();
         var providerChanged =
             !string.Equals(previousSettings.AiProvider, _settings.AiProvider, StringComparison.OrdinalIgnoreCase) ||
@@ -833,14 +872,14 @@ public partial class MainWindow : Window
             {
                 var snapshot = await _agent.NewSessionAsync();
                 MessagesPanel.Children.Clear();
-                WelcomePanel.Visibility = Visibility.Visible;
+                WelcomeHero.Visibility = Visibility.Visible;
                 RenderSnapshot(snapshot);
                 await RefreshHistoryAsync();
             }
             catch (Exception error)
             {
                 SettingsStatusText.Text = "新 Provider 已连接，但创建独立会话失败。";
-                SettingsStatusText.Foreground = Brushes.Firebrick;
+                SettingsStatusText.Foreground = (Brush)FindResource("Danger");
                 ShowFriendlyError(error);
                 return;
             }
@@ -850,7 +889,9 @@ public partial class MainWindow : Window
                 ? "Agent 已使用新协议/模型连接，并创建了独立新会话。"
                 : "Agent 已使用新配置连接。"
             : "Agent 连接失败，请查看主界面提示。";
-        SettingsStatusText.Foreground = _agent is { IsRunning: true } ? Brushes.SeaGreen : Brushes.Firebrick;
+        SettingsStatusText.Foreground = _agent is { IsRunning: true }
+            ? (Brush)FindResource("Success")
+            : (Brush)FindResource("Danger");
     }
 
     private void OpenSettingsFile_Click(object sender, RoutedEventArgs e)
@@ -891,7 +932,7 @@ public partial class MainWindow : Window
     {
         var code = error is AgentClientException agent ? agent.Code : "UNEXPECTED_ERROR";
         FriendlyStatus.Text = $"无法完成：{error.Message}（{code}）";
-        FriendlyStatus.Foreground = Brushes.Firebrick;
+        FriendlyStatus.Foreground = (Brush)FindResource("Danger");
         FriendlyStatus.Visibility = Visibility.Visible;
         ResultText.Text = JsonSerializer.Serialize(new { ok = false, error = code, message = error.Message }, JsonDefaults.Options);
     }

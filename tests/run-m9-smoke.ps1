@@ -178,9 +178,10 @@ try {
         throw 'Desktop API key is not protected with current-user DPAPI.'
     }
     if (-not $desktop.Contains('SettingsApiKeyBox') -or
-        -not $desktop.Contains('Width="900" MaxWidth="900"') -or
-        -not $desktop.Contains('Background="#FF0D0D0D"')) {
-        throw 'Desktop encrypted-key form, wide composer, or dark theme is missing.'
+        -not $desktop.Contains('Width="940" MaxWidth="940"') -or
+        -not $desktop.Contains('AppBackgroundBrush') -or
+        -not $desktop.Contains('HeroSurface')) {
+        throw 'Desktop encrypted-key form, wide composer, or refined dark theme is missing.'
     }
     foreach ($fragment in @('SidebarColumn', 'ToggleSidebar_Click', 'WorkspacePhaseText', 'PromptText_PreviewKeyDown', 'Suggestion_Click', 'ArtifactEmptyPanel', 'SendButton')) {
         if (-not $desktop.Contains($fragment)) { throw "Codex-aligned Desktop interaction is missing: $fragment" }

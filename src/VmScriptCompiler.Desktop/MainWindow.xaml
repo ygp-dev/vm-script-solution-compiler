@@ -2,23 +2,42 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="VM Script Solution Agent" Width="1420" Height="900" MinWidth="1040" MinHeight="700"
-        WindowStartupLocation="CenterScreen" Background="#FF0D0D0D" Foreground="#FFF4F4F4"
-        FontFamily="Segoe UI" TextOptions.TextFormattingMode="Display"
+        WindowStartupLocation="CenterScreen" Background="#FF0B1118" Foreground="#FFF4F7FB"
+        FontFamily="Segoe UI Variable Text, Segoe UI, Microsoft YaHei UI, Microsoft YaHei"
+        TextOptions.TextFormattingMode="Ideal" TextOptions.TextRenderingMode="ClearType"
+        UseLayoutRounding="True" SnapsToDevicePixels="True"
         Loaded="Window_Loaded" Closing="Window_Closing">
     <Window.Resources>
-        <SolidColorBrush x:Key="AppBackground" Color="#FF0D0D0D" />
-        <SolidColorBrush x:Key="SidebarBackground" Color="#FF111111" />
-        <SolidColorBrush x:Key="Surface" Color="#FF171717" />
-        <SolidColorBrush x:Key="SurfaceRaised" Color="#FF1D1D1D" />
-        <SolidColorBrush x:Key="SurfaceHover" Color="#FF242424" />
-        <SolidColorBrush x:Key="Border" Color="#FF2B2B2B" />
-        <SolidColorBrush x:Key="BorderStrong" Color="#FF414141" />
-        <SolidColorBrush x:Key="TextPrimary" Color="#FFF2F2F2" />
-        <SolidColorBrush x:Key="TextSecondary" Color="#FFA5A5A5" />
-        <SolidColorBrush x:Key="TextMuted" Color="#FF747474" />
-        <SolidColorBrush x:Key="Accent" Color="#FF2F7DF4" />
-        <SolidColorBrush x:Key="Success" Color="#FF50B67A" />
-        <SolidColorBrush x:Key="Danger" Color="#FFE36B6B" />
+        <SolidColorBrush x:Key="AppBackground" Color="#FF0B1118" />
+        <LinearGradientBrush x:Key="AppBackgroundBrush" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#FF0B1118" Offset="0" />
+            <GradientStop Color="#FF0D141D" Offset="0.56" />
+            <GradientStop Color="#FF0A1017" Offset="1" />
+        </LinearGradientBrush>
+        <SolidColorBrush x:Key="SidebarBackground" Color="#FF0D151E" />
+        <SolidColorBrush x:Key="Surface" Color="#FF151F2A" />
+        <SolidColorBrush x:Key="SurfaceRaised" Color="#FF1B2836" />
+        <SolidColorBrush x:Key="SurfaceHover" Color="#FF223548" />
+        <SolidColorBrush x:Key="SurfaceAccent" Color="#FF172B43" />
+        <SolidColorBrush x:Key="Border" Color="#FF223243" />
+        <SolidColorBrush x:Key="BorderStrong" Color="#FF34495E" />
+        <SolidColorBrush x:Key="TextPrimary" Color="#FFF1F5FA" />
+        <SolidColorBrush x:Key="TextSecondary" Color="#FFB2BFCD" />
+        <SolidColorBrush x:Key="TextMuted" Color="#FF788898" />
+        <SolidColorBrush x:Key="Accent" Color="#FF78A9F7" />
+        <SolidColorBrush x:Key="AccentStrong" Color="#FF5E96F5" />
+        <SolidColorBrush x:Key="Success" Color="#FF61C89B" />
+        <SolidColorBrush x:Key="Danger" Color="#FFF08A8A" />
+        <LinearGradientBrush x:Key="HeroSurface" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#FF16283B" Offset="0" />
+            <GradientStop Color="#FF131E2A" Offset="0.62" />
+            <GradientStop Color="#FF152536" Offset="1" />
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="ComposerSurface" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#FF182635" Offset="0" />
+            <GradientStop Color="#FF121C27" Offset="1" />
+        </LinearGradientBrush>
+        <DropShadowEffect x:Key="CardShadow" BlurRadius="24" ShadowDepth="8" Direction="270" Opacity="0.22" Color="#FF000000" />
 
         <Style TargetType="TextBlock">
             <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
@@ -29,7 +48,7 @@
             <Setter Property="Background" Value="{StaticResource SurfaceRaised}" />
             <Setter Property="BorderBrush" Value="{StaticResource Border}" />
             <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="Padding" Value="12,7" />
+            <Setter Property="Padding" Value="13,8" />
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="FontSize" Value="13" />
             <Setter Property="Template">
@@ -39,14 +58,14 @@
                                 Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="7">
+                                CornerRadius="9">
                             <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="Chrome" Property="Background" Value="{StaticResource SurfaceHover}" />
-                                <Setter TargetName="Chrome" Property="BorderBrush" Value="{StaticResource BorderStrong}" />
+                                <Setter TargetName="Chrome" Property="BorderBrush" Value="{StaticResource Accent}" />
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter TargetName="Chrome" Property="Opacity" Value=".78" />
@@ -66,7 +85,7 @@
             <Setter Property="HorizontalContentAlignment" Value="Left" />
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="Padding" Value="11,8" />
+            <Setter Property="Padding" Value="12,9" />
             <Setter Property="Margin" Value="0,1" />
         </Style>
 
@@ -82,9 +101,9 @@
         </Style>
 
         <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource BaseButton}">
-            <Setter Property="Background" Value="#FFF2F2F2" />
-            <Setter Property="Foreground" Value="#FF111111" />
-            <Setter Property="BorderBrush" Value="#FFF2F2F2" />
+            <Setter Property="Background" Value="{StaticResource AccentStrong}" />
+            <Setter Property="Foreground" Value="#FFFFFFFF" />
+            <Setter Property="BorderBrush" Value="{StaticResource AccentStrong}" />
             <Setter Property="FontWeight" Value="SemiBold" />
         </Style>
 
@@ -104,7 +123,7 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Chrome" Property="Background" Value="#FFD8D8D8" />
+                                <Setter TargetName="Chrome" Property="Background" Value="{StaticResource Accent}" />
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
                                 <Setter TargetName="Chrome" Property="Opacity" Value=".38" />
@@ -194,18 +213,19 @@
         <Style TargetType="RadioButton">
             <Setter Property="Foreground" Value="{StaticResource TextSecondary}" />
             <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="12" />
         </Style>
         <Style TargetType="Expander">
             <Setter Property="Foreground" Value="{StaticResource TextSecondary}" />
         </Style>
         <Style x:Key="SectionLabel" TargetType="TextBlock">
             <Setter Property="Foreground" Value="{StaticResource TextMuted}" />
-            <Setter Property="FontSize" Value="11" />
+            <Setter Property="FontSize" Value="11.5" />
             <Setter Property="FontWeight" Value="SemiBold" />
         </Style>
         <Style x:Key="FieldLabel" TargetType="TextBlock">
             <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
-            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontSize" Value="13.5" />
             <Setter Property="FontWeight" Value="SemiBold" />
             <Setter Property="Margin" Value="0,0,0,7" />
         </Style>
@@ -213,9 +233,16 @@
             <Setter Property="Height" Value="38" />
             <Setter Property="Padding" Value="10,7" />
         </Style>
+        <Style x:Key="StatusPill" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource SurfaceAccent}" />
+            <Setter Property="BorderBrush" Value="{StaticResource Border}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="Padding" Value="9,4" />
+        </Style>
     </Window.Resources>
 
-    <Grid Background="{StaticResource AppBackground}">
+    <Grid Background="{StaticResource AppBackgroundBrush}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition x:Name="SidebarColumn" Width="252" />
             <ColumnDefinition Width="*" />
@@ -223,7 +250,7 @@
 
         <Border x:Name="SidebarPanel" Grid.Column="0" Background="{StaticResource SidebarBackground}"
                 BorderBrush="{StaticResource Border}" BorderThickness="0,0,1,0">
-            <Grid Margin="10">
+            <Grid Margin="12,13,12,12">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -233,22 +260,23 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <Grid Margin="4,4,2,12">
+                <Grid Margin="2,2,0,18">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Horizontal">
-                        <Border Width="30" Height="30" Margin="0,0,9,0" Background="#FFF1F1F1" CornerRadius="8">
+                        <Border Width="34" Height="34" Margin="0,0,10,0" Background="{StaticResource AccentStrong}"
+                                BorderBrush="#FF9BC2FF" BorderThickness="1" CornerRadius="10">
                             <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
-                                       Foreground="#FF111111" FontSize="11" FontWeight="Bold" Text="VM" />
+                                       Foreground="#FFFFFFFF" FontSize="11" FontWeight="Bold" Text="VM" />
                         </Border>
                         <StackPanel VerticalAlignment="Center">
-                            <TextBlock FontSize="13" FontWeight="SemiBold" Text="VM Script Agent" />
+                            <TextBlock FontSize="14" FontWeight="SemiBold" Text="VM Script Agent" />
                             <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
-                                <Ellipse x:Name="AgentStatusDot" Width="6" Height="6" Margin="0,0,5,0"
+                                <Ellipse x:Name="AgentStatusDot" Width="7" Height="7" Margin="0,0,6,0"
                                          VerticalAlignment="Center" Fill="#FFCE9B45" />
-                                <TextBlock x:Name="AgentStatusText" FontSize="10.5"
+                                <TextBlock x:Name="AgentStatusText" FontSize="11"
                                            Foreground="{StaticResource TextMuted}" Text="正在启动" />
                             </StackPanel>
                         </StackPanel>
@@ -259,7 +287,7 @@
 
                 <Button Grid.Row="1" Style="{StaticResource PrimaryButton}" Height="38"
                         HorizontalContentAlignment="Left" Padding="12,0" Margin="0,0,0,9"
-                        Content="＋  新任务" Click="NewConversation_Click" />
+                        Content="＋  新建任务" Click="NewConversation_Click" />
 
                 <StackPanel Grid.Row="2">
                     <Button x:Name="ChatNavButton" Style="{StaticResource NavButton}"
@@ -270,7 +298,7 @@
                             Content="⚙   设置" Click="ShowSettings_Click" />
                 </StackPanel>
 
-                <Grid Grid.Row="3" Margin="10,19,2,7">
+                <Grid Grid.Row="3" Margin="12,21,2,8">
                     <TextBlock Style="{StaticResource SectionLabel}" VerticalAlignment="Center" Text="最近任务" />
                     <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                         <Button Style="{StaticResource IconButton}" Width="28" Height="28" Margin="0,0,3,0"
@@ -281,7 +309,8 @@
                     </StackPanel>
                 </Grid>
 
-                <ListBox x:Name="RecentConversationList" Grid.Row="4"
+                <Grid Grid.Row="4">
+                    <ListBox x:Name="RecentConversationList"
                          SelectionChanged="RecentConversation_SelectionChanged"
                          MouseDoubleClick="RecentConversation_DoubleClick">
                     <ListBox.ItemContainerStyle>
@@ -323,12 +352,20 @@
                             </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
-                </ListBox>
+                    </ListBox>
+                    <StackPanel x:Name="RecentEmptyPanel" Margin="14,24,14,0" IsHitTestVisible="False">
+                        <TextBlock HorizontalAlignment="Center" FontSize="20" Foreground="{StaticResource TextMuted}" Text="✦" />
+                        <TextBlock Margin="0,8,0,0" HorizontalAlignment="Center" FontSize="12"
+                                   Foreground="{StaticResource TextSecondary}" Text="还没有最近任务" />
+                        <TextBlock Margin="0,4,0,0" HorizontalAlignment="Center" FontSize="11"
+                                   Foreground="{StaticResource TextMuted}" Text="从一句自然语言开始" />
+                    </StackPanel>
+                </Grid>
 
                 <StackPanel Grid.Row="5" Margin="0,9,0,0">
-                    <Border Margin="0,0,0,7" BorderBrush="{StaticResource Border}" BorderThickness="0,1,0,0" />
+                    <Border Margin="0,0,0,9" BorderBrush="{StaticResource Border}" BorderThickness="0,1,0,0" />
                     <Button Style="{StaticResource NavButton}" Content="↗   打开当前结果" Click="OpenConversationFolder_Click" />
-                    <TextBlock x:Name="SidebarStatusText" Margin="11,4,8,5" FontSize="10.5"
+                    <TextBlock x:Name="SidebarStatusText" Margin="11,4,8,5" FontSize="11"
                                Foreground="{StaticResource TextMuted}" TextWrapping="Wrap" />
                 </StackPanel>
             </Grid>
@@ -342,7 +379,7 @@
 
             <Border Grid.Row="0" Background="{StaticResource AppBackground}"
                     BorderBrush="{StaticResource Border}" BorderThickness="0,0,0,1">
-                <Grid Margin="14,0">
+                <Grid Margin="20,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
@@ -351,17 +388,18 @@
                     <Button x:Name="ExpandSidebarButton" Visibility="Collapsed" Style="{StaticResource IconButton}"
                             Content="☰" ToolTip="展开侧栏" Click="ToggleSidebar_Click" />
                     <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <TextBlock x:Name="WorkspaceTitleText" FontSize="13" FontWeight="SemiBold" Text="新任务" />
-                        <Border Margin="9,0,0,0" Padding="7,2" Background="#FF1B1B1B"
-                                BorderBrush="{StaticResource Border}" BorderThickness="1" CornerRadius="10">
-                            <TextBlock x:Name="WorkspacePhaseText" FontSize="10.5"
+                        <TextBlock x:Name="WorkspaceTitleText" FontSize="14" FontWeight="SemiBold" Text="新任务" />
+                        <Border Style="{StaticResource StatusPill}" Margin="10,0,0,0">
+                            <TextBlock x:Name="WorkspacePhaseText" FontSize="11"
                                        Foreground="{StaticResource TextSecondary}" Text="draft" />
                         </Border>
                     </StackPanel>
                     <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock x:Name="EnvironmentText" MaxWidth="310" Margin="0,0,12,0"
-                                   VerticalAlignment="Center" FontSize="11" Foreground="{StaticResource TextMuted}"
+                        <Border Style="{StaticResource StatusPill}" Margin="0,0,12,0" Padding="9,4">
+                            <TextBlock x:Name="EnvironmentText" MaxWidth="270"
+                                   VerticalAlignment="Center" FontSize="11.5" Foreground="{StaticResource TextMuted}"
                                    TextTrimming="CharacterEllipsis" Text="正在检测 VisionMaster…" />
+                        </Border>
                         <Button Style="{StaticResource IconButton}" Content="↻" ToolTip="重新连接 Agent"
                                 Click="ReconnectAgent_Click" />
                     </StackPanel>
@@ -382,56 +420,61 @@
 
                         <ScrollViewer x:Name="TranscriptScroll" VerticalScrollBarVisibility="Auto"
                                       HorizontalScrollBarVisibility="Disabled">
-                            <StackPanel x:Name="TranscriptPanel" Width="840" MaxWidth="840"
-                                        Margin="28,42,28,26" HorizontalAlignment="Center">
-                                <StackPanel x:Name="WelcomePanel" Margin="0,42,0,28">
-                                    <Border Width="52" Height="52" HorizontalAlignment="Center"
-                                            Background="#FFF0F0F0" CornerRadius="14">
+                            <StackPanel x:Name="TranscriptPanel" Width="900" MaxWidth="900"
+                                        Margin="28,30,28,26" HorizontalAlignment="Center">
+                                <Border x:Name="WelcomeHero" Margin="0,28,0,24" Padding="24"
+                                        Background="{StaticResource HeroSurface}" BorderBrush="#FF2B4968"
+                                        BorderThickness="1" CornerRadius="22" Effect="{StaticResource CardShadow}">
+                                <StackPanel x:Name="WelcomePanel">
+                                    <Border Width="58" Height="58" HorizontalAlignment="Center"
+                                            Background="{StaticResource AccentStrong}" BorderBrush="#FF9BC2FF"
+                                            BorderThickness="1" CornerRadius="17">
                                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
-                                                   Foreground="#FF111111" FontWeight="Bold" Text="VM" />
+                                                   Foreground="#FFFFFFFF" FontSize="13" FontWeight="Bold" Text="VM" />
                                     </Border>
                                     <TextBlock HorizontalAlignment="Center" Margin="0,18,0,0"
-                                               FontSize="25" FontWeight="SemiBold" Text="为 VisionMaster 构建什么？" />
+                                               FontSize="26" FontWeight="SemiBold" Text="为 VisionMaster 构建什么？" />
                                     <TextBlock HorizontalAlignment="Center" MaxWidth="600" Margin="0,9,0,0"
                                                Foreground="{StaticResource TextSecondary}" TextAlignment="Center"
-                                               TextWrapping="Wrap"
+                                               TextWrapping="Wrap" FontSize="12.5"
                                                Text="描述脚本、输入输出或要修改的业务方案。Agent 会生成 Requirement，并用确定性编译器完成离线验证。" />
                                     <UniformGrid Columns="3" Margin="0,26,0,0">
-                                        <Button Margin="4" Padding="13,11" HorizontalContentAlignment="Left"
+                                        <Button Margin="4" Padding="14,13" HorizontalContentAlignment="Left"
                                                 Tag="创建一个 C# 脚本方案，输入 A 和 B，输出 Sum，并设置可见默认值。"
                                                 Click="Suggestion_Click">
                                             <StackPanel>
-                                                <TextBlock FontSize="12.5" FontWeight="SemiBold" Text="创建脚本方案" />
-                                                <TextBlock Margin="0,4,0,0" FontSize="11" Foreground="{StaticResource TextMuted}"
+                                                <TextBlock FontSize="13" FontWeight="SemiBold" Text="创建脚本方案" />
+                                                <TextBlock Margin="0,4,0,0" FontSize="11.5" Foreground="{StaticResource TextMuted}"
                                                            TextWrapping="Wrap" Text="生成 C#、Python 或全局脚本" />
                                             </StackPanel>
                                         </Button>
-                                        <Button Margin="4" Padding="13,11" HorizontalContentAlignment="Left"
+                                        <Button Margin="4" Padding="14,13" HorizontalContentAlignment="Left"
                                                 Tag="向已有 VisionMaster SOL 中加入一个脚本，并在修改前检查目标模块和参数。"
                                                 Click="Suggestion_Click">
                                             <StackPanel>
-                                                <TextBlock FontSize="12.5" FontWeight="SemiBold" Text="修改已有 SOL" />
-                                                <TextBlock Margin="0,4,0,0" FontSize="11" Foreground="{StaticResource TextMuted}"
+                                                <TextBlock FontSize="13" FontWeight="SemiBold" Text="修改已有 SOL" />
+                                                <TextBlock Margin="0,4,0,0" FontSize="11.5" Foreground="{StaticResource TextMuted}"
                                                            TextWrapping="Wrap" Text="检查模块后安全注入脚本" />
                                             </StackPanel>
                                         </Button>
-                                        <Button Margin="4" Padding="13,11" HorizontalContentAlignment="Left"
+                                        <Button Margin="4" Padding="14,13" HorizontalContentAlignment="Left"
                                                 Tag="创建一个引用外部 DLL 的 C# 脚本，并校验程序集版本、架构和部署依赖。"
                                                 Click="Suggestion_Click">
                                             <StackPanel>
-                                                <TextBlock FontSize="12.5" FontWeight="SemiBold" Text="引用外部 DLL" />
-                                                <TextBlock Margin="0,4,0,0" FontSize="11" Foreground="{StaticResource TextMuted}"
+                                                <TextBlock FontSize="13" FontWeight="SemiBold" Text="引用外部 DLL" />
+                                                <TextBlock Margin="0,4,0,0" FontSize="11.5" Foreground="{StaticResource TextMuted}"
                                                            TextWrapping="Wrap" Text="验证版本、架构与部署依赖" />
                                             </StackPanel>
                                         </Button>
                                     </UniformGrid>
                                 </StackPanel>
+                                </Border>
 
                                 <StackPanel x:Name="MessagesPanel" />
 
                                 <StackPanel>
                                     <TextBlock x:Name="FriendlyStatus" Visibility="Collapsed" Margin="40,3,40,12"
-                                               TextWrapping="Wrap" FontSize="12"
+                                               TextWrapping="Wrap" FontSize="12.5"
                                                Foreground="{StaticResource TextSecondary}" />
                                     <Border x:Name="SuccessPanel" Visibility="Collapsed" Padding="14"
                                             Margin="40,0,40,12" Background="#FF112219"
@@ -505,7 +548,7 @@
                         </ScrollViewer>
 
                         <Border Grid.Row="1" Padding="22,10,22,22" Background="{StaticResource AppBackground}">
-                            <StackPanel Width="900" MaxWidth="900" HorizontalAlignment="Center">
+                            <StackPanel Width="940" MaxWidth="940" HorizontalAlignment="Center">
                                 <Border x:Name="BaseSolutionPanel" Visibility="Collapsed" Margin="10,0,10,8"
                                         Padding="10,7" Background="#FF161616" BorderBrush="{StaticResource Border}"
                                         BorderThickness="1" CornerRadius="8">
@@ -524,22 +567,24 @@
                                     </Grid>
                                 </Border>
 
-                                <Border Background="#FF1A1A1A" BorderBrush="#FF424242" BorderThickness="1"
-                                        CornerRadius="15" Padding="14,12,12,10">
+                                <Border x:Name="PromptComposerBorder" Background="{StaticResource ComposerSurface}"
+                                        BorderBrush="#FF385471" BorderThickness="1"
+                                        CornerRadius="17" Padding="16,14,14,12" Effect="{StaticResource CardShadow}">
                                     <Grid>
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="92" />
+                                            <RowDefinition Height="104" />
                                             <RowDefinition Height="Auto" />
                                         </Grid.RowDefinitions>
                                         <Grid>
-                                            <TextBlock x:Name="PromptPlaceholder" Margin="3,2,0,0"
-                                                       IsHitTestVisible="False" Foreground="#FF777777"
-                                                       FontSize="14.5" Text="描述要创建或修改的 VisionMaster 脚本…" />
-                                            <TextBox x:Name="PromptText" BorderThickness="0" Background="Transparent"
-                                                     AcceptsReturn="True" TextWrapping="Wrap"
-                                                     VerticalScrollBarVisibility="Auto" FontSize="14.5"
-                                                     TextChanged="PromptText_TextChanged"
-                                                     PreviewKeyDown="PromptText_PreviewKeyDown" />
+                                             <TextBlock x:Name="PromptPlaceholder" Margin="3,2,0,0"
+                                                        IsHitTestVisible="False" Foreground="#FF777777"
+                                                        FontSize="15" Text="描述要创建或修改的 VisionMaster 脚本…" />
+                                             <TextBox x:Name="PromptText" BorderThickness="0" Background="Transparent"
+                                                      AcceptsReturn="True" TextWrapping="Wrap"
+                                                      VerticalScrollBarVisibility="Auto" FontSize="15"
+                                                      TextChanged="PromptText_TextChanged"
+                                                      GotFocus="PromptText_GotFocus" LostFocus="PromptText_LostFocus"
+                                                      PreviewKeyDown="PromptText_PreviewKeyDown" />
                                         </Grid>
                                         <Grid Grid.Row="1" Margin="0,9,0,0">
                                             <Grid.ColumnDefinitions>
@@ -551,8 +596,8 @@
                                                              IsChecked="True" Margin="2,0,16,0" Checked="Mode_Changed" />
                                                 <RadioButton x:Name="PatchModeRadio" Content="Patch 已有方案"
                                                              Margin="0,0,16,0" Checked="Mode_Changed" />
-                                                <Border Padding="8,3" Background="#FF222222" CornerRadius="8">
-                                                    <TextBlock x:Name="AiStatusText" MaxWidth="340" FontSize="10.5"
+                                                <Border Style="{StaticResource StatusPill}" Padding="8,3">
+                                                    <TextBlock x:Name="AiStatusText" MaxWidth="340" FontSize="11"
                                                                Foreground="{StaticResource TextMuted}"
                                                                TextTrimming="CharacterEllipsis"
                                                                Text="正在初始化 Pi Runtime…" />
@@ -586,7 +631,7 @@
                         </Grid.RowDefinitions>
                         <Grid Margin="0,0,0,20">
                             <StackPanel>
-                                <TextBlock FontSize="24" FontWeight="SemiBold" Text="结果产物" />
+                            <TextBlock FontSize="25" FontWeight="SemiBold" Text="结果产物" />
                                 <TextBlock x:Name="ArtifactSummaryText" Margin="0,6,0,0"
                                            Foreground="{StaticResource TextSecondary}" />
                             </StackPanel>
@@ -611,7 +656,7 @@
                                     <TextBlock HorizontalAlignment="Center" FontSize="26"
                                                Foreground="{StaticResource TextMuted}" Text="▣" />
                                     <TextBlock Margin="0,10,0,0" HorizontalAlignment="Center"
-                                               FontWeight="SemiBold" Text="还没有结果产物" />
+                                               FontSize="13" FontWeight="SemiBold" Text="还没有结果产物" />
                                     <TextBlock Margin="0,5,0,0" HorizontalAlignment="Center"
                                                Foreground="{StaticResource TextMuted}"
                                                Text="完成任务后，SOL、报告和生成脚本会显示在这里。" />
@@ -678,7 +723,7 @@
                 <TabItem x:Name="SettingsTab">
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
                         <StackPanel Width="780" MaxWidth="780" Margin="36,30,36,50" HorizontalAlignment="Center">
-                            <TextBlock FontSize="24" FontWeight="SemiBold" Text="设置" />
+                            <TextBlock FontSize="25" FontWeight="SemiBold" Text="设置" />
                             <TextBlock Margin="0,6,0,22" Foreground="{StaticResource TextSecondary}" TextWrapping="Wrap"
                                        Text="配置模型连接和本地产物目录。API Key 使用 Windows 当前用户密钥加密保存。" />
 
@@ -686,7 +731,7 @@
                                     BorderBrush="{StaticResource Border}" BorderThickness="1" CornerRadius="11">
                                 <StackPanel>
                                     <TextBlock FontSize="15" FontWeight="SemiBold" Text="模型" />
-                                    <TextBlock Margin="0,4,0,18" FontSize="11.5" Foreground="{StaticResource TextMuted}"
+                                    <TextBlock Margin="0,4,0,18" FontSize="12" Foreground="{StaticResource TextMuted}"
                                                Text="用于把自然语言转换为 Requirement，模型不能直接编辑 SOL。" />
                                     <TextBlock Style="{StaticResource FieldLabel}" Text="API 协议（决定请求路径）" />
                                     <ComboBox x:Name="SettingsProviderChoice" Height="38" Margin="0,0,0,15" Padding="7">
@@ -728,7 +773,7 @@
                                     BorderBrush="{StaticResource Border}" BorderThickness="1" CornerRadius="11">
                                 <StackPanel>
                                     <TextBlock FontSize="15" FontWeight="SemiBold" Text="本地数据" />
-                                    <TextBlock Margin="0,4,0,18" FontSize="11.5" Foreground="{StaticResource TextMuted}"
+                                    <TextBlock Margin="0,4,0,18" FontSize="12" Foreground="{StaticResource TextMuted}"
                                                Text="管理生成结果、会话和桌面配置文件。" />
                                     <TextBlock Style="{StaticResource FieldLabel}" Text="默认输出目录" />
                                     <Grid Margin="0,0,0,15">

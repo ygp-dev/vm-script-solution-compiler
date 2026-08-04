@@ -136,7 +136,9 @@ foreach ($product in $products) {
     Move-Item -LiteralPath $staging -Destination $output
 }
 
-& (Join-Path $root 'scripts\write_release_manifest.ps1') -DistDirectory $dist | Out-Null
+$manifestScript = Join-Path $root 'scripts\write_release_manifest_fast.mjs'
+& $node $manifestScript $dist | Out-Null
+if ($LASTEXITCODE -ne 0) { throw 'Release manifest generation failed.' }
 $releaseSmoke = & (Join-Path $root 'tests\run-release-smoke.ps1') | ConvertFrom-Json
 if (-not $releaseSmoke.ok) { throw 'Standalone release smoke failed.' }
 Get-Content -LiteralPath (Join-Path $dist 'release-manifest.json') -Raw -Encoding UTF8
