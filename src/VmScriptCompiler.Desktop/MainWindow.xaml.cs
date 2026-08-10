@@ -1,10 +1,12 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using VmScriptCompiler.Core;
 using Brush = System.Windows.Media.Brush;
@@ -16,6 +18,60 @@ namespace VmScriptCompiler.Desktop;
 
 public partial class MainWindow : Window
 {
+    private const int DwmwaUseImmersiveDarkMode = 20;
+    private const int DwmwaUseImmersiveDarkModeLegacy = 19;
+    private const int DwmwaCaptionColor = 35;
+    private const int DwmwaTextColor = 36;
+    private const int WmGetMinMaxInfo = 0x0024;
+    private const uint MonitorDefaultToNearest = 0x00000002;
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct NativePoint
+    {
+        public int X;
+        public int Y;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct NativeRect
+    {
+        public int Left;
+        public int Top;
+        public int Right;
+        public int Bottom;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct NativeMinMaxInfo
+    {
+        public NativePoint Reserved;
+        public NativePoint MaxSize;
+        public NativePoint MaxPosition;
+        public NativePoint MinTrackSize;
+        public NativePoint MaxTrackSize;
+    }
+
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+    private struct NativeMonitorInfo
+    {
+        public int Size;
+        public NativeRect Monitor;
+        public NativeRect Work;
+        public uint Flags;
+    }
+
+    [DllImport("dwmapi.dll", EntryPoint = "DwmSetWindowAttribute", PreserveSig = true)]
+    private static extern int SetDwmWindowAttributeInt(nint hwnd, int attribute, ref int value, int valueSize);
+
+    [DllImport("dwmapi.dll", EntryPoint = "DwmSetWindowAttribute", PreserveSig = true)]
+    private static extern int SetDwmWindowAttributeColor(nint hwnd, int attribute, ref uint value, int valueSize);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    private static extern nint MonitorFromWindow(nint hwnd, uint flags);
+
+    [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+    private static extern bool GetMonitorInfo(nint monitor, ref NativeMonitorInfo info);
+
     private readonly CompilerFacade _compiler;
     private readonly DesktopStateStore _stateStore;
     private DesktopSettings _settings;
@@ -24,6 +80,7 @@ public partial class MainWindow : Window
     private IReadOnlyList<ArtifactRecord> _artifacts = [];
     private System.Windows.Controls.TextBox? _streamingAssistant;
     private readonly Dictionary<string, ToolCardVisual> _activeTools = new(StringComparer.Ordinal);
+    private HwndSource? _windowSource;
     private string? _lastSolution;
     private string? _lastReport;
     private string? _lastDependencyDirectory;
@@ -53,6 +110,10 @@ public partial class MainWindow : Window
                 SetWorkspace(ArtifactsTab, "结果产物");
                 ApplyArtifactFilter();
                 break;
+            case "search":
+                SetWorkspace(SearchTab, "Search");
+                RefreshGlobalSearch();
+                break;
             case "settings":
                 SetWorkspace(SettingsTab, "设置");
                 break;
@@ -66,14 +127,15 @@ public partial class MainWindow : Window
         AppendUserMessage("创建一个 C# 脚本，输入 A 和 B，输出 Sum，并设置默认值。");
         AppendAssistantDelta("我会先确认 VM 4.4 环境和端口能力，再建立 Requirement 并交给确定性编译器生成方案。");
         _streamingAssistant = null;
-        AppendToolStatus("vm_detect_environment", false, false);
-        AppendToolStatus("vm_detect_environment", true, false);
-        AppendToolStatus("vm_validate_requirement", false, false);
-        WorkspacePhaseText.Text = "校验需求";
+        AppendToolStatus("vm_update_requirement", false, false);
+        AppendToolStatus("vm_update_requirement", true, false);
+        AppendToolStatus("vm_compile_solution", false, false);
+        WorkspacePhaseText.Text = "确定性编译";
     }
 
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
+        ApplyDarkTitleBar();
         var agentTask = StartAgentAsync();
         await Task.Yield();
         var secondaryStartupTasks = Task.WhenAll(
@@ -81,6 +143,88 @@ public partial class MainWindow : Window
             DetectEnvironmentAsync());
         await agentTask;
         await secondaryStartupTasks;
+    }
+
+    private void Window_SourceInitialized(object? sender, EventArgs e)
+    {
+        ApplyDarkTitleBar();
+        _windowSource = PresentationSource.FromVisual(this) as HwndSource;
+        _windowSource?.AddHook(WindowMessageHook);
+    }
+
+    private static nint WindowMessageHook(nint hwnd, int message, nint wParam, nint lParam, ref bool handled)
+    {
+        if (message != WmGetMinMaxInfo || lParam == IntPtr.Zero) return IntPtr.Zero;
+
+        var monitor = MonitorFromWindow(hwnd, MonitorDefaultToNearest);
+        if (monitor == IntPtr.Zero) return IntPtr.Zero;
+
+        var info = new NativeMonitorInfo { Size = Marshal.SizeOf<NativeMonitorInfo>() };
+        if (!GetMonitorInfo(monitor, ref info)) return IntPtr.Zero;
+
+        var minMax = Marshal.PtrToStructure<NativeMinMaxInfo>(lParam);
+        minMax.MaxPosition.X = info.Work.Left - info.Monitor.Left;
+        minMax.MaxPosition.Y = info.Work.Top - info.Monitor.Top;
+        minMax.MaxSize.X = info.Work.Right - info.Work.Left;
+        minMax.MaxSize.Y = info.Work.Bottom - info.Work.Top;
+        Marshal.StructureToPtr(minMax, lParam, false);
+        handled = true;
+        return IntPtr.Zero;
+    }
+
+    private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        if (e.ChangedButton != MouseButton.Left) return;
+        if (e.ClickCount == 2)
+        {
+            ToggleWindowState();
+            return;
+        }
+        if (WindowState != WindowState.Maximized)
+        {
+            try { DragMove(); }
+            catch (InvalidOperationException) { }
+        }
+    }
+
+    private void MinimizeWindow_Click(object sender, RoutedEventArgs e) => WindowState = WindowState.Minimized;
+
+    private void MaximizeWindow_Click(object sender, RoutedEventArgs e) => ToggleWindowState();
+
+    private void CloseWindow_Click(object sender, RoutedEventArgs e) => Close();
+
+    private void Window_StateChanged(object? sender, EventArgs e)
+        => MaximizeWindowButton.Content = WindowState == WindowState.Maximized ? "❐" : "□";
+
+    private void ToggleWindowState()
+        => WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+
+    private void ApplyDarkTitleBar()
+    {
+        if (!OperatingSystem.IsWindows()) return;
+        var hwnd = new WindowInteropHelper(this).Handle;
+        if (hwnd == IntPtr.Zero) return;
+
+        try
+        {
+            var darkMode = 1;
+            if (SetDwmWindowAttributeInt(hwnd, DwmwaUseImmersiveDarkMode,
+                    ref darkMode, Marshal.SizeOf<int>()) != 0)
+            {
+                _ = SetDwmWindowAttributeInt(hwnd, DwmwaUseImmersiveDarkModeLegacy,
+                    ref darkMode, Marshal.SizeOf<int>());
+            }
+
+            // DWM COLORREF is stored as 0x00BBGGRR, matching the app's #0B1118 palette.
+            var captionColor = 0x0018110Bu;
+            var textColor = 0x00FBF7F4u;
+            _ = SetDwmWindowAttributeColor(hwnd, DwmwaCaptionColor,
+                ref captionColor, Marshal.SizeOf<uint>());
+            _ = SetDwmWindowAttributeColor(hwnd, DwmwaTextColor,
+                ref textColor, Marshal.SizeOf<uint>());
+        }
+        catch (DllNotFoundException) { }
+        catch (EntryPointNotFoundException) { }
     }
 
     private async Task StartAgentAsync()
@@ -270,12 +414,16 @@ public partial class MainWindow : Window
 
     private async void Stop_Click(object sender, RoutedEventArgs e)
     {
+        _runCancellation?.Cancel();
         try
         {
-            if (_agent is not null) await _agent.AbortAsync();
+            if (_agent is not null)
+            {
+                using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(2));
+                await _agent.AbortAsync(timeout.Token);
+            }
         }
         catch { }
-        _runCancellation?.Cancel();
     }
 
     private void Agent_EventReceived(object? sender, JsonElement message)
@@ -716,6 +864,16 @@ public partial class MainWindow : Window
         SetWorkspace(ArtifactsTab, "结果产物");
         ApplyArtifactFilter();
     }
+    private void ShowAutomations_Click(object sender, RoutedEventArgs e)
+        => SetWorkspace(AutomationTab, "Automations");
+
+    private void ShowSearch_Click(object sender, RoutedEventArgs e)
+    {
+        SetWorkspace(SearchTab, "Search");
+        RefreshGlobalSearch();
+        GlobalSearchText.Focus();
+    }
+
     private void ShowSettings_Click(object sender, RoutedEventArgs e)
     {
         LoadSettingsForm();
@@ -740,8 +898,13 @@ public partial class MainWindow : Window
         var inactiveForeground = (Brush)FindResource("TextSecondary");
         ChatNavButton.Background = tab == ComposerTab ? activeBackground : Brushes.Transparent;
         ChatNavButton.Foreground = tab == ComposerTab ? activeForeground : inactiveForeground;
+        var searchActive = tab == SearchTab;
         ArtifactsNavButton.Background = tab == ArtifactsTab ? activeBackground : Brushes.Transparent;
         ArtifactsNavButton.Foreground = tab == ArtifactsTab ? activeForeground : inactiveForeground;
+        AutomationNavButton.Background = tab == AutomationTab ? activeBackground : Brushes.Transparent;
+        AutomationNavButton.Foreground = tab == AutomationTab ? activeForeground : inactiveForeground;
+        SearchNavButton.Background = searchActive ? activeBackground : Brushes.Transparent;
+        SearchNavButton.Foreground = searchActive ? activeForeground : inactiveForeground;
         SettingsNavButton.Background = tab == SettingsTab ? activeBackground : Brushes.Transparent;
         SettingsNavButton.Foreground = tab == SettingsTab ? activeForeground : inactiveForeground;
     }
@@ -801,6 +964,51 @@ public partial class MainWindow : Window
         ArtifactList.ItemsSource = filtered;
         ArtifactEmptyPanel.Visibility = filtered.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
         ArtifactSummaryText.Text = $"已索引 {_artifacts.Count} 个产物，当前显示 {filtered.Count} 个";
+    }
+
+    private void GlobalSearch_Changed(object sender, TextChangedEventArgs e) => RefreshGlobalSearch();
+
+    private void RefreshGlobalSearch()
+    {
+        if (GlobalSearchList is null) return;
+        var query = GlobalSearchText.Text.Trim();
+        var sessions = _stateStore.LoadConversations().Select(session => new SearchResult(
+            "Session",
+            session.DisplayTitle,
+            session.Prompt,
+            session.TimestampUtc,
+            string.Join(" ", session.DisplayTitle, session.Prompt, session.TaskDirectory ?? ""),
+            null,
+            session.TaskDirectory));
+        var artifacts = _artifacts.Select(artifact => new SearchResult(
+            artifact.Kind,
+            artifact.DisplayTitle,
+            artifact.DisplayDetail,
+            artifact.ModifiedUtc,
+            artifact.SearchText,
+            artifact.FilePath,
+            null));
+        var all = sessions.Concat(artifacts).OrderByDescending(result => result.TimestampUtc).ToArray();
+        var filtered = string.IsNullOrWhiteSpace(query)
+            ? all
+            : all.Where(result => result.SearchText.Contains(query, StringComparison.OrdinalIgnoreCase)).Take(200).ToArray();
+        GlobalSearchList.ItemsSource = filtered;
+        GlobalSearchEmptyPanel.Visibility = filtered.Length == 0 ? Visibility.Visible : Visibility.Collapsed;
+        GlobalSearchSummaryText.Text = string.IsNullOrWhiteSpace(query)
+            ? $"搜索 Sessions、提示词、SOL、报告和生成脚本；共 {all.Length} 条"
+            : $"搜索“{query}”：找到 {filtered.Length} 条结果";
+    }
+
+    private void GlobalSearchList_DoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    {
+        if (GlobalSearchList.SelectedItem is not SearchResult result) return;
+        if (!string.IsNullOrWhiteSpace(result.FilePath) && File.Exists(result.FilePath))
+        {
+            Process.Start(new ProcessStartInfo(result.FilePath) { UseShellExecute = true });
+            return;
+        }
+        if (!string.IsNullOrWhiteSpace(result.DirectoryPath) && Directory.Exists(result.DirectoryPath))
+            OpenDirectory(result.DirectoryPath);
     }
 
     private void ArtifactList_DoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e) => OpenSelectedArtifact();
@@ -905,6 +1113,7 @@ public partial class MainWindow : Window
     {
         try
         {
+            _windowSource?.RemoveHook(WindowMessageHook);
             _stateStore.SaveSettings(_settings);
             _runCancellation?.Cancel();
             var agent = Interlocked.Exchange(ref _agent, null);
@@ -1003,6 +1212,18 @@ public partial class MainWindow : Window
     {
         var dependency = Path.Combine(result.TaskDirectory, "dependencies");
         return new BuildPresentation(result.TaskDirectory, result.SolutionFile, result.ReportFile, Directory.Exists(dependency) ? dependency : null);
+    }
+
+    private sealed record SearchResult(
+        string Kind,
+        string Title,
+        string Detail,
+        DateTime TimestampUtc,
+        string SearchText,
+        string? FilePath,
+        string? DirectoryPath)
+    {
+        public string DisplayTime => TimestampUtc.ToLocalTime().ToString("yyyy-MM-dd HH:mm");
     }
 
     private sealed record ToolCardVisual(Border Card, TextBlock Icon, TextBlock Status);

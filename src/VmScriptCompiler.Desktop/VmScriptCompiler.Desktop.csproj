@@ -14,6 +14,8 @@
     <ProjectReference Include="..\VmScriptCompiler.Core\VmScriptCompiler.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="..\..\assets\branding\vm-script-compiler.ico" Link="vm-script-compiler.ico" />
+    <Resource Include="..\..\assets\branding\vm-script-compiler-icon-512.png" Link="vm-script-compiler-icon.png" />
     <Content Include="..\..\resources\**\*" Link="resources\%(RecursiveDir)%(Filename)%(Extension)" CopyToPublishDirectory="PreserveNewest" />
     <Content Include="..\..\schemas\**\*" Link="schemas\%(RecursiveDir)%(Filename)%(Extension)" CopyToPublishDirectory="PreserveNewest" />
     <Content Include="..\..\tools\vm-solution-parser\**\*" Link="tools\vm-solution-parser\%(RecursiveDir)%(Filename)%(Extension)" CopyToPublishDirectory="PreserveNewest" />

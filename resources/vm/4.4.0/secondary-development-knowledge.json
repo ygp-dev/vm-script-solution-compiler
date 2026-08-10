@@ -1,0 +1,101 @@
+{
+  "knowledgeVersion": "1.0.0",
+  "vmVersion": "4.4.0",
+  "status": "advisory",
+  "scope": {
+    "sourceVersion": "3.4.0",
+    "targetVersion": "4.4.0",
+    "statement": "社区文章描述的是 VM 3.4.0 的运行界面清图像场景；它可以提供设计模式，但不能直接证明 VM 4.4 的方法名、参数名或脚本端口类型。"
+  },
+  "source": {
+    "kind": "community-article",
+    "title": "【技术分享】VM运行界面之清空图像",
+    "url": "https://www.v-club.com/home/article/11028",
+    "published": "2026-06-10",
+    "retrieved": "2026-08-06"
+  },
+  "facts": [
+    {
+      "id": "multi-image-clear-ui",
+      "statement": "文章的场景是多点检测时先清理上一个产品的多图像控件显示，再逐张保留新图像。",
+      "evidence": "article-text",
+      "confidence": "observed",
+      "versionScope": "VM 3.4.0"
+    },
+    {
+      "id": "clear-interface-not-exposed",
+      "statement": "文章记录的试错结果是：运行界面的多图像控件没有可直接调用的清空接口。",
+      "evidence": "article-text",
+      "confidence": "observed",
+      "versionScope": "VM 3.4.0"
+    },
+    {
+      "id": "affine-output-readonly-input-writable",
+      "statement": "文章记录的试错结果是：绑定仿射变换模块的输出图像属性只读，而输入图像属性可写。",
+      "evidence": "article-text",
+      "confidence": "observed",
+      "versionScope": "VM 3.4.0"
+    },
+    {
+      "id": "background-image-clear-pattern",
+      "statement": "文章采用一次执行的分支流程，在脚本中向每个已确认的仿射变换模块输入图像写入背景图，使运行界面更新为清空后的状态。",
+      "evidence": "article-text-and-code-screenshot",
+      "confidence": "pattern-only",
+      "versionScope": "VM 3.4.0"
+    },
+    {
+      "id": "operator-sdk-input-image-sample",
+      "statement": "文章代码截图展示了一个 VM 3.4 C# 脚本样例：用 OpenCvSharp 的 Cv2.ImRead 读取灰度背景图，创建 InputImageData，填写 Names.DataName=InImage、Names.HeightName=InImageHeight、Names.WidthName=InImageWidth、Names.PixelFormatName=InImagePixelFormat、Data/DataLen/Height/Width/Pixelformat，然后通过 VmSolution.Instance[流程名.模块名] 转为 TMVSAffineTransformModuTool，并调用 ModuParams.SetInputImage(inputImageData)。",
+      "evidence": "article-code-screenshot",
+      "confidence": "observed",
+      "versionScope": "VM 3.4.0"
+    },
+    {
+      "id": "operator-sdk-boundary",
+      "statement": "文章中的接口属于 VM 运行/算子二次开发场景，不能据此推断 ShellModule 或 PyShellModule 的端口、对象、构造函数或参数契约。",
+      "evidence": "article-context",
+      "confidence": "boundary",
+      "versionScope": "all"
+    }
+  ],
+  "agentRules": [
+    "Treat this article as a version-scoped design pattern, never as a verified VM 4.4 API catalog entry.",
+    "When the user requests clearing a multi-image display, first inspect the Patch baseline and identify the actual display, affine module, and writable input-image parameter; do not invent a direct UI-clear method.",
+    "Only emit setModuleValue or source that writes an image when the target module, parameter, input relation, and image type are present in the parsed SOL or in project evidence.",
+    "Do not copy method names or types from the article screenshot. If the target is not confirmed, stop with a structured capability or target-missing diagnostic and ask the user for a validated sample.",
+    "The screenshot's InputImageData field names and TMVSAffineTransformModuTool/ModuParams.SetInputImage pattern may be considered only as a VM 3.4 sample; for VM 4.4 require exact DLL paths, assembly versions, target architecture, and a successful precompile before generating these identifiers.",
+    "Cv2.ImRead and OpenCvSharp are not implicit VM references; require an explicitly verified OpenCvSharp dependency and image-pixel conversion before using them.",
+    "Treat operator SDK calls as external-host/global-script by default; the article shows that VM 3.4 C# ShellModule may work with explicit references, but VM 4.4 requires project catalog evidence and a successful target-ShellModule precompile for the same DLL and types. PyShellModule must not directly reference C# operator SDK types.",
+    "A background-image write is a state-changing workaround, not proof that the display was cleared; report the required user VM validation separately."
+  ],
+  "sampleIdentifiers": {
+    "carrier": "csharp-module",
+    "vmVersion": "3.4.0",
+    "imageReader": "OpenCvSharp.Cv2.ImRead",
+    "inputImageType": "InputImageData",
+    "inputImageNames": {
+      "data": "InImage",
+      "height": "InImageHeight",
+      "width": "InImageWidth",
+      "pixelFormat": "InImagePixelFormat"
+    },
+    "moduleType": "TMVSAffineTransformModuTool",
+    "moduleLookup": "VmSolution.Instance[procedureName + \".\" + moduleName]",
+    "inputSetter": "ModuParams.SetInputImage(inputImageData)",
+    "notVerifiedFor": ["VM 4.4.0", "PyShellModule"]
+  },
+  "pattern": {
+    "preconditions": [
+      "The Patch baseline contains the display module and the upstream affine modules.",
+      "Each target affine module input image has a parsed or user-verified writable binding.",
+      "The script carrier and image type are confirmed for the target VM version."
+    ],
+    "steps": [
+      "Inspect and preserve existing data-source bindings.",
+      "Add or reuse an explicit initialization/once branch that reaches the script.",
+      "Write the validated background image to each validated affine input.",
+      "Compile and report the generated SOL plus the target list for user VM verification."
+    ],
+    "failure": "If any target module, parameter, binding, image type, or writable direction is unconfirmed, fail explicitly instead of generating a blank-image or guessed API solution."
+  }
+}

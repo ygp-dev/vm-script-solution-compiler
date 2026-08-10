@@ -11,15 +11,15 @@ public sealed class ModuleScriptCompiler(string repositoryRoot, ParserClient par
 {
     private readonly string _repositoryRoot = Path.GetFullPath(repositoryRoot);
 
-    public ModuleCompileResult Compile(string inputSolution, string outputSolution, string templateSolution, IReadOnlyList<ScriptRequirement> scripts, IReadOnlyList<ConnectionRequirement> connections, string mode, string generatedDirectory, string validationDirectory)
+    public ModuleCompileResult Compile(string inputSolution, string outputSolution, string templateSolution, IReadOnlyList<ScriptRequirement> scripts, IReadOnlyList<ConnectionRequirement> connections, string mode, string generatedDirectory, string validationDirectory, string? baselineParseFile = null)
     {
         var modules = scripts.Where(x => x.Carrier is "csharp-module" or "python-module").ToArray();
-        ValidateRequirements(modules, mode, inputSolution, validationDirectory);
+        ValidateRequirements(modules, mode, inputSolution, validationDirectory, baselineParseFile);
         var changes = new List<Dictionary<string, object?>>();
         var artifacts = new List<ModuleScriptArtifact>();
 
         if (mode == "create") BuildCreateChanges(modules, templateSolution, changes);
-        else BuildPatchChanges(modules, templateSolution, validationDirectory, changes);
+        else BuildPatchChanges(modules, templateSolution, validationDirectory, baselineParseFile, changes);
 
         foreach (var script in modules)
         {
@@ -100,9 +100,9 @@ public sealed class ModuleScriptCompiler(string repositoryRoot, ParserClient par
         }
     }
 
-    private static void BuildPatchChanges(ScriptRequirement[] modules, string templateSolution, string validationDirectory, List<Dictionary<string, object?>> changes)
+    private static void BuildPatchChanges(ScriptRequirement[] modules, string templateSolution, string validationDirectory, string? baselineParseFile, List<Dictionary<string, object?>> changes)
     {
-        var inventoryFile = Path.Combine(validationDirectory, "base-parse-result.json");
+        var inventoryFile = baselineParseFile ?? Path.Combine(validationDirectory, "base-parse-result.json");
         if (!File.Exists(inventoryFile)) throw new CompilerException("SOL_PARSE_FAILED", "Patch base inventory is missing.");
         using var document = JsonDocument.Parse(File.ReadAllText(inventoryFile));
         var existing = document.RootElement.GetProperty("solution").GetProperty("procedures").EnumerateArray()
@@ -123,7 +123,7 @@ public sealed class ModuleScriptCompiler(string repositoryRoot, ParserClient par
         }
     }
 
-    private void ValidateRequirements(ScriptRequirement[] modules, string mode, string inputSolution, string validationDirectory)
+    private void ValidateRequirements(ScriptRequirement[] modules, string mode, string inputSolution, string validationDirectory, string? baselineParseFile)
     {
         var referenceCatalog = LoadShellReferenceCatalog();
         foreach (var group in modules.GroupBy(x => x.Procedure + "\0" + x.Name, StringComparer.Ordinal))
@@ -138,7 +138,7 @@ public sealed class ModuleScriptCompiler(string repositoryRoot, ParserClient par
                 else if (referenceCatalog.Verified.TryGetValue(dependency.Name, out verified) && !string.IsNullOrWhiteSpace(dependency.Role) && !string.Equals(dependency.Role, verified.Role, StringComparison.OrdinalIgnoreCase))
                     throw new CompilerException("DEPENDENCY_ROLE_MISMATCH", $"Declared role {dependency.Role} does not match verified role {verified.Role} for {dependency.Name}.");
         }
-        ValidateOperationTargets(modules, mode, inputSolution, validationDirectory);
+        ValidateOperationTargets(modules, mode, inputSolution, validationDirectory, baselineParseFile);
     }
 
     private string BuildShellReferences(ScriptRequirement script)
@@ -167,7 +167,7 @@ public sealed class ModuleScriptCompiler(string repositoryRoot, ParserClient par
         return new(defaults, verified);
     }
 
-    private void ValidateOperationTargets(ScriptRequirement[] modules, string mode, string inputSolution, string validationDirectory)
+    private void ValidateOperationTargets(ScriptRequirement[] modules, string mode, string inputSolution, string validationDirectory, string? baselineParseFile)
     {
         var known = modules.ToDictionary(
             x => x.Procedure + "." + x.Name,
@@ -175,9 +175,12 @@ public sealed class ModuleScriptCompiler(string repositoryRoot, ParserClient par
             StringComparer.Ordinal);
         if (mode == "patch")
         {
-            var inventoryFile = Path.Combine(validationDirectory, "base-parse-result.json");
-            var result = parser.Parse(inputSolution, inventoryFile);
-            if (result.ExitCode != 0) throw new CompilerException("SOL_PARSE_FAILED", "Cannot inspect Patch base solution.");
+            var inventoryFile = baselineParseFile ?? Path.Combine(validationDirectory, "base-parse-result.json");
+            if (!File.Exists(inventoryFile))
+            {
+                var result = parser.Parse(inputSolution, inventoryFile);
+                if (result.ExitCode != 0) throw new CompilerException("SOL_PARSE_FAILED", "Cannot inspect Patch base solution.");
+            }
             using var document = JsonDocument.Parse(File.ReadAllText(inventoryFile));
             foreach (var procedure in document.RootElement.GetProperty("solution").GetProperty("procedures").EnumerateArray())
             foreach (var module in procedure.GetProperty("modules").EnumerateArray())

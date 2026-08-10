@@ -23,7 +23,7 @@ try
         File.WriteAllText(temporary, json);
         var compiler = new CompilerFacade(RepositoryLocator.Find());
         var result = command == "patch" ? compiler.Patch(baseSolution!, temporary, output) : compiler.Build(temporary, output);
-        Console.WriteLine(JsonSerializer.Serialize(new { ok = true, requirement, result.TaskDirectory, result.SolutionFile, result.ReportFile }, JsonDefaults.Options));
+        Console.WriteLine(JsonSerializer.Serialize(new { ok = true, requirement, result.TaskDirectory, result.SolutionFile, result.ReportFile, result.DefaultPersistenceNotices }, JsonDefaults.Options));
     }
     finally { if (File.Exists(temporary)) File.Delete(temporary); }
     return 0;

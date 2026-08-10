@@ -23,6 +23,9 @@ try {
     }
     $python = Get-Content (Join-Path $typed.taskDirectory 'generated\typed-python.py') -Raw -Encoding UTF8
     if (-not $python.Contains('moduleVar.Values if moduleVar.Values is not None else [1, 2, 3]')) { throw 'Python array default fallback was not generated.' }
+    $contract = Get-Content (Join-Path $typed.taskDirectory 'script-contract.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+    $arrayNotice = @($contract.defaultPersistenceNotices | Where-Object { $_.port -eq 'Values' -and $_.code -eq 'DEFAULT_PERSISTENCE_UNCONFIRMED' })
+    if ($arrayNotice.Count -ne 1) { throw 'Unsupported Python array default did not produce an explicit persistence diagnostic.' }
     $precompile = Get-Content (Join-Path $typed.taskDirectory 'validation\script-precompile.json') -Raw -Encoding UTF8 | ConvertFrom-Json
     if (-not $precompile.ok -or @($precompile.scripts).Count -ne 3 -or @($precompile.scripts | Where-Object exitCode -ne 0).Count -ne 0) { throw 'Offline VM assembly/Python precompile did not validate all three carriers.' }
     $typedParse = Get-Content (Join-Path $typed.taskDirectory 'validation\parse-result.json') -Raw -Encoding UTF8 | ConvertFrom-Json

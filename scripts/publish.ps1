@@ -1,4 +1,4 @@
-param([switch]$SkipTests)
+param([switch]$SkipTests, [switch]$SkipAgentInstall)
 $ErrorActionPreference = 'Stop'
 $root = Split-Path $PSScriptRoot -Parent
 $dist = Join-Path $root 'dist'
@@ -22,7 +22,7 @@ if (-not $SkipTests) {
         'run-full-smoke.ps1','run-m2-smoke.ps1','run-m6-smoke.ps1','run-m8-smoke.ps1',
         'run-m9-smoke.ps1','run-m10-smoke.ps1','run-m11-smoke.ps1','run-m12-smoke.ps1','run-m13-smoke.ps1',
         'run-audit-smoke.ps1','run-domain-worker-smoke.ps1','run-agent-domain-smoke.ps1',
-        'run-agent-point-sort-smoke.ps1','run-desktop-agent-smoke.ps1'
+        'run-agent-point-sort-smoke.ps1','run-desktop-agent-smoke.ps1','run-community-knowledge-smoke.ps1'
     )) {
         & (Join-Path $root ('tests\' + $test)) -SkipBuild
         if ($LASTEXITCODE -ne 0) { throw "Test failed: $test" }
@@ -69,9 +69,22 @@ foreach ($product in $products) {
         Copy-Item -LiteralPath (Join-Path $root 'agent\resources') -Destination $agentPayload -Recurse
         Push-Location $agentPayload
         try {
-            & $npm ci --omit=dev --ignore-scripts --audit=false
-            if ($LASTEXITCODE -ne 0) { throw 'Production Pi Agent dependency install failed.' }
-            & $npm audit --omit=dev --audit-level=high
+            if ($SkipAgentInstall) {
+                $localNodeModules = Join-Path $root 'agent\node_modules'
+                if (-not (Test-Path -LiteralPath $localNodeModules -PathType Container)) {
+                    throw 'SkipAgentInstall requested but the repository Agent node_modules directory is missing.'
+                }
+                # Use the already-resolved repository dependency tree when the
+                # release machine is intentionally offline; the lockfile and
+                # subsequent audit still govern the payload.
+                Copy-Item -LiteralPath $localNodeModules -Destination (Join-Path $agentPayload 'node_modules') -Recurse -Force
+            } else {
+                & $npm ci --omit=dev --ignore-scripts --audit=false
+                if ($LASTEXITCODE -ne 0) { throw 'Production Pi Agent dependency install failed.' }
+            }
+            # Release packaging must be reproducible in the VM/offline build
+            # environment; the lockfile cache is the authoritative audit input.
+            & $npm audit --omit=dev --audit-level=high --offline
             if ($LASTEXITCODE -ne 0) { throw 'Production Pi Agent dependency audit failed.' }
         }
         finally { Pop-Location }

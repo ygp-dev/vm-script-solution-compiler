@@ -111,6 +111,12 @@ export class VmDomainState {
     return this.commit();
   }
 
+  failTool(name: string): VmTaskState {
+    this.batching = false;
+    this.state.lastTool = { name, ok: false, timestampUtc: now() };
+    return this.commit();
+  }
+
   recordRequirement(requirement: Record<string, unknown>): VmTaskState {
     const task = isRecord(requirement.task) ? requirement.task : undefined;
     const mode = task?.mode;

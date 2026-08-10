@@ -44,6 +44,7 @@ public sealed class BuildService(string repositoryRoot)
         File.Copy(specificationFile, Path.Combine(taskDirectory, "requirement.json"));
         var working = Path.Combine(taskDirectory, "working-input.sol");
         var solution = Path.Combine(taskDirectory, "result.sol");
+        string? baselineParseFile = null;
         string? temporaryTemplate = null;
         var buildSucceeded = false;
         try
@@ -60,7 +61,7 @@ public sealed class BuildService(string repositoryRoot)
             if (!File.Exists(source)) throw new CompilerException("BASE_SOLUTION_NOT_FOUND", "Patch base SOL does not exist: " + source);
             SolArchiveValidator.ValidateVm44EntryNames(source);
             File.Copy(source, working);
-            var baselineParseFile = Path.Combine(validationDirectory, "base-structural-parse.json");
+            baselineParseFile = Path.Combine(validationDirectory, "base-structural-parse.json");
             var baselineParse = parser.Parse(working, baselineParseFile);
             if (baselineParse.ExitCode != 0) throw new CompilerException("SOL_PARSE_FAILED", "Patch base SOL failed structural parsing.");
             using var baselineDocument = JsonDocument.Parse(File.ReadAllText(baselineParseFile));
@@ -71,16 +72,16 @@ public sealed class BuildService(string repositoryRoot)
         var template = expectedMode == "create" ? working : resources.Materialize(requirement.Task.VmVersion, Path.Combine(taskDirectory, "module-template.sol"));
         temporaryTemplate = template == working ? null : template;
         var moduleCompiler = new ModuleScriptCompiler(_repositoryRoot, parser);
-        var moduleResult = moduleCompiler.Compile(working, solution, template, requirement.Scripts, requirement.Connections, expectedMode, generatedDirectory, validationDirectory);
+        var moduleResult = moduleCompiler.Compile(working, solution, template, requirement.Scripts, requirement.Connections, expectedMode, generatedDirectory, validationDirectory, baselineParseFile);
 
         GlobalScriptArtifact? globalArtifact = null;
         var global = requirement.Scripts.SingleOrDefault(x => x.Carrier == "global-csharp");
         if (global is not null) globalArtifact = new GlobalScriptCompiler(_repositoryRoot).Compile(solution, generatedDirectory, requirement.Task.VmVersion, global);
-        VmServerDefaultWriter.Apply(solution, requirement.Scripts);
+        var defaultPersistenceNotices = VmServerDefaultWriter.Apply(solution, requirement.Scripts);
         new ScriptPrecompiler(environment.VmRoot!, dependencyResolution).Validate(requirement.Scripts, moduleResult.Artifacts, globalArtifact, validationDirectory);
 
         WritePlan(taskDirectory, expectedMode, requirement.Scripts);
-        WriteContract(taskDirectory, expectedMode, requirement.Scripts, moduleResult.Artifacts, globalArtifact, dependencyResolution, manifest.RuntimeValidated, manifest.RuntimeValidationPending);
+        WriteContract(taskDirectory, expectedMode, requirement.Scripts, moduleResult.Artifacts, globalArtifact, dependencyResolution, manifest.RuntimeValidated, manifest.RuntimeValidationPending, defaultPersistenceNotices);
 
         var parseFile = Path.Combine(validationDirectory, "parse-result.json");
         var parse = parser.Parse(solution, parseFile);
@@ -91,9 +92,9 @@ public sealed class BuildService(string repositoryRoot)
         ValidateBuiltSolution(parseFile, requirement, expectedMode, baselineWarnings);
 
         var report = Path.Combine(taskDirectory, "build-report.md");
-        File.WriteAllText(report, Report(taskId, expectedMode, environment, manifest, specificationFile, resolvedBaseSolution, solution, parse, inspect, requirement.Scripts, dependencyResolution));
+        File.WriteAllText(report, Report(taskId, expectedMode, environment, manifest, specificationFile, resolvedBaseSolution, solution, parse, inspect, requirement.Scripts, dependencyResolution, defaultPersistenceNotices));
         buildSucceeded = true;
-        return new(taskDirectory, solution, report, validation, parse, inspect);
+        return new(taskDirectory, solution, report, validation, parse, inspect, defaultPersistenceNotices);
         }
         finally
         {
@@ -180,7 +181,7 @@ public sealed class BuildService(string repositoryRoot)
         File.WriteAllText(Path.Combine(taskDirectory, "build-plan.json"), JsonSerializer.Serialize(new { actions = actions.Select(x => new { kind = x }) }, JsonDefaults.Options));
     }
 
-    private static void WriteContract(string taskDirectory, string mode, IReadOnlyList<ScriptRequirement> requirements, IReadOnlyList<ModuleScriptArtifact> modules, GlobalScriptArtifact? global, DotNetDependencyResolution dependencyResolution, bool runtimeValidated, IReadOnlyList<string> runtimeValidationPending)
+    private static void WriteContract(string taskDirectory, string mode, IReadOnlyList<ScriptRequirement> requirements, IReadOnlyList<ModuleScriptArtifact> modules, GlobalScriptArtifact? global, DotNetDependencyResolution dependencyResolution, bool runtimeValidated, IReadOnlyList<string> runtimeValidationPending, IReadOnlyList<DefaultPersistenceNotice> defaultPersistenceNotices)
     {
         var scripts = new List<object>();
         if (global is not null) scripts.Add(new { carrier = "global-csharp", source = "generated/GlobalScript.cs", solEntry = global.CarrierFile, references = global.References });
@@ -191,13 +192,13 @@ public sealed class BuildService(string repositoryRoot)
             return (object)new { x.Id, x.Carrier, x.Procedure, x.Name, source = "generated/" + Path.GetFileName(x.SourceFile), inputs = x.Inputs, outputs = x.Outputs, dependencies = requirement.Dependencies,
                 shellReferences = new { mode = dotNetDependencies.Length == 0 ? "vm-implicit-defaults" : "explicit-shell-refrences-payload", declared = dotNetDependencies } };
         }));
-        var contract = new { mode, framework = ".NET Framework 4.6.1", architecture = "x64", scripts, dependencyResolution = dependencyResolution.Scripts, sourcePrecompiled = true, precompileEnvironment = "VM 4.4 method assemblies and bundled Python parser", ioMapping = "VM-4.4 saved-sample logical ports + StructName backing fields + DynamicIO combinations + UiParamData object mappings", inputDefaults = "int/float ModuleSubscribe mapping confirmed by VM-saved round trip; bool/string structurally encoded; Python also emits deterministic None fallback", runtimeValidated, runtimeValidation = new { baselineValidated = runtimeValidated, pending = runtimeValidationPending } };
+        var contract = new { mode, framework = ".NET Framework 4.6.1", architecture = "x64", scripts, dependencyResolution = dependencyResolution.Scripts, sourcePrecompiled = true, precompileEnvironment = "VM 4.4 method assemblies and bundled Python parser", ioMapping = "VM-4.4 saved-sample logical ports + StructName backing fields + DynamicIO combinations + UiParamData object mappings", inputDefaults = "int/float ModuleSubscribe mapping confirmed by VM-saved round trip; bool/string structurally encoded; Python also emits deterministic None fallback", defaultPersistenceNotices, runtimeValidated, runtimeValidation = new { baselineValidated = runtimeValidated, pending = runtimeValidationPending } };
         File.WriteAllText(Path.Combine(taskDirectory, "script-contract.json"), JsonSerializer.Serialize(contract, JsonDefaults.Options));
     }
 
     private static string MakeTaskId(string name) => $"{DateTimeOffset.UtcNow:yyyyMMddHHmmssfff}-{string.Concat(name.Select(c => char.IsLetterOrDigit(c) || c is '-' or '_' ? c : '-')).Trim('-')}";
     private static void SafeDelete(string path) { if (File.Exists(path)) File.Delete(path); }
-    private static string Report(string taskId, string mode, VmEnvironment environment, ResourceManifest manifest, string spec, string? baseSolution, string sol, ProcessResult parse, ProcessResult inspect, IReadOnlyList<ScriptRequirement> scripts, DotNetDependencyResolution dependencyResolution)
+    private static string Report(string taskId, string mode, VmEnvironment environment, ResourceManifest manifest, string spec, string? baseSolution, string sol, ProcessResult parse, ProcessResult inspect, IReadOnlyList<ScriptRequirement> scripts, DotNetDependencyResolution dependencyResolution, IReadOnlyList<DefaultPersistenceNotice> defaultPersistenceNotices)
     {
         var assemblies = dependencyResolution.Scripts.SelectMany(x => x.Assemblies).ToArray();
         var deployment = assemblies.Where(x => !x.RuntimeVisible).Select(x => x.Name + " -> " + x.DeploymentTarget).DefaultIfEmpty("none");
@@ -242,6 +243,7 @@ public sealed class BuildService(string repositoryRoot)
             $"- Inspect exit code: `{inspect.ExitCode}`",
             "- DynamicIO validation: complex C# ports use VM-saved uppercase logical types, CR-separated `StructName` backing fields, nested DynamicIO `Combination` nodes, array type metadata, image object mappings, and a non-empty AssemblyGuid",
             "- Input defaults: int/float `ModuleSubscribe` round-trip confirmed; bool/string structurally encoded; Python also has deterministic `None` fallback",
+            $"- Default persistence diagnostics: `{(defaultPersistenceNotices.Count == 0 ? "none" : string.Join("; ", defaultPersistenceNotices.Select(x => $"{x.Code} {x.Procedure}.{x.Module}.{x.Port}")))}`",
             $"- VM runtime baseline validation: `{(manifest.RuntimeValidated ? "passed by user verification in VisionMaster 4.4" : "pending user verification")}`",
             $"- VM runtime validation pending: `{pendingRuntime}`", ""
         };

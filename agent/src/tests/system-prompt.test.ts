@@ -36,4 +36,16 @@ test("VM system prompt contains authoritative schema and all carrier Create exam
   assert.match(prompt, /确定性操作 `dxfRender`/);
   assert.match(prompt, /累计最多提交 6 个 Requirement 版本/);
   assert.match(prompt, /error\.details\.diagnostics/);
+  assert.match(prompt, /算子二次开发与运行界面清图/);
+  assert.match(prompt, /secondary-development-knowledge/);
+  assert.match(prompt, /多图像控件没有直接清空接口/);
+  assert.match(prompt, /不得从文章截图猜方法名/);
+  assert.match(prompt, /InputImageData/);
+  assert.match(prompt, /TMVSAffineTransformModuTool/);
+  assert.match(prompt, /OpenCvSharp/);
+  assert.match(prompt, /背景图写入只表示执行了一个状态修改工作流/);
+  assert.match(prompt, /community-articles-knowledge/);
+  assert.match(prompt, /状态机需求优先拆成显式状态/);
+  assert.match(prompt, /原生 C\+\+ 类需要托管包装或 C ABI/);
+  assert.match(prompt, /Python 模型和图像库不得在脚本中自动安装或下载/);
 });

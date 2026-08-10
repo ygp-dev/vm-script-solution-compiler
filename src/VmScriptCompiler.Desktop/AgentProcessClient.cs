@@ -155,16 +155,21 @@ internal sealed class AgentProcessClient : IAsyncDisposable
         _process = null;
         FailAll(new OperationCanceledException("Desktop is closing."));
         if (process is null) return;
-        try { process.StandardInput.Close(); }
-        catch { }
-        try
+        // Never wait for a child process or its redirected pipes on the WPF UI thread.
+        _ = Task.Run(() =>
         {
-            if (!process.HasExited) process.Kill(entireProcessTree: true);
-        }
-        catch { }
+            try { process.StandardInput.Close(); }
+            catch { }
+            try
+            {
+                if (!process.HasExited) process.Kill(entireProcessTree: true);
+                process.WaitForExit(2_000);
+            }
+            catch { }
+            finally { process.Dispose(); }
+        });
         if (_stdoutTask is not null) _ = Ignore(_stdoutTask);
         if (_stderrTask is not null) _ = Ignore(_stderrTask);
-        process.Dispose();
         _stdoutTask = null;
         _stderrTask = null;
     }

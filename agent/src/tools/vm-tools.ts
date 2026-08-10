@@ -75,6 +75,9 @@ function compactBuildResult(result: unknown) {
     solutionFile: stringValue(result, "solutionFile"),
     reportFile: stringValue(result, "reportFile"),
     inputPreserved: isRecord(result) ? result.inputPreserved : undefined,
+    defaultPersistenceNotices: isRecord(result) && Array.isArray(result.defaultPersistenceNotices)
+      ? result.defaultPersistenceNotices
+      : [],
   };
 }
 
@@ -119,7 +122,12 @@ async function executeDomainTool(
   try {
     const result = await action();
     apply(result);
-    state.completeTool(name);
+    const succeeded = !(isRecord(result) && result.ok === false);
+    if (succeeded) state.completeTool(name);
+    else state.failTool(name);
+    if (!succeeded) {
+      return output({ ok: false, result, state: compactState(state.snapshot()) });
+    }
     return output({ ok: true, result, state: compactState(state.snapshot()) });
   } catch (error) {
     const code = error instanceof DomainWorkerError ? error.code : "DOMAIN_TOOL_FAILED";
@@ -187,8 +195,9 @@ export function createVmTools(
       executionMode: "parallel",
       execute: async (_id, params, signal) => {
         const query = canonicalCapabilityQuery(params.query);
+        const cacheKey = `${params.vmVersion ?? "4.4.0"}:${query}`;
         state.beginTool("vm_query_capability");
-        if (capabilityCache.has(query)) {
+        if (capabilityCache.has(cacheKey)) {
           state.completeTool("vm_query_capability");
           return output({
             ok: true,
@@ -208,7 +217,7 @@ export function createVmTools(
             vmVersion: params.vmVersion ?? "4.4.0",
           }, signal),
           (result) => {
-            capabilityCache.set(query, result);
+            capabilityCache.set(cacheKey, result);
             state.recordCapability(query, result);
           },
         );
@@ -265,7 +274,7 @@ export function createVmTools(
           );
           state.recordRequirementValidation(validation);
           if (validation.ok !== true) {
-            state.completeTool("vm_compile_solution");
+            state.failTool("vm_compile_solution");
             return output({
               ok: false,
               result: {
@@ -307,11 +316,14 @@ export function createVmTools(
 
           const solutionFile = stringValue(build, "solutionFile");
           if (!solutionFile) throw new Error("确定性编译器没有返回 SOL 路径。");
-          const offline = await worker.call<Record<string, unknown>>(
-            "validate_solution",
-            { file: solutionFile },
-            signal,
-          );
+          const embeddedOffline = isRecord(build) && isRecord(build.offlineValidation)
+            ? build.offlineValidation
+            : undefined;
+          const offline = embeddedOffline ?? await worker.call<Record<string, unknown>>(
+              "validate_solution",
+              { file: solutionFile },
+              signal,
+            );
           state.recordOfflineValidation(solutionFile, offline);
           state.completeTool("vm_compile_solution");
           return output({

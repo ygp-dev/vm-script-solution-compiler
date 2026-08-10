@@ -159,7 +159,7 @@ try {
     foreach ($label in @('GenerateButton', 'CreateModeRadio', 'PatchModeRadio', 'AdvancedDeterministicTools', 'FriendlyStatus', 'SettingsProviderChoice', 'SettingsEndpointText', 'SettingsApiKeyBox', 'OpenResultFolder_Click', 'OpenDependenciesButton', 'OpenDependencies_Click')) {
         if (-not $desktop.Contains($label)) { throw "Simple Desktop workflow is missing: $label" }
     }
-    foreach ($label in @('RecentConversationList', 'ArtifactSearchText', 'SettingsFilePathText', 'NewConversation_Click', 'ShowArtifacts_Click', 'ShowSettings_Click')) {
+    foreach ($label in @('RecentConversationList', 'ArtifactSearchText', 'GlobalSearchText', 'GlobalSearchList', 'SettingsFilePathText', 'NewConversation_Click', 'ShowArtifacts_Click', 'ShowAutomations_Click', 'ShowSearch_Click', 'GlobalSearch_Changed', 'AutomationTab', 'SearchTab')) {
         if (-not $desktop.Contains($label)) { throw "Codex-style Desktop workspace is missing: $label" }
     }
     $desktopCode = Get-Content -Raw (Join-Path $root 'src\VmScriptCompiler.Desktop\MainWindow.xaml.cs') -Encoding UTF8
@@ -183,10 +183,10 @@ try {
         -not $desktop.Contains('HeroSurface')) {
         throw 'Desktop encrypted-key form, wide composer, or refined dark theme is missing.'
     }
-    foreach ($fragment in @('SidebarColumn', 'ToggleSidebar_Click', 'WorkspacePhaseText', 'PromptText_PreviewKeyDown', 'Suggestion_Click', 'ArtifactEmptyPanel', 'SendButton')) {
+    foreach ($fragment in @('SidebarColumn', 'ToggleSidebar_Click', 'WorkspacePhaseText', 'PromptText_PreviewKeyDown', 'Suggestion_Click', 'ArtifactEmptyPanel', 'SendButton', 'WindowStyle="None"', 'WindowChrome.WindowChrome', 'TitleBar_MouseLeftButtonDown', 'MinimizeWindow_Click', 'MaximizeWindow_Click', 'CloseWindow_Click', 'Icon="vm-script-compiler.ico"', 'Source="vm-script-compiler-icon.png"')) {
         if (-not $desktop.Contains($fragment)) { throw "Codex-aligned Desktop interaction is missing: $fragment" }
     }
-    foreach ($fragment in @('ToolCardVisual', 'FriendlyPhase(', 'PrepareUiSnapshot(')) {
+    foreach ($fragment in @('ToolCardVisual', 'FriendlyPhase(', 'PrepareUiSnapshot(', 'ApplyDarkTitleBar()', 'SetDwmWindowAttributeInt', 'DwmwaCaptionColor', 'WmGetMinMaxInfo', 'MonitorFromWindow', 'WindowMessageHook', 'RefreshGlobalSearch()', 'SearchResult')) {
         if (-not $desktopCode.Contains($fragment)) { throw "Codex-aligned Desktop runtime behavior is missing: $fragment" }
     }
 

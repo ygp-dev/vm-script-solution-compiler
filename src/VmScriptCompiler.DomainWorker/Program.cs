@@ -7,14 +7,16 @@ Console.InputEncoding = new UTF8Encoding(false);
 Console.OutputEncoding = new UTF8Encoding(false);
 
 var explicitRoot = Option(args, "--repository-root");
-var worker = new DomainWorker(new CompilerFacade(RepositoryLocator.Find(explicitRoot)));
+var repositoryRoot = RepositoryLocator.Find(explicitRoot);
+var outputRoot = Option(args, "--output-root") ?? Path.Combine(repositoryRoot, "outputs");
+var worker = new DomainWorker(new CompilerFacade(repositoryRoot), outputRoot);
 await worker.RunAsync(Console.In, Console.Out);
 return;
 
 static string? Option(string[] values, string name) =>
     values.SkipWhile(x => !string.Equals(x, name, StringComparison.Ordinal)).Skip(1).FirstOrDefault();
 
-internal sealed class DomainWorker(CompilerFacade compiler)
+internal sealed class DomainWorker(CompilerFacade compiler, string outputRoot)
 {
     private const string ProtocolVersion = "1.0";
     private static readonly JsonSerializerOptions ProtocolJson = new(JsonDefaults.Options)
@@ -24,6 +26,8 @@ internal sealed class DomainWorker(CompilerFacade compiler)
     };
 
     private bool _shutdownRequested;
+    private readonly string _repositoryRoot = Path.GetFullPath(compiler.RepositoryRoot);
+    private readonly string _outputRoot = Path.GetFullPath(outputRoot);
 
     public async Task RunAsync(TextReader input, TextWriter output)
     {
@@ -79,7 +83,7 @@ internal sealed class DomainWorker(CompilerFacade compiler)
                 RequiredString(arguments, "baseSolution"),
                 path,
                 RequiredString(arguments, "output"))),
-            "validate_solution" => compiler.ValidateSolution(RequiredString(arguments, "file")),
+            "validate_solution" => compiler.ValidateSolution(ExistingFile(RequiredString(arguments, "file"), "SOLUTION_FILE_NOT_FOUND", allowExternalSolution: true)),
             "read_build_report" => ReadBuildReport(RequiredString(arguments, "file")),
             "shutdown" => Shutdown(),
             _ => throw new CompilerException("COMMAND_NOT_FOUND", "Unknown domain command: " + command)
@@ -108,7 +112,7 @@ internal sealed class DomainWorker(CompilerFacade compiler)
 
     private object InspectSolution(string file)
     {
-        file = ExistingFile(file, "SOLUTION_FILE_NOT_FOUND");
+        file = ExistingFile(file, "SOLUTION_FILE_NOT_FOUND", allowExternalSolution: true);
         SolArchiveValidator.ValidateVm44EntryNames(file);
         var parser = new ParserClient(Path.Combine(compiler.RepositoryRoot, "tools", "vm-solution-parser", "VMSolutionParser.Cli.exe"));
         var inspect = parser.Inspect(file);
@@ -196,7 +200,7 @@ internal sealed class DomainWorker(CompilerFacade compiler)
 
     private object Patch(string baseSolution, string specificationFile, string output)
     {
-        baseSolution = ExistingFile(baseSolution, "SOLUTION_FILE_NOT_FOUND");
+        baseSolution = ExistingFile(baseSolution, "SOLUTION_FILE_NOT_FOUND", allowExternalSolution: true);
         var before = Hash(baseSolution);
         var result = compiler.Patch(baseSolution, specificationFile, FullDirectory(output));
         var after = Hash(baseSolution);
@@ -210,6 +214,8 @@ internal sealed class DomainWorker(CompilerFacade compiler)
             result.ReportFile,
             parseExitCode = result.Parse.ExitCode,
             inspectExitCode = result.Inspect.ExitCode,
+            defaultPersistenceNotices = result.DefaultPersistenceNotices,
+            offlineValidation = OfflineValidation(result),
             baseSolution,
             baseSolutionSha256 = before,
             inputPreserved = true
@@ -223,10 +229,26 @@ internal sealed class DomainWorker(CompilerFacade compiler)
         result.SolutionFile,
         result.ReportFile,
         parseExitCode = result.Parse.ExitCode,
-        inspectExitCode = result.Inspect.ExitCode
+        inspectExitCode = result.Inspect.ExitCode,
+        defaultPersistenceNotices = result.DefaultPersistenceNotices,
+        offlineValidation = OfflineValidation(result)
     };
 
-    private static object ReadBuildReport(string file)
+    private static object OfflineValidation(BuildResult result)
+    {
+        var parseFile = Path.Combine(result.TaskDirectory, "validation", "parse-result.json");
+        JsonElement parse = default;
+        if (File.Exists(parseFile))
+        {
+            using var document = JsonDocument.Parse(File.ReadAllText(parseFile));
+            parse = document.RootElement.Clone();
+        }
+        var inspectFile = Path.Combine(result.TaskDirectory, "validation", "inspect-result.json");
+        var inspect = File.Exists(inspectFile) ? File.ReadAllText(inspectFile) : result.Inspect.StandardOutput;
+        return new { ok = result.Parse.ExitCode == 0 && result.Inspect.ExitCode == 0, parseResult = parse, inspectOutput = inspect };
+    }
+
+    private object ReadBuildReport(string file)
     {
         file = ExistingFile(file, "BUILD_REPORT_NOT_FOUND");
         var taskDirectory = Path.GetDirectoryName(file)!;
@@ -296,17 +318,35 @@ internal sealed class DomainWorker(CompilerFacade compiler)
             ? property.GetString()
             : null;
 
-    private static string ExistingFile(string path, string code)
+    private string ExistingFile(string path, string code, bool allowExternalSolution = false)
     {
         path = Path.GetFullPath(path);
         if (!File.Exists(path)) throw new CompilerException(code, "File does not exist: " + path);
+        if (!allowExternalSolution && !IsWithinAllowedRoot(path))
+            throw new CompilerException("PATH_OUTSIDE_ALLOWED_ROOT", "Worker can only access files under the configured repository or output root: " + path);
+        if (allowExternalSolution && !string.Equals(Path.GetExtension(path), ".sol", StringComparison.OrdinalIgnoreCase))
+            throw new CompilerException("SOLUTION_FILE_INVALID", "External solution access is limited to .sol files: " + path);
         return path;
     }
 
-    private static string FullDirectory(string path)
+    private string FullDirectory(string path)
     {
         if (string.IsNullOrWhiteSpace(path)) throw new CompilerException("INVALID_ARGUMENT", "Output directory is required.");
-        return Path.GetFullPath(path);
+        path = Path.GetFullPath(path);
+        if (!IsWithin(path, _outputRoot))
+            throw new CompilerException("OUTPUT_PATH_OUTSIDE_ROOT", "Build output must stay under the configured Agent output root: " + path);
+        return path;
+    }
+
+    private bool IsWithinAllowedRoot(string path) => IsWithin(path, _repositoryRoot) || IsWithin(path, _outputRoot);
+
+    private static bool IsWithin(string path, string root)
+    {
+        var normalizedPath = Path.GetFullPath(path).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        var normalizedRoot = Path.GetFullPath(root).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        return string.Equals(normalizedPath, normalizedRoot, StringComparison.OrdinalIgnoreCase) ||
+            normalizedPath.StartsWith(normalizedRoot + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+            normalizedPath.StartsWith(normalizedRoot + Path.AltDirectorySeparatorChar, StringComparison.OrdinalIgnoreCase);
     }
 
     private static string Hash(string file) =>

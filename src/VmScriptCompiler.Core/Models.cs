@@ -7,7 +7,8 @@ public sealed record ValidationIssue(string Code, string Message, string? Path =
 public sealed record RequirementValidationResult(bool IsValid, IReadOnlyList<ValidationIssue> Issues);
 public sealed record ResourceManifest(string ResourceVersion, string VisionMasterVersion, bool ContainsSolFiles, string ScriptBasePath, IReadOnlyDictionary<string, string> Hashes, bool RuntimeValidated, IReadOnlyList<string> RuntimeValidationPending);
 public sealed record ProcessResult(int ExitCode, string StandardOutput, string StandardError);
-public sealed record BuildResult(string TaskDirectory, string SolutionFile, string ReportFile, RequirementValidationResult RequirementValidation, ProcessResult Parse, ProcessResult Inspect);
+public sealed record DefaultPersistenceNotice(string Code, string Severity, string ScriptId, string Carrier, string Procedure, string Module, string Port, string Direction, string Type, string Message);
+public sealed record BuildResult(string TaskDirectory, string SolutionFile, string ReportFile, RequirementValidationResult RequirementValidation, ProcessResult Parse, ProcessResult Inspect, IReadOnlyList<DefaultPersistenceNotice> DefaultPersistenceNotices);
 
 public static class ProductInfo
 {

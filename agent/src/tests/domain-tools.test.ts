@@ -28,7 +28,7 @@ test("Pi VM tools complete a deterministic Create workflow without MCP", async (
   )) as Record<string, unknown>;
   const manager = SessionManager.inMemory(repositoryRoot);
   const state = new VmDomainState(manager);
-  const worker = new DomainWorkerClient({ workerPath, repositoryRoot });
+  const worker = new DomainWorkerClient({ workerPath, repositoryRoot, outputDirectory: output });
   const tools = createVmTools(state, worker);
   const updateTool = tools.find((tool) => tool.name === "vm_update_requirement");
   assert.ok(updateTool);
@@ -83,7 +83,7 @@ test("Pi VM tools complete a deterministic Create workflow without MCP", async (
 
 test("Requirement update normalizes built-in C# Script.Methods references", async () => {
   const state = new VmDomainState(SessionManager.inMemory(repositoryRoot));
-  const worker = new DomainWorkerClient({ workerPath, repositoryRoot });
+  const worker = new DomainWorkerClient({ workerPath, repositoryRoot, outputDirectory: path.join(repositoryRoot, "outputs") });
   const tools = createVmTools(state, worker);
   await invoke(tools, "vm_update_requirement", {
     requirement: {
@@ -112,10 +112,30 @@ test("Requirement update normalizes built-in C# Script.Methods references", asyn
   assert.deepEqual(script.dependencies, []);
 });
 
+test("Requirement validation failures remain failed in the public tool result", async () => {
+  const state = new VmDomainState(SessionManager.inMemory(repositoryRoot));
+  const worker = new DomainWorkerClient({ workerPath, repositoryRoot, outputDirectory: path.join(repositoryRoot, "outputs") });
+  const tools = createVmTools(state, worker);
+  try {
+    const requirement = JSON.parse(fs.readFileSync(
+      path.join(repositoryRoot, "tests", "fixtures", "e14-csharp-circle-port-unsupported.json"),
+      "utf8",
+    )) as Record<string, unknown>;
+    await invoke(tools, "vm_update_requirement", { requirement });
+    const result = await invoke(tools, "vm_compile_solution", {}) as {
+      details?: { ok?: boolean; state?: { lastTool?: { ok?: boolean } } };
+    };
+    assert.equal(result.details?.ok, false);
+    assert.equal(result.details?.state?.lastTool?.ok, false);
+  } finally {
+    await worker.dispose();
+  }
+});
+
 test("Domain tool failures return compact structured results", async () => {
   const outputDirectory = fs.mkdtempSync(path.join(os.tmpdir(), "vm-agent-error-"));
   const state = new VmDomainState(SessionManager.inMemory(repositoryRoot));
-  const worker = new DomainWorkerClient({ workerPath, repositoryRoot });
+  const worker = new DomainWorkerClient({ workerPath, repositoryRoot, outputDirectory });
   const tools = createVmTools(state, worker);
   const requirement = JSON.parse(fs.readFileSync(
     path.join(repositoryRoot, "tests", "fixtures", "m3-shell-create.json"),

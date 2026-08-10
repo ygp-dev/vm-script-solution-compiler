@@ -24,6 +24,14 @@ export function buildVmSystemPrompt(config: AgentConfiguration): string {
     path.join(config.repositoryRoot, "resources", "vm", "4.4.0", "api-catalog.json"),
     "utf8",
   );
+  const secondaryDevelopmentKnowledge = fs.readFileSync(
+    path.join(config.repositoryRoot, "resources", "vm", "4.4.0", "secondary-development-knowledge.json"),
+    "utf8",
+  );
+  const communityArticlesKnowledge = fs.readFileSync(
+    path.join(config.repositoryRoot, "resources", "vm", "4.4.0", "community-articles-knowledge.json"),
+    "utf8",
+  );
   return [
     base,
     "## Requirement 权威资料",
@@ -57,9 +65,19 @@ export function buildVmSystemPrompt(config: AgentConfiguration): string {
     globalCsharpExample,
     "```",
     "### VM 4.4 权威能力目录",
-    "下列目录由项目内已验证模板、中文样例和反编译 API 汇总。生成 VM API 调用时只能使用这里确认的载体契约与方法；如信息仍不足，再调用 vm_query_capability，不得猜测。",
+    "下列目录由项目内已验证模板、中文样例和反编译 API 汇总。生成 VM API 调用时只能使用这里确认的载体契约与方法；当前 Agent 默认工具面不暴露兼容性查询工具，信息仍不足时应向用户询问已验证样例，不得猜测。",
     "```json",
     apiCatalog,
+    "```",
+    "### 算子二次开发与运行界面清图知识（版本受限，仅作模式参考）",
+    "下面资料来自项目收录的社区文章。它不是 VM 4.4 API 契约；不能从文章截图猜方法名、参数名、构造函数或脚本端口类型。涉及已有方案时先 inspect，只有目标模块、参数、数据源绑定和可写方向都被解析结果或项目证据确认后，才可生成写入操作。",
+    "```json",
+    secondaryDevelopmentKnowledge,
+    "```",
+    "### V 社区脚本与二次开发知识索引（扩展参考，非 API 契约）",
+    "下面资料按文章来源、证据等级和适用边界整理。它可以帮助拆解状态机、文件持久化、图像缓冲区、Python/第三方库和原生 DLL 需求，但不能替代 SOL inspect、依赖校验或目标脚本预编译。",
+    "```json",
+    communityArticlesKnowledge,
     "```",
     "### Python Create 最小正确示例",
     "注意：`source`、`operations`、`dependencies` 都是 script 顶层属性；`execution` 只能包含 `mode` 和 `order`，普通脚本使用 `mode: \"once\"`。",

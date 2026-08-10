@@ -90,6 +90,6 @@ VM 4.4 关系串格式为：
 模块Index . %输入端口名% . 0 . 默认值 . 1 . 0 . All . 1
 ```
 
-Core 会按流程和显示名定位模块 Index，为 int、float、以 int 0/1 表示的 bool，以及不含关系分隔符的 string 写入关系，并替换同一模块同一端口的旧关系。用户在 VM 4.4 中手工写入并保存的 C# float 值 `1.25/2.5` 和 Python int 值 `11/13` 采用相同编码，另存后的 SOL 仍原样保留，因此 int/float 初值持久化映射已确认。bool 使用同一个 int 结构，但尚无同等级手工样本；string 也仍属于结构编码。数组和复杂类型不会伪造未知的 `ModuleSubscribe` 编码，也不会因此阻断端口生成；Python 对可安全表示的标量/数组另行生成 `None` 回退。输出 `default` 不写入 `ModuleSubscribe`。
+Core 会按流程和显示名定位模块 Index，为 int、float、以 int 0/1 表示的 bool，以及不含关系分隔符的 string 写入关系，并替换同一模块同一端口的旧关系。用户在 VM 4.4 中手工写入并保存的 C# float 值 `1.25/2.5` 和 Python int 值 `11/13` 采用相同编码，另存后的 SOL 仍原样保留，因此 int/float 初值持久化映射已确认。bool 使用同一个 int 结构，但尚无同等级手工样本；string 也仍属于结构编码。数组和复杂类型不会伪造未知的 `ModuleSubscribe` 编码，也不会因此阻断端口生成；Python 对可安全表示的标量/数组另行生成 `None` 回退。输出 `default` 不写入 `ModuleSubscribe`。对于未写入的声明，构建结果会在 `script-contract.json`、`build-report.md` 及 Agent/MCP 返回值的 `defaultPersistenceNotices` 中给出明确诊断，不再静默丢失。
 
 用户实测确认：手工初值保存为上述关系，VM 另存时不会迁移到其他载荷。构建报告只声明 int/float 初值持久化映射已确认，不把它扩大为脚本运行结果；Python 确定性生成器另行生成 `None` 回退，C# 输入采用 VM 强类型属性的实际值。

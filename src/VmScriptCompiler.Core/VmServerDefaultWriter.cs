@@ -11,10 +11,20 @@ public static class VmServerDefaultWriter
 {
     private const string VmServerEntry = "SolutionFile/VmServer.xml";
 
-    public static void Apply(string solutionFile, IReadOnlyList<ScriptRequirement> scripts)
+    public static IReadOnlyList<DefaultPersistenceNotice> Apply(string solutionFile, IReadOnlyList<ScriptRequirement> scripts)
     {
         var modules = scripts.Where(x => x.Carrier is "csharp-module" or "python-module").ToArray();
-        if (modules.Length == 0) return;
+        var notices = new List<DefaultPersistenceNotice>();
+        foreach (var script in scripts.Where(x => x.Carrier == "global-csharp"))
+        {
+            foreach (var port in script.Inputs.Where(HasDefault).Concat(script.Outputs.Where(HasDefault)))
+                notices.Add(new DefaultPersistenceNotice(
+                    "DEFAULT_GLOBAL_NOT_PERSISTED", "warning", script.Id, script.Carrier,
+                    script.Procedure ?? "", script.Name, port.Name,
+                    script.Inputs.Contains(port) ? "input" : "output", port.Type,
+                    "GlobalScript ports do not use ShellModule/PyShellModule ModuleSubscribe persistence; the declared default was not written to SOL."));
+        }
+        if (modules.Length == 0) return notices;
 
         using var archive = ZipFile.Open(solutionFile, ZipArchiveMode.Update);
         var entry = archive.Entries.FirstOrDefault(x => Normalize(x.FullName) == VmServerEntry)
@@ -38,12 +48,22 @@ public static class VmServerDefaultWriter
             if (script.Carrier == "csharp-module") WriteCSharpUiParameters(archive, moduleIndex, script);
             // Replacing an existing script must not retain stale literal defaults for removed ports
             // or for ports whose new Requirement intentionally omits a default.
+            // Keep an existing VM-saved relation when the new Requirement uses a
+            // type whose encoding is not verified. We cannot safely replace an
+            // array/complex value with an invented literal, and patch must not
+            // destroy a user-authored value merely because Core cannot emit it.
             foreach (var existing in subscriptions.ChildNodes.OfType<XmlElement>()
-                .Where(x => IsPersistedDefault(x.GetAttribute("Relation"), moduleIndex)).ToArray())
+                .Where(x => IsPersistedDefault(x.GetAttribute("Relation"), moduleIndex))
+                .Where(x => !script.Inputs.Any(port => HasDefault(port) && !TryFormatPersistedDefault(port, out _) && IsSameInput(x.GetAttribute("Relation"), moduleIndex, "%" + port.Name + "%")))
+                .ToArray())
                 subscriptions.RemoveChild(existing);
             foreach (var port in script.Inputs.Where(HasDefault))
             {
-                if (!TryFormatPersistedDefault(port, out var value)) continue;
+                if (!TryFormatPersistedDefault(port, out var value))
+                {
+                    notices.Add(UnsupportedNotice(script, port, "input"));
+                    continue;
+                }
                 var paramName = "%" + port.Name + "%";
                 foreach (var existing in subscriptions.ChildNodes.OfType<XmlElement>()
                     .Where(x => IsSameInput(x.GetAttribute("Relation"), moduleIndex, paramName)).ToArray())
@@ -52,6 +72,11 @@ public static class VmServerDefaultWriter
                 element.SetAttribute("Relation", $"{moduleIndex} . {paramName} . 0 . {value} . 1 . 0 . All . 1");
                 subscriptions.AppendChild(element);
             }
+            foreach (var port in script.Outputs.Where(HasDefault))
+                notices.Add(new DefaultPersistenceNotice(
+                    "DEFAULT_OUTPUT_NOT_PERSISTED", "warning", script.Id, script.Carrier,
+                    script.Procedure!, script.Name, port.Name, "output", port.Type,
+                    "VM 4.4 output defaults have no verified ModuleSubscribe persistence mapping; the declared value was not written to SOL."));
         }
 
         entry.Delete();
@@ -66,7 +91,16 @@ public static class VmServerDefaultWriter
             NewLineHandling = NewLineHandling.Replace
         });
         document.Save(writer);
+        return notices;
     }
+
+    private static DefaultPersistenceNotice UnsupportedNotice(ScriptRequirement script, IoRequirement port, string direction) =>
+        new(
+            "DEFAULT_PERSISTENCE_UNCONFIRMED", "warning", script.Id, script.Carrier,
+            script.Procedure!, script.Name, port.Name, direction, port.Type,
+            port.Type.EndsWith("[]", StringComparison.Ordinal)
+                ? "VM 4.4 array defaults are not written to ModuleSubscribe because no VM-saved array encoding is verified; Python modules retain a deterministic None/source fallback."
+                : "The declared default type has no verified VM 4.4 ModuleSubscribe encoding and was not written to SOL.");
 
     private static void WriteCSharpUiParameters(ZipArchive archive, int moduleIndex, ScriptRequirement script)
     {

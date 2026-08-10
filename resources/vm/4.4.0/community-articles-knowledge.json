@@ -1,0 +1,267 @@
+{
+  "knowledgeVersion": "1.0.0",
+  "vmVersion": "4.4.0",
+  "status": "advisory",
+  "sourcePolicy": {
+    "description": "These V-Community articles are engineering references and examples, not authoritative VM 4.4 API contracts.",
+    "rules": [
+      "Preserve the article's version scope and evidence level.",
+      "Never promote a class name, method name, parameter, port type, DLL path, or package version to the VM 4.4 catalog only because it appears in an article.",
+      "Use the patterns to plan a Requirement, then require parsed SOL evidence, an explicit user dependency, and target precompile evidence before emitting a guessed API.",
+      "The compiler's deterministic operations remain preferred; this knowledge does not add an operation by itself."
+    ]
+  },
+  "sources": [
+    {
+      "id": "11100",
+      "title": "基于基础应用扩展的偏心抓取算法",
+      "url": "https://www.v-club.com/home/article/11100",
+      "evidence": ["article-text", "code-images"],
+      "versionScope": "VM version not stated; article warns that VM built-in scripts use float single precision",
+      "summary": "Uses calibrated template and robot points, Euclidean distance, and a rotation transform to calculate an eccentric-grab target. The sample constants are personal calibration data and must not be copied. Visual Studio source cannot be pasted into the VM script unchanged; double values must be adapted to the VM script's float constraints. The screenshot also contains typographic quotation marks in a Console.WriteLine example, so source must be normalized and precompiled rather than copied literally."
+    },
+    {
+      "id": "10564",
+      "title": "VM实现状态机",
+      "url": "https://www.v-club.com/home/article/10564",
+      "evidence": ["article-text", "flow-images"],
+      "versionScope": "VM version not stated",
+      "summary": "Models a multi-step inspection process as explicit states across several procedures. Global state values drive branch selection, OK advances, NG repeats, UI is refreshed after transitions, and an INI recipe maps scanned product codes to expected values."
+    },
+    {
+      "id": "11087",
+      "title": "话术-用AI协助编写VM3D脚本模块的代码",
+      "url": "https://www.v-club.com/home/article/11087",
+      "attachmentUrls": ["https://xian-vforum.oss-cn-hangzhou.aliyuncs.com/2026-06-29_r2ZM2jbQQP_%E8%AF%9D%E6%9C%AF--%E5%80%9F%E5%8A%A9AI%E5%86%99VM%E8%84%9A%E6%9C%AC.pdf"],
+      "evidence": ["article-text", "pdf-template"],
+      "versionScope": "VM 3D/VM script template; target framework shown as .NET Framework 4.6.1",
+      "summary": "The prompt template says inputs and outputs are already declared, so generated C# must not redeclare them. Output ports are assigned only at the final step; intermediate values use local variables. The fixed ShellModule shape is UserScript : ScriptMethods, IProcessMethods with Init() and Process()."
+    },
+    {
+      "id": "10375",
+      "title": "VM的使用技巧篇三之脚本存CSV",
+      "url": "https://www.v-club.com/home/article/10375",
+      "evidence": ["article-text", "code-images"],
+      "versionScope": "VM version not stated",
+      "summary": "Uses a script for CSV persistence and retention cleanup because the built-in data save behavior reportedly refreshes old data after reopening and limits retention to 500 days. The cleanup is based on folder creation time and a configured number of days."
+    },
+    {
+      "id": "10129",
+      "title": "vm脚本和VibeCoding",
+      "url": "https://www.v-club.com/home/article/10129",
+      "evidence": ["article-text", "code-images"],
+      "versionScope": "Article explicitly refers to VM 4.4",
+      "summary": "Prototypes least-squares and robust regression on a float array without third-party dependencies, tests the algorithm outside VM, then asks AI to translate it to C# targeting .NET Framework 4.6.1 and validates with dotnet build."
+    },
+    {
+      "id": "10026",
+      "title": "C#脚本拼接两张高度一致的图片",
+      "url": "https://www.v-club.com/home/article/10026",
+      "evidence": ["article-text", "code-images"],
+      "versionScope": "Article explicitly refers to VM 4.4",
+      "summary": "Implements horizontal image concatenation without OpenCV. It treats ImageData as a byte buffer, uses one byte per pixel for MONO8 and three for RGB24, copies rows with Array.Copy, and returns a new ImageData with combined width."
+    },
+    {
+      "id": "9798",
+      "title": "vm4.4脚本图像ImageData与OpenCVMat互转",
+      "url": "https://www.v-club.com/home/article/9798",
+      "evidence": ["article-text", "code-images"],
+      "versionScope": "Article explicitly refers to VM 4.4",
+      "summary": "Shows MatToImageData and ImageDataToMat for MONO8/RGB24. It uses Marshal.Copy, swaps RGB/BGR for three-channel data, creates CV_8UC1/CV_8UC3 Mats, and uses Cv2.CvtColor for RGB/BGR conversion. The article discussion notes that the ImageDataToMat implementation needs care, so a round-trip test is required before reuse."
+    },
+    {
+      "id": "9954",
+      "title": "关于脚本输入值为空的讨论",
+      "url": "https://www.v-club.com/home/article/9954",
+      "evidence": ["article-text", "screenshots"],
+      "versionScope": "VM version not stated",
+      "summary": "Reports that an empty numeric script input can behave as zero because the generated variable is initialized to 0. An explicit non-zero initial value can distinguish the empty/default state, but zero cannot then be used as an implicit missing sentinel."
+    },
+    {
+      "id": "9856",
+      "title": "vmpython脚本+yolo+cpu",
+      "url": "https://www.v-club.com/home/article/9856",
+      "evidence": ["article-text", "code-images"],
+      "versionScope": "Article states that the VM Python interpreter is 3.7 and uses YOLOv5",
+      "summary": "Loads a YOLOv5 model on CPU, predicts from a converted color image, draws detections, and returns the image. It warns that loading a model during startup can prevent normal VM startup unless the script is opened in silent mode first."
+    },
+    {
+      "id": "9808",
+      "title": "用脚本添加图片保存路径",
+      "url": "https://www.v-club.com/home/article/9808",
+      "evidence": ["article-text", "code-images"],
+      "versionScope": "VM version not stated",
+      "summary": "Builds date/status folders and timestamped image names from a configured root path. The pattern is useful for deterministic path construction but must not silently write outside a user-approved root."
+    },
+    {
+      "id": "9792",
+      "title": "关于海康python脚本如何将读取图片转成cv2可处理的图片的方法",
+      "url": "https://www.v-club.com/home/article/9792",
+      "evidence": ["article-text", "code-images"],
+      "versionScope": "VM Python script; exact interpreter version not stated",
+      "summary": "Converts IoHelper ImageData buffers with numpy.frombuffer and reshape, uses RGB-to-gray conversion, threshold/contours/erosion, and writes byte buffers back to output ImageData. It distinguishes color channel count 3 from grayscale channel count 1."
+    },
+    {
+      "id": "9733",
+      "title": "浅谈VM的使用技巧篇二之VM脚本中调用opencv库进行图像处理",
+      "url": "https://www.v-club.com/home/article/9733",
+      "evidence": ["article-text", "code-images"],
+      "versionScope": "Article compares VM 4.3 and VM 4.4",
+      "summary": "Calls OpenCV from a C# script for LUT/gamma image enhancement. It names OpenCvSharp.dll and OpenCvSharpExtern.dll as required dependencies and notes that VM 4.4 adds a color-image generation path, enabling RGB split/process/merge designs."
+    },
+    {
+      "id": "9558",
+      "title": "[算子SDK]C#调用C++Dll的方法",
+      "url": "https://www.v-club.com/home/article/9558",
+      "attachmentUrls": ["https://xian-vforum.oss-cn-hangzhou.aliyuncs.com/2024-11-08_XFqH596qZz_C%23%E8%B0%83%E7%94%A8C%2B%2BDll%E7%9A%84%E6%96%B9%E6%B3%95.pdf"],
+      "evidence": ["article-text", "pdf-screenshots"],
+      "versionScope": "VM/operator SDK context; exact VM version not stated",
+      "summary": "Distinguishes managed C++/CLI DLLs from native C++ DLLs. Native C++ classes cannot be called directly from C#; a C++ wrapper or extern C exported functions are needed. The wrapper and its transitive native DLLs must be beside the C# executable, while .h/.lib files are build-time inputs."
+    },
+    {
+      "id": "9527",
+      "title": "怎样使用脚本拿出快速匹配的所有xy及角度信息",
+      "url": "https://www.v-club.com/home/article/9527",
+      "evidence": ["article-text"],
+      "versionScope": "VM version not stated",
+      "summary": "Discusses collecting variable-count match x/y/angle results, but does not provide a verified VM output type or API signature. It is a requirement-shaping hint only, not a code contract."
+    },
+    {
+      "id": "8886",
+      "title": "用脚本调用sdk采集图片",
+      "url": "https://www.v-club.com/home/article/8886",
+      "evidence": ["article-text", "design-images"],
+      "versionScope": "VM/operator SDK context; exact camera SDK/version not stated",
+      "summary": "Wraps camera open/close/exposure/capture behind a camera base class and vendor/file implementations. Inputs represent trigger, exposure, image path, and camera name. The sample handles one camera and says multi-camera support needs an explicit camera list and process mapping."
+    },
+    {
+      "id": "1912",
+      "title": "VisionMaster在脚本更改存图路径",
+      "url": "https://www.v-club.com/home/article/1912",
+      "evidence": ["article-text", "code-images"],
+      "versionScope": "VM version not stated",
+      "summary": "Shows a script constructing a date/SN/status path and setting the output-image module's OriginImgPath through CurrentProcess.GetModule(...).SetValue(...). The actual module and parameter must still be inspected or catalog-confirmed."
+    },
+    {
+      "id": "1741",
+      "title": "浅谈VsionMaster：用脚本最简代码，调用halcon",
+      "url": "https://www.v-club.com/home/article/1741",
+      "evidence": ["article-text", "code-images"],
+      "versionScope": "VM/HALCON integration; exact VM and HALCON versions not stated",
+      "summary": "Calls a HALCON procedure from C# through halcondotnet.dll and hdevenginedotnet.dll, using an engine, procedure, and procedure call. VM ImageData must be converted to HALCON input and outputs converted back to VM-compatible values."
+    }
+  ],
+  "patterns": [
+    {
+      "id": "explicit-state-machine",
+      "sourceIds": ["10564"],
+      "applicability": "VM 4.4 design pattern",
+      "facts": [
+        "Use a small explicit state enum or integer contract rather than a large unstructured if/else tree.",
+        "Keep each procedure responsible for one business stage and make transitions explicit.",
+        "Represent OK/NG, retry, reset, and UI refresh as state transitions; do not infer a state transition from a display update.",
+        "Recipe/INI lookup is external data and needs an explicit path, encoding, and missing-key policy."
+      ]
+    },
+    {
+      "id": "script-contract-and-ai-handoff",
+      "sourceIds": ["11087"],
+      "applicability": "C# ShellModule only",
+      "facts": [
+        "Inputs and outputs are VM-generated properties; never redeclare them in source.",
+        "Use local variables for intermediate values and assign outputs at the final step.",
+        "Keep the fixed UserScript/ScriptMethods/IProcessMethods/Init/Process contract."
+      ]
+    },
+    {
+      "id": "calibrated-numeric-algorithm",
+      "sourceIds": ["11100", "10129"],
+      "applicability": "C# or Python source after target precompile",
+      "facts": [
+        "Prototype numerical algorithms with synthetic test vectors before embedding them in a VM script.",
+        "Use the target VM numeric precision explicitly; do not paste double-based Visual Studio code into a float-only script contract.",
+        "Calibration values are user-specific inputs, not reusable defaults.",
+        "For robust regression or outlier rejection, define behavior for empty, one-point, constant, NaN, and extreme-value arrays."
+      ]
+    },
+    {
+      "id": "file-backed-results",
+      "sourceIds": ["10375", "9808", "1912"],
+      "applicability": "C# source or verified module parameter",
+      "facts": [
+        "Build paths with Path.Combine under a user-approved root; include date/SN/status only after validating characters.",
+        "Use explicit UTF-8/CSV schema and append/overwrite semantics; do not silently assume the built-in VM retention behavior.",
+        "Retention cleanup must be bounded to the same root, use a user-specified age, and report failures.",
+        "Set OriginImgPath or RenderImgPath only when the parsed module or project catalog confirms the parameter."
+      ]
+    },
+    {
+      "id": "image-buffer-interoperability",
+      "sourceIds": ["10026", "9798", "9792", "9733"],
+      "applicability": "ImageData source requires exact VM 4.4 evidence",
+      "facts": [
+        "ImageData is a width/height/pixel-format/byte-buffer contract, not a Bitmap or Mat object.",
+        "For MONO8 use one byte per pixel; for RGB24 use three bytes per pixel and preserve the documented channel order.",
+        "Check dimensions, channel count, buffer length, and pixel format before row copies or reshape.",
+        "OpenCV interop requires explicit OpenCvSharp managed/native dependencies and a verified RGB/BGR conversion.",
+        "Do not replace the deterministic dxfRender ImageData compatibility path with an article's manual source-construction pattern."
+      ]
+    },
+    {
+      "id": "python-ml-and-image",
+      "sourceIds": ["9856", "9792"],
+      "applicability": "PyShellModule only after Python runtime/package evidence",
+      "facts": [
+        "Do not install packages or download model weights from the generated script.",
+        "Verify the VM Python interpreter, package versions, model path, and CPU/GPU choice first.",
+        "Load heavy models once during a verified initialization path, not repeatedly in Process.",
+        "Guard None, buffer length, dimensions, dtype, and channel order before numpy/OpenCV operations."
+      ]
+    },
+    {
+      "id": "native-sdk-boundary",
+      "sourceIds": ["9558", "8886", "1741"],
+      "applicability": "External host or explicitly verified C# ShellModule dependency",
+      "facts": [
+        "Managed C++/CLI can be referenced by C#; native C++ classes need a wrapper or exported C ABI.",
+        "Build-time headers and import libraries are not runtime deployment files; native DLLs and transitive dependencies are.",
+        "Camera SDK and HALCON integrations need exact vendor versions, architecture, license/runtime location, and an image conversion sample.",
+        "The current deterministic dependency pipeline is not evidence that arbitrary native DLLs can be loaded by a SOL script."
+      ]
+    },
+    {
+      "id": "default-and-missing-input",
+      "sourceIds": ["9954"],
+      "applicability": "C# and Python input handling",
+      "facts": [
+        "Do not use numeric zero as an implicit missing-value marker when the VM initializes an empty numeric property to zero.",
+        "Use an explicit sentinel/default or a separate validity flag confirmed by the port contract.",
+        "Python code must handle None before int/float conversion."
+      ]
+    },
+    {
+      "id": "variable-result-evidence",
+      "sourceIds": ["9527"],
+      "applicability": "Requirement clarification only",
+      "facts": [
+        "A request for all match x/y/angle values requires the actual module output type and collection API; the article does not provide them.",
+        "Ask for an inspect result or validated sample rather than inventing a list property."
+      ]
+    }
+  ],
+  "agentRules": [
+    "When a request resembles a state machine, ask for the state values, transition conditions, retry/reset behavior, procedure names, and UI outputs; then express only verified global/local variable and procedure operations.",
+    "For CSV, image paths, recipes, logs, or cleanup, require an approved root and retention policy. Never generate a path that can escape the root or delete arbitrary directories.",
+    "For ImageData/OpenCV/HALCON/camera code, require exact dependency names, paths, versions, architecture, and a known conversion sample. Do not treat OpenCvSharp, HALCON, camera SDK, or native C++ DLLs as implicit VM references.",
+    "For native C++ DLLs, stop at a structured dependency-boundary error unless the user supplies a managed wrapper or a verified C ABI wrapper and all runtime dependencies.",
+    "For numeric algorithms, preserve float/double semantics, require calibration or test data from the user, and validate edge cases before emitting source.",
+    "When a community article has no exact API signature, classify it as requirement-shaping evidence and ask for a validated sample instead of guessing.",
+    "After a community-knowledge-driven change, run the generated source through the normal Requirement schema, resource manifest, SOL parse, and precompile flow; report that this is offline validation and still request VM user validation."
+  ],
+  "closedLoopChecks": [
+    "Every source id in patterns.sourceIds must exist in sources.",
+    "The file must be covered by resources/vm/4.4.0/manifest.json SHA-256 hashes.",
+    "Agent system-prompt tests must confirm the knowledge file is loaded and the safety rules are present.",
+    "Core/CLI/MCP/DomainWorker smoke tests must continue to pass with the new resource manifest."
+  ]
+}

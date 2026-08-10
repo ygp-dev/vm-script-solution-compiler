@@ -33,6 +33,7 @@ export class DomainWorkerError extends Error {
 export interface DomainWorkerClientOptions {
   workerPath: string;
   repositoryRoot: string;
+  outputDirectory?: string;
   onDiagnostic?: (message: string) => void;
 }
 
@@ -49,11 +50,12 @@ export class DomainWorkerClient {
     if (this.process && !this.process.killed) return;
     this.closing = false;
     const workerPath = path.resolve(this.options.workerPath);
+    const outputDirectory = path.resolve(this.options.outputDirectory ?? path.join(this.options.repositoryRoot, "outputs"));
     const isDll = workerPath.toLowerCase().endsWith(".dll");
     const executable = isDll ? "dotnet" : workerPath;
     const args = isDll
-      ? [workerPath, "--repository-root", this.options.repositoryRoot]
-      : ["--repository-root", this.options.repositoryRoot];
+      ? [workerPath, "--repository-root", this.options.repositoryRoot, "--output-root", outputDirectory]
+      : ["--repository-root", this.options.repositoryRoot, "--output-root", outputDirectory];
 
     const child = spawn(executable, args, {
       cwd: this.options.repositoryRoot,
@@ -75,7 +77,7 @@ export class DomainWorkerClient {
       this.reader?.close();
       this.reader = undefined;
       this.process = undefined;
-      if (!this.closing) {
+      if (!this.closing || this.pending.size > 0) {
         this.failAll(new DomainWorkerError(
           "DOMAIN_WORKER_EXITED",
           `Domain Worker exited unexpectedly (code=${code ?? "null"}, signal=${signal ?? "null"}).`,
@@ -99,8 +101,13 @@ export class DomainWorkerClient {
     const id = `worker-${++this.sequence}`;
     return await new Promise<T>((resolve, reject) => {
       const abort = () => {
+        const pending = this.pending.get(id);
+        if (!pending) return;
+        this.pending.delete(id);
+        pending.cleanup();
+        pending.reject(signal?.reason instanceof Error ? signal.reason : new Error("Operation aborted."));
+        this.failAll(new DomainWorkerError("DOMAIN_WORKER_ABORTED", "Domain Worker operation aborted."));
         this.terminate();
-        reject(signal?.reason instanceof Error ? signal.reason : new Error("Operation aborted."));
       };
       signal?.addEventListener("abort", abort, { once: true });
       this.pending.set(id, {
@@ -122,9 +129,18 @@ export class DomainWorkerClient {
     if (!this.process) return;
     this.closing = true;
     try {
-      await this.call("shutdown", {});
+      await Promise.race([
+        this.call("shutdown", {}),
+        new Promise((_, reject) => setTimeout(() => reject(new Error("Domain Worker shutdown timed out.")), 2_000)),
+      ]);
     } catch {
+      this.failAll(new DomainWorkerError("DOMAIN_WORKER_DISPOSED", "Domain Worker was disposed."));
       this.terminate();
+    } finally {
+      if (this.process) {
+        this.failAll(new DomainWorkerError("DOMAIN_WORKER_DISPOSED", "Domain Worker was disposed."));
+        this.terminate();
+      }
     }
   }
 
@@ -168,7 +184,18 @@ export class DomainWorkerClient {
     this.closing = true;
     this.reader?.close();
     this.reader = undefined;
-    this.process?.kill();
+    const processToKill = this.process;
+    if (processToKill) {
+      if (process.platform === "win32" && processToKill.pid) {
+        const killer = spawn("taskkill", ["/PID", String(processToKill.pid), "/T", "/F"], {
+          windowsHide: true,
+          stdio: "ignore",
+        });
+        killer.unref();
+      } else {
+        processToKill.kill();
+      }
+    }
     this.process = undefined;
   }
 }

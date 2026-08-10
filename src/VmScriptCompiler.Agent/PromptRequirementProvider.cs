@@ -202,6 +202,8 @@ internal static class AiRequirementProtocol
         var apiCatalog = File.ReadAllText(Path.Combine(root, "resources", "vm", "4.4.0", "api-catalog.json"));
         var moduleCatalog = File.ReadAllText(Path.Combine(root, "resources", "vm", "4.4.0", "module-parameter-catalog.json"));
         var referenceCatalog = File.ReadAllText(Path.Combine(root, "resources", "vm", "4.4.0", "shell-reference-catalog.json"));
+        var secondaryDevelopmentKnowledge = File.ReadAllText(Path.Combine(root, "resources", "vm", "4.4.0", "secondary-development-knowledge.json"));
+        var communityArticlesKnowledge = File.ReadAllText(Path.Combine(root, "resources", "vm", "4.4.0", "community-articles-knowledge.json"));
         return "Convert the user request to Requirement IR JSON only. Never edit or describe SOL binary data. " +
             "Use task.mode=" + mode + ", task.vmVersion=4.4.0. Modules are independent unless connections are explicit. " +
             "Patch operations that address an existing module must preserve its exact procedure/module/parameter names. " +
@@ -213,6 +215,8 @@ internal static class AiRequirementProtocol
             "Classify C# assemblies with role=system, vm-sdk, operator-sdk, or third-party. VM*.dll secondary-development SDK references use the verified catalog role vm-sdk/referenceType 6; MVD*.dll operator SDK references use the verified catalog role operator-sdk/referenceType 4. " +
             "For VM 4.4 netDxf 2023.11.10 use DrawingEntities.Polylines2D with Polyline2D and DrawingEntities.Polylines3D with Polyline3D; LwPolylines, LwPolyline, Polylines, and Polyline are not available. Polyline2D vertices expose Position, while Polyline3D Vertexes are Vector3 values directly. For bitmap drawing reference System.Drawing.dll, never System.Drawing.Common. Script.Methods.ImageData has only a parameterless constructor: convert Bitmap pixels to an RGB byte array and create new ImageData { Buffer=rgbBytes, Width=width, Height=height, PixelFormat=ImagePixelFormate.RGB24 }; never call new ImageData(bitmap). " +
             "For an external C# ShellModule DLL outside the verified reference catalog, emit dotnet-assembly with its exact name, path, architecture, role=third-party (or operator-sdk for a real operator SDK), and referenceType=4; never invent another referenceType. " +
+            "The community article knowledge below is advisory and version-scoped, not an API catalog. For a request to clear a multi-image display, inspect the Patch baseline first; only write a validated affine-module input image when the module, parameter, binding, image type, and writable direction are confirmed. Do not copy method names or types from an article screenshot, and do not place operator SDK types in a ShellModule unless the target reference is verified and precompiles:\n" + secondaryDevelopmentKnowledge +
+            "Additional V-Community articles are summarized below as requirement-shaping evidence. Use their state-machine, file-storage, ImageData/OpenCV, Python, HALCON, camera-SDK, and native-DLL patterns only after the exact target dependencies and VM 4.4 precompile contract are confirmed. Never infer a missing API from an article that lacks an exact signature:\n" + communityArticlesKnowledge +
             "The JSON must satisfy this schema:\n" + schema + "\nVM type system:\n" + typeSystem + "\nAPI catalog:\n" + apiCatalog + "\nVerified module parameters:\n" + moduleCatalog + "\nVerified ShellModule references:\n" + referenceCatalog;
     }
 

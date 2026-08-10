@@ -46,6 +46,7 @@ export class VmAgentRuntime {
     this.worker = new DomainWorkerClient({
       workerPath: config.workerPath,
       repositoryRoot: config.repositoryRoot,
+      outputDirectory: config.outputDirectory,
       onDiagnostic: (message) => this.emit({ type: "diagnostic", message }),
     });
   }

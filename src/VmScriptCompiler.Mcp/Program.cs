@@ -132,7 +132,7 @@ internal sealed class McpServer(CompilerFacade compiler)
     private object Build(string spec, string output)
     {
         var result = compiler.Build(spec, output);
-        return new { ok = true, result.TaskDirectory, result.SolutionFile, result.ReportFile, parseExitCode = result.Parse.ExitCode, inspectExitCode = result.Inspect.ExitCode };
+        return new { ok = true, result.TaskDirectory, result.SolutionFile, result.ReportFile, parseExitCode = result.Parse.ExitCode, inspectExitCode = result.Inspect.ExitCode, defaultPersistenceNotices = result.DefaultPersistenceNotices, offlineValidation = OfflineValidation(result) };
     }
 
     private object Patch(string baseSolution, string spec, string output)
@@ -143,7 +143,21 @@ internal sealed class McpServer(CompilerFacade compiler)
         var after = Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(baseSolution)));
         if (!string.Equals(before, after, StringComparison.Ordinal))
             throw new CompilerException("BASE_SOLUTION_MODIFIED", "Patch modified the input SOL, which is forbidden.");
-        return new { ok = true, result.TaskDirectory, result.SolutionFile, result.ReportFile, parseExitCode = result.Parse.ExitCode, inspectExitCode = result.Inspect.ExitCode, baseSolution, baseSolutionSha256 = before, inputPreserved = true };
+        return new { ok = true, result.TaskDirectory, result.SolutionFile, result.ReportFile, parseExitCode = result.Parse.ExitCode, inspectExitCode = result.Inspect.ExitCode, defaultPersistenceNotices = result.DefaultPersistenceNotices, offlineValidation = OfflineValidation(result), baseSolution, baseSolutionSha256 = before, inputPreserved = true };
+    }
+
+    private static object OfflineValidation(BuildResult result)
+    {
+        var parseFile = Path.Combine(result.TaskDirectory, "validation", "parse-result.json");
+        JsonElement parse = default;
+        if (File.Exists(parseFile))
+        {
+            using var document = JsonDocument.Parse(File.ReadAllText(parseFile));
+            parse = document.RootElement.Clone();
+        }
+        var inspectFile = Path.Combine(result.TaskDirectory, "validation", "inspect-result.json");
+        var inspect = File.Exists(inspectFile) ? File.ReadAllText(inspectFile) : result.Inspect.StandardOutput;
+        return new { ok = result.Parse.ExitCode == 0 && result.Inspect.ExitCode == 0, parseResult = parse, inspectOutput = inspect };
     }
 
     private static object ReadBuildReport(string file)

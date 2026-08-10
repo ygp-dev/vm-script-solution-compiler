@@ -20,7 +20,7 @@ try {
         @{ id='shutdown'; command='shutdown'; arguments=@{} }
     )
     $lines = $requests | ForEach-Object { $_ | ConvertTo-Json -Depth 30 -Compress }
-    $responses = @($lines | & dotnet $worker --repository-root $root | ForEach-Object { $_ | ConvertFrom-Json })
+    $responses = @($lines | & dotnet $worker --repository-root $root --output-root $temp | ForEach-Object { $_ | ConvertFrom-Json })
     if ($LASTEXITCODE -ne 0) { throw 'Domain Worker exited with an error.' }
     if ($responses.Count -ne $requests.Count) { throw "Expected $($requests.Count) responses, got $($responses.Count)." }
     if ($responses.Where({ -not $_.ok }).Count -ne 0) { throw 'Domain Worker returned a failed response.' }

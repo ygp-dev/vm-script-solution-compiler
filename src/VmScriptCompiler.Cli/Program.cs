@@ -34,12 +34,12 @@ static class Cli
     private static object Build(string root, string spec, string output)
     {
         var result = new CompilerFacade(root).Build(spec, output);
-        return new { ok = true, taskDirectory = result.TaskDirectory, solution = result.SolutionFile, report = result.ReportFile, parseExitCode = result.Parse.ExitCode, inspectExitCode = result.Inspect.ExitCode };
+        return new { ok = true, taskDirectory = result.TaskDirectory, solution = result.SolutionFile, report = result.ReportFile, parseExitCode = result.Parse.ExitCode, inspectExitCode = result.Inspect.ExitCode, defaultPersistenceNotices = result.DefaultPersistenceNotices };
     }
     private static object Patch(string root, string baseSolution, string spec, string output)
     {
         var result = new CompilerFacade(root).Patch(baseSolution, spec, output);
-        return new { ok = true, taskDirectory = result.TaskDirectory, solution = result.SolutionFile, report = result.ReportFile, parseExitCode = result.Parse.ExitCode, inspectExitCode = result.Inspect.ExitCode };
+        return new { ok = true, taskDirectory = result.TaskDirectory, solution = result.SolutionFile, report = result.ReportFile, parseExitCode = result.Parse.ExitCode, inspectExitCode = result.Inspect.ExitCode, defaultPersistenceNotices = result.DefaultPersistenceNotices };
     }
     private static object Inspect(string root, string file)
     {
