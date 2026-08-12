@@ -371,6 +371,7 @@ public partial class MainWindow : Window
         WorkspacePhaseText.Text = "处理中";
         GenerateButton.IsEnabled = false;
         StopButton.Visibility = Visibility.Visible;
+        ContinueButton.Visibility = Visibility.Collapsed;
         _runCancellation = new CancellationTokenSource();
         try
         {
@@ -400,6 +401,7 @@ public partial class MainWindow : Window
         {
             FriendlyStatus.Text = "已停止当前 Agent 任务。";
             FriendlyStatus.Foreground = (Brush)FindResource("Accent");
+            ContinueButton.Visibility = Visibility.Visible;
         }
         catch (Exception error) { ShowFriendlyError(error); }
         finally
@@ -408,6 +410,8 @@ public partial class MainWindow : Window
             _runCancellation = null;
             GenerateButton.IsEnabled = true;
             StopButton.Visibility = Visibility.Collapsed;
+            if (ContinueButton.Visibility != Visibility.Visible)
+                ContinueButton.Visibility = Visibility.Collapsed;
             _streamingAssistant = null;
         }
     }
@@ -421,9 +425,51 @@ public partial class MainWindow : Window
             {
                 using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(2));
                 await _agent.AbortAsync(timeout.Token);
+                var snapshot = await _agent.GetStateAsync(timeout.Token);
+                RenderSnapshot(snapshot);
+                ContinueButton.Visibility = Visibility.Visible;
             }
         }
         catch { }
+    }
+
+    private async void Continue_Click(object sender, RoutedEventArgs e)
+    {
+        if (_agent is null || !_agent.IsRunning) return;
+        GenerateButton.IsEnabled = false;
+        ContinueButton.Visibility = Visibility.Collapsed;
+        StopButton.Visibility = Visibility.Visible;
+        FriendlyStatus.Text = "正在从中断位置继续 Agent 任务…";
+        FriendlyStatus.Foreground = (Brush)FindResource("TextSecondary");
+        FriendlyStatus.Visibility = Visibility.Visible;
+        WorkspacePhaseText.Text = "继续处理中";
+        _runCancellation = new CancellationTokenSource();
+        try
+        {
+            var completed = await _agent.ContinueAsync(cancellationToken: _runCancellation.Token);
+            var snapshot = completed.GetProperty("state");
+            RenderSnapshot(snapshot);
+            await RefreshArtifactIndexAsync();
+            await RefreshHistoryAsync();
+        }
+        catch (OperationCanceledException)
+        {
+            FriendlyStatus.Text = "继续任务已取消。";
+            ContinueButton.Visibility = Visibility.Visible;
+        }
+        catch (Exception error)
+        {
+            ShowFriendlyError(error);
+            ContinueButton.Visibility = Visibility.Visible;
+        }
+        finally
+        {
+            _runCancellation?.Dispose();
+            _runCancellation = null;
+            GenerateButton.IsEnabled = true;
+            StopButton.Visibility = Visibility.Collapsed;
+            _streamingAssistant = null;
+        }
     }
 
     private void Agent_EventReceived(object? sender, JsonElement message)
@@ -440,6 +486,7 @@ public partial class MainWindow : Window
         {
             var phase = String(state, "phase") ?? "draft";
             WorkspacePhaseText.Text = FriendlyPhase(phase);
+            UpdateContinueAvailability(state);
             SidebarStatusText.Text = $"阶段：{phase} · Requirement r{Int(state, "requirementRevision")}";
             return;
         }
@@ -506,6 +553,12 @@ public partial class MainWindow : Window
         container.Children.Add(bubble);
         MessagesPanel.Children.Add(container);
         ScrollTranscript();
+    }
+
+    private void UpdateContinueAvailability(JsonElement snapshot)
+    {
+        if (snapshot.TryGetProperty("canContinue", out var canContinue))
+            ContinueButton.Visibility = canContinue.GetBoolean() ? Visibility.Visible : Visibility.Collapsed;
     }
 
     private void AppendAssistantDelta(string delta)
@@ -665,6 +718,7 @@ public partial class MainWindow : Window
 
     private void RenderSnapshot(JsonElement snapshot)
     {
+        UpdateContinueAvailability(snapshot);
         if (!snapshot.TryGetProperty("state", out var state)) return;
         var phase = String(state, "phase") ?? "draft";
         WorkspacePhaseText.Text = FriendlyPhase(phase);

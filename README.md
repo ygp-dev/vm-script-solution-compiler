@@ -30,6 +30,7 @@ tests\run-audit-smoke.ps1 -SkipBuild
 tests\run-domain-worker-smoke.ps1 -SkipBuild
 tests\run-agent-domain-smoke.ps1 -SkipBuild
 tests\run-agent-point-sort-smoke.ps1 -SkipBuild
+tests\run-agent-interrupt-smoke.ps1 -SkipBuild
 tests\run-desktop-agent-smoke.ps1 -SkipBuild
 tests\run-release-smoke.ps1
 ```
@@ -54,7 +55,7 @@ Requirement schema 位于 `schemas/requirement.schema.json`，类型和 API 证�
 dotnet run --project src\VmScriptCompiler.Desktop -c Release
 ```
 
-正式入口为 `dist\Desktop\vm-script-compiler-desktop.exe`。桌面端提供会话列表、流式 Agent 消息、工具执行卡片、Create/Patch、基底 SOL 选择、结果索引、停止执行和用户 VM 实机确认。普通用户只需在“配置”中填写：
+正式入口为 `dist\Desktop\vm-script-compiler-desktop.exe`。桌面端提供会话列表、流式 Agent 消息、工具执行卡片、Create/Patch、基底 SOL 选择、结果索引、中断/继续 Agent 任务和用户 VM 实机确认。普通用户只需在“配置”中填写：
 
 - Provider：OpenAI Responses 或 OpenAI-compatible Chat Completions；
 - API 基础地址：例如 `https://api.openai.com/v1`，不要填写 `/responses`；
@@ -64,6 +65,8 @@ dotnet run --project src\VmScriptCompiler.Desktop -c Release
 API Key 只以 Windows 当前用户 DPAPI 密文保存，不写入会话、Requirement、报告或发布包。Agent 只维护 Requirement IR 和任务状态，SOL 始终由 Domain Worker 中的 Core 生成。
 
 `vm_update_requirement` 直接向模型暴露与项目 Schema 对齐的强类型参数，System Prompt 同时加载当前 `requirement.schema.json` 和 Python Create 示例。单个用户回合最多自动校验 3 次、同一错误最多连续 2 次；同一个任务跨回合累计最多 6 个 Requirement 版本，避免无效 IR 和 API 猜测循环。
+
+Agent RPC 支持 `abort` 和 `continue`：`abort` 会停止当前模型/工具循环并保留 session JSONL、Requirement 状态及已有产物；返回快照中的 `runStatus` 为 `interrupted`、`canContinue` 为 `true`。之后发送 `continue` 会复用同一会话上下文，从中断位置继续，不重新提交原始需求；应用重启后也可从 Sessions 恢复同一中断任务。正常完成或新建会话后 `canContinue` 会恢复为 `false`。
 
 DXF 预览使用 Core 内置的确定性 `dxfRender` 操作，不由模型编写渲染源码。默认尺寸为 1920×1080，运行时输入可修改最终尺寸；支持 Line、Circle、Arc、Ellipse、Polyline2D/3D、Spline、Insert/Block。无可绘制实体或纯白输出会明确失败，像素转换仅保留最终 RGB 缓冲和单行临时缓冲。C# 预编译错误通过 CLI、MCP、Domain Worker 和 Agent 返回结构化诊断数组。
 

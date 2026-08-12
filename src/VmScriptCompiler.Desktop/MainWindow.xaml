@@ -655,7 +655,10 @@
                                                 <Button x:Name="StopButton" Visibility="Collapsed"
                                                         Style="{StaticResource IconButton}" Margin="0,0,7,0"
                                                         Content="■" ToolTip="停止任务" Click="Stop_Click" />
-                                                <Button x:Name="GenerateButton" Style="{StaticResource SendButton}"
+                                                 <Button x:Name="ContinueButton" Visibility="Collapsed"
+                                                         Style="{StaticResource IconButton}" Margin="0,0,7,0"
+                                                         Content="▶" ToolTip="继续中断的 Agent 任务" Click="Continue_Click" />
+                                                 <Button x:Name="GenerateButton" Style="{StaticResource SendButton}"
                                                         Content="↑" ToolTip="发送（Enter）" Click="Generate_Click" />
                                             </StackPanel>
                                         </Grid>

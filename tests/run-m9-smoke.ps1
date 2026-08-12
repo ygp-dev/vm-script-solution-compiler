@@ -156,15 +156,20 @@ try {
     if ($unsupportedErrorPolicy.ok -or @($unsupportedErrorPolicy.issues | Where-Object code -eq 'ON_ERROR_POLICY_UNSUPPORTED').Count -ne 1) { throw 'Unsupported per-operation error policy was not blocked.' }
 
     $desktop = Get-Content -Raw (Join-Path $root 'src\VmScriptCompiler.Desktop\MainWindow.xaml') -Encoding UTF8
-    foreach ($label in @('GenerateButton', 'CreateModeRadio', 'PatchModeRadio', 'AdvancedDeterministicTools', 'FriendlyStatus', 'SettingsProviderChoice', 'SettingsEndpointText', 'SettingsApiKeyBox', 'OpenResultFolder_Click', 'OpenDependenciesButton', 'OpenDependencies_Click')) {
+    foreach ($label in @('GenerateButton', 'ContinueButton', 'CreateModeRadio', 'PatchModeRadio', 'AdvancedDeterministicTools', 'FriendlyStatus', 'SettingsProviderChoice', 'SettingsEndpointText', 'SettingsApiKeyBox', 'OpenResultFolder_Click', 'OpenDependenciesButton', 'OpenDependencies_Click')) {
         if (-not $desktop.Contains($label)) { throw "Simple Desktop workflow is missing: $label" }
     }
     foreach ($label in @('RecentConversationList', 'ArtifactSearchText', 'GlobalSearchText', 'GlobalSearchList', 'SettingsFilePathText', 'NewConversation_Click', 'ShowArtifacts_Click', 'ShowAutomations_Click', 'ShowSearch_Click', 'GlobalSearch_Changed', 'AutomationTab', 'SearchTab')) {
         if (-not $desktop.Contains($label)) { throw "Codex-style Desktop workspace is missing: $label" }
     }
     $desktopCode = Get-Content -Raw (Join-Path $root 'src\VmScriptCompiler.Desktop\MainWindow.xaml.cs') -Encoding UTF8
-    foreach ($fragment in @('AgentProcessClient','_agent.PromptAsync(','new AgentConnectionOptions(','_lastDependencyDirectory','Path.Combine(path, "dependencies")','agent.Terminate()')) {
+    foreach ($fragment in @('AgentProcessClient','_agent.PromptAsync(','_agent.ContinueAsync(','new AgentConnectionOptions(','_lastDependencyDirectory','Path.Combine(path, "dependencies")','agent.Terminate()')) {
         if (-not $desktopCode.Contains($fragment)) { throw "Desktop UI snapshot/provider flow is missing: $fragment" }
+    }
+    $agentRpc = Get-Content -Raw (Join-Path $root 'agent\src\rpc-host.ts') -Encoding UTF8
+    $agentRuntime = Get-Content -Raw (Join-Path $root 'agent\src\runtime.ts') -Encoding UTF8
+    foreach ($fragment in @('case "continue"', 'canContinue', 'runStatus', 'CONTINUE_NOT_AVAILABLE', 'this.interrupted = true')) {
+        if (-not ($agentRpc.Contains($fragment) -or $agentRuntime.Contains($fragment))) { throw "Agent interrupt/continue RPC is missing: $fragment" }
     }
     if ($desktopCode.Contains('Environment.SetEnvironmentVariable')) { throw 'Desktop must not persist or mutate process-wide AI credentials.' }
     foreach ($fragment in @('DesktopStateStore', 'ListSessionsAsync()', 'ResumeSessionAsync(', 'RefreshArtifactIndexAsync()', 'RecordUserValidationAsync(')) {
@@ -186,9 +191,10 @@ try {
     foreach ($fragment in @('SidebarColumn', 'ToggleSidebar_Click', 'WorkspacePhaseText', 'PromptText_PreviewKeyDown', 'Suggestion_Click', 'ArtifactEmptyPanel', 'SendButton', 'WindowStyle="None"', 'WindowChrome.WindowChrome', 'TitleBar_MouseLeftButtonDown', 'MinimizeWindow_Click', 'MaximizeWindow_Click', 'CloseWindow_Click', 'Icon="vm-script-compiler.ico"', 'Source="vm-script-compiler-icon.png"')) {
         if (-not $desktop.Contains($fragment)) { throw "Codex-aligned Desktop interaction is missing: $fragment" }
     }
-    foreach ($fragment in @('ToolCardVisual', 'FriendlyPhase(', 'PrepareUiSnapshot(', 'ApplyDarkTitleBar()', 'SetDwmWindowAttributeInt', 'DwmwaCaptionColor', 'WmGetMinMaxInfo', 'MonitorFromWindow', 'WindowMessageHook', 'RefreshGlobalSearch()', 'SearchResult')) {
+    foreach ($fragment in @('ToolCardVisual', 'FriendlyPhase(', 'PrepareUiSnapshot(', 'Continue_Click', 'UpdateContinueAvailability', 'ApplyDarkTitleBar()', 'SetDwmWindowAttributeInt', 'DwmwaCaptionColor', 'WmGetMinMaxInfo', 'MonitorFromWindow', 'WindowMessageHook', 'RefreshGlobalSearch()', 'SearchResult')) {
         if (-not $desktopCode.Contains($fragment)) { throw "Codex-aligned Desktop runtime behavior is missing: $fragment" }
     }
+    if (-not (Test-Path -LiteralPath (Join-Path $root 'tests\run-agent-interrupt-smoke.ps1'))) { throw 'Agent interrupt smoke test is missing.' }
 
     [pscustomobject]@{ ok=$true; multiProcedureCreate=$true; shellReferences=$true; canonicalShellReferenceSlot=$true; shellReferenceTraceability=$true; csharpDependencyPrecompiled=$true; desktopWorkingDirectoryIsolated=$true; bitmapImageDataCompatibility=$true; installedDllInspected=$true; vmSdkClassified=$true; operatorSdkClassified=$true; externalDllPackaged=$true; sharedDllDeduplicated=$true; guardedDllNameCollision=$true; dllDeploymentReported=$true; normalizedAssemblyVersion=$true; guardedDllVersion=$true; pythonDependencyProbed=$true; initPlacement=$true; guardedUnknownReference=$true; guardedSourceConflict=$true; guardedErrorPolicy=$true; simpleDesktop=$true; codexStyleWorkspace=$true; darkTheme=$true; wideComposer=$true; recentConversations=$true; artifactIndex=$true; desktopConfiguration=$true; encryptedApiKey=$true; visibleFriendlyStatus=$true; uiThreadSnapshot=$true } | ConvertTo-Json
 }

@@ -32,6 +32,8 @@ export class VmAgentRuntime {
   private sessionManager?: SessionManager;
   private domain?: VmDomainState;
   private unsubscribe?: () => void;
+  private interrupted = false;
+  private continuationActive = false;
   private readonly listeners = new Set<(event: AgentRuntimeEvent) => void>();
   private readonly worker: DomainWorkerClient;
 
@@ -68,6 +70,8 @@ export class VmAgentRuntime {
     sessionId: string;
     sessionFile?: string;
     isStreaming: boolean;
+    canContinue: boolean;
+    runStatus: "idle" | "running" | "interrupted";
     state: VmTaskState;
     messages: unknown[];
     model: { provider: string; id: string };
@@ -77,7 +81,13 @@ export class VmAgentRuntime {
     return {
       sessionId: session.sessionId,
       sessionFile: session.sessionFile,
-      isStreaming: session.isStreaming,
+      isStreaming: session.isStreaming || this.continuationActive,
+      canContinue: this.canContinue(),
+      runStatus: session.isStreaming || this.continuationActive
+        ? "running"
+        : this.canContinue()
+          ? "interrupted"
+          : "idle",
       state: this.requireDomain().snapshot(),
       messages: session.messages,
       model: { provider: this.model.provider, id: this.model.id },
@@ -87,6 +97,7 @@ export class VmAgentRuntime {
 
   async prompt(text: string, context: TaskContextInput = {}): Promise<void> {
     const session = this.requireSession();
+    this.interrupted = false;
     if (!text.trim()) throw new Error("消息不能为空。");
     const state = this.requireDomain();
     state.setTaskContext(context);
@@ -104,6 +115,30 @@ export class VmAgentRuntime {
     await session.prompt(`${contextLines.join("\n")}\n\n${text}`);
   }
 
+  async continue(text?: string): Promise<void> {
+    const session = this.requireSession();
+    if (session.isStreaming || this.continuationActive) {
+      throw Object.assign(new Error("Agent 正在执行，不能重复继续。"), { code: "AGENT_BUSY" });
+    }
+    if (!this.canContinue()) {
+      throw Object.assign(new Error("当前会话没有可继续的中断任务。"), { code: "CONTINUE_NOT_AVAILABLE" });
+    }
+
+    this.continuationActive = true;
+    this.interrupted = false;
+    try {
+      await session.prompt(
+        text?.trim() ||
+          "继续当前 VM Script Compiler 任务。不要重新创建任务，也不要重复已经成功的工具调用；从上次中断的位置检查当前 Requirement、构建状态和已有产物，然后完成剩余工作。",
+      );
+    } catch (error) {
+      this.interrupted = true;
+      throw error;
+    } finally {
+      this.continuationActive = false;
+    }
+  }
+
   async steer(text: string): Promise<void> {
     await this.requireSession().steer(text);
   }
@@ -113,11 +148,21 @@ export class VmAgentRuntime {
   }
 
   async abort(): Promise<void> {
-    await this.requireSession().abort();
+    const session = this.requireSession();
+    if (!session.isStreaming) return;
+    this.interrupted = true;
+    await session.abort();
+    this.emit({
+      type: "domain",
+      sessionId: session.sessionId,
+      state: this.requireDomain().snapshot(),
+    });
   }
 
   async newSession(): Promise<void> {
     this.ensureIdle();
+    this.interrupted = false;
+    this.continuationActive = false;
     await this.replaceSession(SessionManager.create(
       this.config.repositoryRoot,
       this.config.sessionsDirectory,
@@ -227,6 +272,8 @@ export class VmAgentRuntime {
     this.sessionManager = sessionManager;
     this.domain = domain;
     this.session = created.session;
+    this.interrupted = hasContinuationCandidate(created.session);
+    this.continuationActive = false;
     this.unsubscribe = created.session.subscribe((event) => {
       this.emit({ type: "pi", sessionId: created.session.sessionId, event });
       if (event.type === "tool_execution_end") {
@@ -254,11 +301,32 @@ export class VmAgentRuntime {
     return this.domain;
   }
 
+  private canContinue(): boolean {
+    if (this.continuationActive) return false;
+    if (this.interrupted) return true;
+    return isContinuationMessage(this.session?.messages.at(-1));
+  }
+
   private ensureIdle(): void {
+    if (this.continuationActive) throw Object.assign(new Error("Agent 正在继续执行。"), { code: "AGENT_BUSY" });
     if (this.requireSession().isStreaming) throw new Error("Agent 正在执行，不能切换会话。");
   }
 
   private emit(event: AgentRuntimeEvent): void {
     for (const listener of this.listeners) listener(event);
   }
+}
+
+function hasContinuationCandidate(session: AgentSession): boolean {
+  return isContinuationMessage(session.messages.at(-1));
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
+}
+
+function isContinuationMessage(value: unknown): boolean {
+  return isRecord(value) &&
+    value.role === "assistant" &&
+    (value.stopReason === "aborted" || value.stopReason === "error");
 }

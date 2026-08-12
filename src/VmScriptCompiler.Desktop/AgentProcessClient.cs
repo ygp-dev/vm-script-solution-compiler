@@ -131,6 +131,24 @@ internal sealed class AgentProcessClient : IAsyncDisposable
     public Task<JsonElement> AbortAsync(CancellationToken cancellationToken = default)
         => SendAsync("abort", new { }, cancellationToken);
 
+    public async Task<JsonElement> ContinueAsync(string? text = null, CancellationToken cancellationToken = default)
+    {
+        var id = NextId();
+        var response = NewCompletion(_responses, id);
+        var run = NewCompletion(_runs, id);
+        await WriteAsync(new
+        {
+            id,
+            command = "continue",
+            arguments = new { text }
+        }, cancellationToken);
+        var acknowledgement = await response.Task.WaitAsync(cancellationToken);
+        ThrowIfFailed(acknowledgement);
+        var completed = await run.Task.WaitAsync(cancellationToken);
+        ThrowIfFailed(completed);
+        return completed;
+    }
+
     public Task<JsonElement> RecordUserValidationAsync(string note, CancellationToken cancellationToken = default)
         => SendAsync("record_user_validation", new { note }, cancellationToken);
 

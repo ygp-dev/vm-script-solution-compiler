@@ -82,6 +82,21 @@ export class AgentRpcHost {
           this.success(id, { accepted: true, sessionId: this.runtime.snapshot().sessionId });
           return;
         }
+        case "continue": {
+          const run = this.runtime.continue(optionalString(args.text))
+            .then(() => this.write({ type: "run_completed", id, ok: true, state: this.runtime.snapshot() }))
+            .catch((error) => this.write({
+              type: "run_completed",
+              id,
+              ok: false,
+              error: serializeError(error),
+              state: this.runtime.snapshot(),
+            }))
+            .finally(() => this.runs.delete(run));
+          this.runs.add(run);
+          this.success(id, { accepted: true, sessionId: this.runtime.snapshot().sessionId });
+          return;
+        }
         case "steer":
           await this.runtime.steer(requiredString(args, "text"));
           this.success(id, { accepted: true });
@@ -92,7 +107,7 @@ export class AgentRpcHost {
           return;
         case "abort":
           await this.runtime.abort();
-          this.success(id, { aborted: true });
+          this.success(id, { aborted: true, snapshot: this.runtime.snapshot() });
           return;
         case "record_user_validation":
           this.success(id, this.runtime.recordUserValidation(requiredString(args, "note")));

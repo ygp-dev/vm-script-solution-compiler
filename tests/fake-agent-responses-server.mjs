@@ -6,6 +6,9 @@ const [, , portValue, fixtureFile, outputValue, readyFile] = process.argv;
 const port = Number.parseInt(portValue, 10);
 const fixture = JSON.parse(fs.readFileSync(fixtureFile, "utf8"));
 const outputDirectory = path.resolve(outputValue);
+const delayedRequest = Number.parseInt(process.argv[6] ?? "0", 10);
+const delayMs = Number.parseInt(process.argv[7] ?? "0", 10);
+const maxRequests = Number.parseInt(process.argv[8] ?? (delayedRequest > 0 ? "0" : "3"), 10);
 let requestCount = 0;
 
 function functionCall(index, name, args) {
@@ -82,40 +85,49 @@ const server = http.createServer((request, response) => {
       return;
     }
 
-    const items = scriptedOutput(requestCount);
-    const responseId = `resp_agent_${requestCount}`;
-    const events = [{
-      type: "response.created",
-      response: { id: responseId, status: "in_progress", output: [] },
-    }];
-    items.forEach((item, outputIndex) => {
-      events.push({ type: "response.output_item.added", output_index: outputIndex, item });
-      events.push({ type: "response.output_item.done", output_index: outputIndex, item });
-    });
-    events.push({
-      type: "response.completed",
-      response: {
-        id: responseId,
-        status: "completed",
-        output: items,
-        usage: {
-          input_tokens: 100,
-          output_tokens: 20,
-          total_tokens: 120,
-          input_tokens_details: { cached_tokens: 0 },
-          output_tokens_details: { reasoning_tokens: 0 },
+    const sendResponse = () => {
+      const items = scriptedOutput(requestCount);
+      const responseId = `resp_agent_${requestCount}`;
+      const events = [{
+        type: "response.created",
+        response: { id: responseId, status: "in_progress", output: [] },
+      }];
+      items.forEach((item, outputIndex) => {
+        events.push({ type: "response.output_item.added", output_index: outputIndex, item });
+        events.push({ type: "response.output_item.done", output_index: outputIndex, item });
+      });
+      events.push({
+        type: "response.completed",
+        response: {
+          id: responseId,
+          status: "completed",
+          output: items,
+          usage: {
+            input_tokens: 100,
+            output_tokens: 20,
+            total_tokens: 120,
+            input_tokens_details: { cached_tokens: 0 },
+            output_tokens_details: { reasoning_tokens: 0 },
+          },
         },
-      },
-    });
-    const payload = `${events.map((event) => `data: ${JSON.stringify(event)}\n\n`).join("")}data: [DONE]\n\n`;
-    response.writeHead(200, {
-      "Content-Type": "text/event-stream; charset=utf-8",
-      "Cache-Control": "no-cache",
-      "Content-Length": Buffer.byteLength(payload),
-      Connection: "close",
-    });
-    response.end(payload);
-    if (requestCount >= 3) server.close();
+      });
+      const payload = `${events.map((event) => `data: ${JSON.stringify(event)}\n\n`).join("")}data: [DONE]\n\n`;
+      if (!response.headersSent) {
+        response.writeHead(200, {
+          "Content-Type": "text/event-stream; charset=utf-8",
+          "Cache-Control": "no-cache",
+          "Content-Length": Buffer.byteLength(payload),
+          Connection: "close",
+        });
+      }
+      response.end(payload);
+      if (maxRequests > 0 && requestCount >= maxRequests) server.close();
+    };
+    if (delayedRequest > 0 && requestCount === delayedRequest && delayMs > 0) {
+      setTimeout(sendResponse, delayMs);
+    } else {
+      sendResponse();
+    }
   });
 });
 
