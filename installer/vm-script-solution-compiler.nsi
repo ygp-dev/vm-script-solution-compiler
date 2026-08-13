@@ -10,10 +10,10 @@ SetCompressorDictSize 64
 !include "FileFunc.nsh"
 
 !ifndef VERSION
-  !define VERSION "1.0.4"
+  !define VERSION "1.0.5"
 !endif
 !ifndef VERSION4
-  !define VERSION4 "1.0.4.0"
+  !define VERSION4 "1.0.5.0"
 !endif
 !ifndef DISTROOT
   !error "DISTROOT must point to the validated dist directory."

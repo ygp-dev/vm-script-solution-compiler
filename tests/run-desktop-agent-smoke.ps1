@@ -29,11 +29,11 @@ $previous = @{
 }
 try {
     $arguments = @(
-        (Join-Path $root 'tests\fake-agent-responses-server.mjs')
+        "`"$(Join-Path $root 'tests\fake-agent-responses-server.mjs')`""
         $port
-        (Join-Path $root 'tests\fixtures\m3-shell-create.json')
-        (Join-Path $temp 'outputs')
-        $ready
+        "`"$(Join-Path $root 'tests\fixtures\m3-shell-create.json')`""
+        "`"$(Join-Path $temp 'outputs')`""
+        "`"$ready`""
     )
     $server = Start-Process $node -WindowStyle Hidden -PassThru -ArgumentList $arguments -RedirectStandardOutput $serverOut -RedirectStandardError $serverError
     $deadline = [DateTime]::UtcNow.AddSeconds(15)

@@ -14,7 +14,9 @@ try {
     $python = Join-Path $environment.vmRoot 'Applications\ModuleProxy\x64\python.exe'
     $port = Get-Random -Minimum 31000 -Maximum 45000
     $ready = Join-Path $temp 'ready.txt'
-    $process = Start-Process -FilePath $python -ArgumentList @($server, $port, $fixture, $ready) -PassThru -WindowStyle Hidden
+    $process = Start-Process -FilePath $python -ArgumentList @(
+        "`"$server`"", $port, "`"$fixture`"", "`"$ready`""
+    ) -PassThru -WindowStyle Hidden
     $deadline = [DateTime]::UtcNow.AddSeconds(15)
     while (-not (Test-Path $ready) -and [DateTime]::UtcNow -lt $deadline) { Start-Sleep -Milliseconds 100 }
     if (-not (Test-Path $ready)) { throw 'Fake AI provider did not start.' }

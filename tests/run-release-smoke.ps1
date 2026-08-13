@@ -33,11 +33,11 @@ try {
         $port = ([Net.IPEndPoint]$listener.LocalEndpoint).Port
         $listener.Stop()
         $server = Start-Process $node -WindowStyle Hidden -PassThru -ArgumentList @(
-            (Join-Path $root 'tests\fake-agent-responses-server.mjs'),
+            "`"$(Join-Path $root 'tests\fake-agent-responses-server.mjs')`"",
             $port,
-            (Join-Path $root 'tests\fixtures\m3-shell-create.json'),
-            (Join-Path $temp 'outputs'),
-            $ready
+            "`"$(Join-Path $root 'tests\fixtures\m3-shell-create.json')`"",
+            "`"$(Join-Path $temp 'outputs')`"",
+            "`"$ready`""
         ) -RedirectStandardOutput $serverOut -RedirectStandardError $serverError
         $deadline = [DateTime]::UtcNow.AddSeconds(15)
         while (-not (Test-Path -LiteralPath $ready) -and [DateTime]::UtcNow -lt $deadline) { Start-Sleep -Milliseconds 100 }

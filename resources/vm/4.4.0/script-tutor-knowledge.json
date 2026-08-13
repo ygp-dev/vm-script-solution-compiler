@@ -1,0 +1,374 @@
+{
+  "knowledgeVersion": "1.0.0",
+  "vmVersion": "4.4.0",
+  "scope": {
+    "skillName": "vm-script-tutor",
+    "skillVersion": "1.2",
+    "source": "knowledge/vm-script-tutor/SKILL.md",
+    "domain": "VisionMaster 2D C# ShellModule 脚本开发",
+    "compilerUse": "用于人工 C# 脚本生成、审查和配置提示；确定性 Requirement operations、Core 规则和目标预编译结果优先",
+    "supportedProducts": ["2D VisionMaster"],
+    "supportedCarriers": ["csharp-module"],
+    "notCovered": [
+      "3D VisionMaster、PointCloudData、VM3DScriptBase",
+      "Python 脚本模块",
+      "控制器 IO 发送",
+      "界面层操作和 UI 自动化",
+      "通信协议解析",
+      "非托管资源外部封装方案",
+      "反编译或读取 VM 安装目录下 DLL/EXE 获取 API"
+    ]
+  },
+  "sourceInventory": {
+    "skillFiles": [
+      "SKILL.md",
+      "README.md",
+      "output_report_template.md",
+      "assets/find_msbuild.ps1",
+      "examples/01-basic-template.cs",
+      "examples/02-canny-edge-detection.cs",
+      "examples/03-roi.cs",
+      "examples/04-trans-CAD-file.cs",
+      "examples/05-halcon-image-conversion.cs",
+      "examples/code-patterns.md",
+      "examples/interface-quickref.md",
+      "references/Script.Interface.cs",
+      "references/Script.DataStruct.cs",
+      "references/Script.ExMethods.cs",
+      "references/InternalMethods.cs",
+      "references/VisionMaster模块映射表.md",
+      "references/module-param-workflow.md",
+      "references/csharp_api.md",
+      "references/csharp_debug.md"
+    ],
+    "precedence": [
+      "用户提供并确认的 UserProperty.cs、csproj、AlgorithmTab.xml 和目标预编译诊断",
+      "项目 resources/vm/4.4.0 下的已验证能力目录",
+      "vm-script-tutor references/ 与 examples/",
+      "社区文章和经验模式（仅作需求拆解，不作 API 证明）"
+    ]
+  },
+  "activation": {
+    "semanticKeywords": [
+      "脚本",
+      "输入输出",
+      "UserScript",
+      "IProcessMethods",
+      "Script.Methods",
+      "变量直接赋值",
+      "数组",
+      "图像",
+      "ROI",
+      "模块参数",
+      "全局变量",
+      "模块间读写",
+      "调试输出",
+      "VM 模块 UI 配置",
+      "VS 断点调试"
+    ],
+    "workspacePathPatterns": ["VisionMaster", "UserScript"],
+    "pathMatchCaseInsensitive": true,
+    "pathConfirmation": [
+      "读取并告知当前工作目录",
+      "询问用户是否需要编写或修改 VisionMaster C# 脚本",
+      "用户明确确认后进入脚本工作流；拒绝则退出本 skill；沉默时最多追问一次"
+    ]
+  },
+  "hardBoundaries": [
+    "绝不反编译或读取 VM 安装目录中的 DLL/EXE 来推断 API、类型或方法签名",
+    "C# 接口、数据结构和转换方法只能来自本 skill 的 references/、examples/ 以及项目已验证资源",
+    "允许并要求读取 VM 安装目录中的 AlgorithmTab.xml 查询算法模块参数 Name、MinValue、MaxValue",
+    "模块英文名和工具箱英文名必须先从 references/VisionMaster模块映射表.md 查询，不能凭记忆猜测",
+    "信息不在已确认资料中时停止生成，明确说明缺少的文件、签名、参数或依赖",
+    "UserProperty.cs 是 VM 自动生成的只读定义，严禁修改",
+    "脚本 *.csproj 由 VM UI 自动生成，skill 不直接修改 csproj",
+    "3D、Python、控制器 IO、UI 自动化和通信协议解析请求直接报告不支持"
+  ],
+  "runtimeAndLanguage": {
+    "targetFramework": ".NET Framework 4.6.1",
+    "languageVersion": "C# 5.0",
+    "versionDetection": {
+      "preferredSource": "PATH 中的 VisionMasterX.Y.0 路径",
+      "zeroMatch": "询问 VM 版本和 2D/3D 产品形态",
+      "oneMatch": "告知检测到的版本并默认按该版本生成，允许用户修正",
+      "multipleMatches": "列出全部版本并要求用户指定目标版本",
+      "threeDMatch": "立即停止并报告本 skill 仅支持 2D"
+    },
+    "blockedCSharpFeatures": [
+      "字符串插值 $\"...\"",
+      "空条件运算符 ?.",
+      "nameof()",
+      "表达式体方法或属性（Lambda 表达式除外）",
+      "自动属性初始化",
+      "using static",
+      "异常筛选器 catch when",
+      "await 出现在 catch/finally 中",
+      "out var",
+      "值元组",
+      "模式匹配",
+      "局部函数",
+      "throw 表达式",
+      "二进制字面量",
+      "数字分隔符",
+      "??=",
+      "可空引用类型",
+      "switch 表达式",
+      "范围和索引运算符"
+    ],
+    "allowedCompatibilityFeatures": [
+      "??",
+      "var",
+      "LINQ",
+      "Lambda",
+      "async/await（C# 5 可表达范围内）",
+      "可选参数",
+      "命名实参"
+    ],
+    "heightFieldCompatibility": {
+      "vmUpTo4.3": {
+        "ImageData": "Heigth",
+        "RoiboxData": "Heigth"
+      },
+      "vm4.4AndLater": {
+        "ImageData": "Height",
+        "RoiboxData": "Height"
+      },
+      "alwaysHeight": ["RectData", "Mat", "Bitmap"],
+      "rule": "生成访问 ImageData/RoiboxData 高度字段的代码前必须确认 VM 版本"
+    }
+  },
+  "moduleContract": {
+    "classDeclaration": "public partial class UserScript : ScriptMethods, IProcessMethods",
+    "lifecycle": {
+      "Init": {
+        "signature": "public void Init()",
+        "purpose": "加载方案或预编译时初始化字段和资源"
+      },
+      "Process": {
+        "signature": "public bool Process()",
+        "purpose": "每次流程执行的业务入口",
+        "success": true,
+        "failure": false
+      },
+      "Dispose": {
+        "signature": "public virtual void Dispose()",
+        "purpose": "仅在存在需要显式释放的非托管或 IDisposable 资源时实现"
+      }
+    },
+    "partialClassFiles": {
+      "UserProperty.cs": "VM 生成的 partial 属性和端口定义，只读",
+      "UserScript.cs": "用户编辑的 Process、辅助方法和资源字段",
+      "csproj": "VM 根据程序集 UI 配置自动生成，不由 skill 直接改写"
+    },
+    "codeOrganization": [
+      "Process() 放在类的上方",
+      "辅助方法放在 Process() 下方",
+      "每个方法添加 XML 注释",
+      "删除 VM 默认模板中的结构化占位注释"
+    ],
+    "ioAccess": {
+      "preferred": "直接通过 UserProperty.cs 生成的属性读写，例如 int x = in0; out0 = x;",
+      "dynamicFallback": "只有按字符串动态访问变量名时才使用遗留 Get/Set 或 InternalMethods 2 参数组接口",
+      "userPropertyMechanism": "标量属性调用 Get*Value/Set*Value，数组和复合类型属性调用 Conceal.InternalMethods 的数组接口",
+      "propertyNames": "必须与 UserProperty.cs 中的大小写和拼写完全一致"
+    }
+  },
+  "typeRules": {
+    "image": {
+      "vmType": "IMAGE",
+      "csharpType": "ImageData",
+      "assignment": "直接赋值是引用传递",
+      "copyRule": "需要独立副本时通过 ImageDataToMat/MatToImageData 或已确认的 Bitmap 转换生成新对象"
+    },
+    "roi": {
+      "spokenDefault": "矩形框、ROI、识别框默认按 ROIBOX 处理",
+      "defaultCSharpType": "RoiboxData[]",
+      "rotated": true,
+      "axisAlignedAlternative": "RECT -> RectData[]，不带角度",
+      "sourceOfTruth": "始终以 UserProperty.cs 的实际端口定义为准"
+    },
+    "compoundShape": "POINT、ROIBOX、CIRCLE、RECT、LINE、ELLIPSE、ANNULUS、POLYGON 等通常映射为相应 <Type>Data[]；实际端口类型以 UserProperty.cs 和 type-system.json 为准",
+    "circleBoundary": "CircleData[] 的变量 Getter/Setter 可以保留，但 VM 4.4 ShellModule UI 没有可选择的 Circle 端口，不得生成 ShellModule Circle 输入或输出",
+    "ambiguity": [
+      "同类型输入或输出候选不少于两个且用户未指名时，先列出全部变量名并要求用户选择",
+      "一对多、多对一、数组空值、聚合方式和输出索引不清晰时，列出歧义和推荐方案，不能猜测",
+      "用户已明确无歧义时，先用一句话复述输入、算法和输出，再进入实施大纲"
+    ]
+  },
+  "preGenerationWorkflow": [
+    "检测当前工作目录和 VM 版本，确认目标为 2D",
+    "读取 UserProperty.cs、UserScript.cs 和 csproj；无法访问时要求用户提供绝对路径或内容",
+    "对同类型端口进行候选消歧，确认输入、输出和异常输出字段",
+    "分析输入输出类型、算法语义、一对多/多对一和空数据行为",
+    "盘点 using、BCL 程序集和第三方 DLL，优先选择零依赖实现",
+    "模块参数场景执行模块映射表 + AlgorithmTab.xml 查询和范围校验",
+    "先给实施大纲并等待用户确认，确认前不粘贴完整代码或覆盖文件",
+    "代码生成后执行 C# 5、变量拼写、版本字段、命名空间、资源释放和异常路径静态审查",
+    "附带 UI 手动配置清单，并提醒 VM 预编译、执行、保存和重开验证"
+  ],
+  "assemblyPolicy": {
+    "defaultReferences": [
+      "mscorlib.dll",
+      "System.dll",
+      "System.Core.dll",
+      "System.Windows.Forms.dll",
+      "Script.Methods.dll"
+    ],
+    "commonNonDefaultReferences": {
+      "System.Drawing.dll": ["PointF", "Bitmap", "Graphics", "Color"],
+      "System.Drawing.dll (System.Drawing.Imaging namespace)": ["PixelFormat", "ImageFormat"],
+      "System.Numerics.dll": ["Vector2", "Vector3", "Matrix4x4"],
+      "System.Xml.Linq.dll": ["XDocument", "XElement"],
+      "System.Net.Http.dll": ["HttpClient"],
+      "System.IO.Compression.dll": ["ZipArchive"]
+    },
+    "zeroDependencyPreference": [
+      "纯几何计算优先使用自定义点结构、float/double 数组，不为 PointF 额外引入 System.Drawing",
+      "只有确实需要 Bitmap、Graphics 或图像格式转换时才引入 System.Drawing",
+      "System.Windows.Forms 不会传递引用 System.Drawing"
+    ],
+    "missingReferenceAction": [
+      "先检查 csproj 是否已经存在 Reference",
+      "若不存在，不要臆造 HintPath，不要自动修改 csproj",
+      "暂停代码生成，要求用户在 VM 脚本 UI 的 控制栏 -> 编辑程序集 -> 添加 中完成配置并重新导出工程",
+      "在最终 UI 清单中列出该 DLL、来源、架构和是否已存在"
+    ],
+    "externalDependencyEvidence": [
+      "DLL 名称、绝对路径、版本、x64/AnyCPU、递归依赖和目标预编译结果必须明确",
+      "OpenCvSharp、Halcon、netDxf 等第三方库不是 VM 隐式引用",
+      "原生 C++ 库不能按普通 .NET DLL 引用，必须有托管包装或 C ABI"
+    ]
+  },
+  "moduleParameterWorkflow": {
+    "scope": "CurrentProcess 当前流程；Group 内模块使用 Group1.模块名",
+    "interfaces": {
+      "set": "CurrentProcess.GetModule(\"模块名称\").SetValue(\"参数Key\", \"参数值字符串\")",
+      "getResult": "CurrentProcess.GetModule(\"模块名称\").GetValue(\"结果参数名\")",
+      "legacyGetParam": "GetModuleParam(nModuleID, \"参数Key\", ref paramValue)"
+    },
+    "requiredInputs": [
+      "流程中显示的模块名称",
+      "待设置或获取的参数语义",
+      "目标值和单位（如适用）"
+    ],
+    "lookup": {
+      "step0": "从 references/VisionMaster模块映射表.md 查询工具箱英文名和模块英文名，并告知用户确认",
+      "algorithmTabPath": "{VM根目录}/Applications/Module(sp)/x64/{工具箱英文名}/{模块英文名}/{模块英文名}AlgorithmTab.xml",
+      "keyNode": "<Name>",
+      "minNode": "<MinValue>",
+      "maxNode": "<MaxValue>",
+      "valueEncoding": "SetValue 的参数值统一以字符串传入，VM 内部负责转换"
+    },
+    "blockingConditions": [
+      "映射表找不到模块且用户未提供英文名",
+      "工具箱或模块目录不存在",
+      "AlgorithmTab.xml 不存在或没有目标参数节点",
+      "参数值超出 MinValue-MaxValue",
+      "模块显示名、流程上下文或写入方向未确认"
+    ],
+    "knownExamples": [
+      { "toolbox": "Calculation", "module": "SinglePointGrabModu", "displayName": "单点抓取" },
+      { "toolbox": "ImageProcessing", "module": "IMVSAffineTransformModu", "displayName": "仿射变换" },
+      { "toolbox": "Collection", "module": "SaveImage", "displayName": "输出图像" },
+      { "toolbox": "Calibration", "module": "IMVSNPointCalibModu", "displayName": "N点标定" }
+    ]
+  },
+  "errorAndDebugPolicy": {
+    "errorField": "string errorStatus = string.Empty;",
+    "processGuard": "Process() 用 try/catch 包裹整个业务逻辑；catch 写入异常信息并 return false",
+    "nameConflict": "若 UserProperty.cs 已有 errorStatus，改用不冲突的 _errorStatus、__errorStatus 或 scriptErrorStatus，并在清单中告知",
+    "vmOutput": "errorStatus 默认只是类字段；需要在 VM 中显示时新增 STRING 输出如 errorOut，并在 catch 中直接赋值",
+    "inputValidation": [
+      "数组检查 null 和 Length == 0",
+      "float/double 检查 NaN 和 Infinity",
+      "ImageData 检查 Buffer、Width、Height 和像素格式"
+    ],
+    "debugDefault": "默认不生成 ShowMessageBox、ConsoleWrite、日志或向全局变量写调试信息",
+    "debugEffects": {
+      "ShowMessageBox": "会暂停整个流程，仅在用户明确要求且仅用于调试时添加",
+      "ConsoleWrite": "输出到 DebugView，需要外部工具查看",
+      "globalVariableLogging": "会污染流程数据，必须显式确认"
+    }
+  },
+  "resourceLifecycle": {
+    "disposeOnlyWhenNeeded": true,
+    "mat": "Mat 使用完成后 Dispose；大量对象按字段缓存，避免每帧重复 new",
+    "bitmap": "ImageDataToBitmap 返回的 Bitmap 由调用方 Dispose",
+    "halcon": "HObject 由调用方 Dispose；Marshal.AllocHGlobal 必须在 finally 中 FreeHGlobal",
+    "nativeHandles": "非托管句柄必须在 Dispose 中释放"
+  },
+  "artifactDelivery": {
+    "default": "直接覆盖导出工程中的 UserScript.cs",
+    "defaultTemplate": "若仅有 processCount 初始化和空 Process，可直接覆盖",
+    "existingBusinessCode": "覆盖前备份为 UserScript.cs.bak，并报告备份路径",
+    "fallback": "用户要求自己粘贴、没有可访问路径或未授权写盘时改用粘贴模式",
+    "neverModify": ["UserProperty.cs", "*.csproj"],
+    "postSteps": ["报告目标绝对路径和备份", "附 UI 配置清单", "提醒 VM 中重新预编译和执行验证"]
+  },
+  "staticReviewChecklist": [
+    "目标 VM 版本和 2D 产品形态已确认",
+    "没有读取或反编译 VM 安装 DLL/EXE",
+    "没有修改 UserProperty.cs 或 csproj",
+    "变量名与 UserProperty.cs 完全一致，多候选已由用户指认",
+    "RoiboxData/ImageData 高度字段与 VM 版本匹配；RectData/Mat/Bitmap 使用 Height",
+    "只使用直接赋值读写端口，除非确有动态字符串访问需求",
+    "Process() 含完整 try/catch，errorStatus 无命名冲突且 catch 会赋值",
+    "默认没有 ShowMessageBox、ConsoleWrite 或日志副作用",
+    "所有非默认程序集和第三方库已列入 UI 清单，未私改 csproj",
+    "使用 .NET Framework 4.6.1 和 C# 5.0 语法",
+    "Process() 在上、辅助方法在下、每个方法有 XML 注释",
+    "Mat、Bitmap、HObject 和非托管内存的生命周期已处理",
+    "模块参数 Key 来自映射表和 AlgorithmTab.xml，范围校验已完成",
+    "已附 UI 手动配置清单；若有 VS 工程且工具可用，可用 find_msbuild.ps1 做真实编译"
+  ],
+  "referenceRoles": {
+    "references/Script.Interface.cs": "ScriptMethods 遗留标量 Get/Set、CurrentProcess、全局变量和生命周期签名参考",
+    "references/Script.DataStruct.cs": "ImageData、RoiboxData、PointData 及几何数据结构字段参考",
+    "references/Script.ExMethods.cs": "Mat、Bitmap 与 ImageData 的转换实现和像素通道/stride 处理",
+    "references/InternalMethods.cs": "Conceal.InternalMethods 数组 Get/Set 2 参实现；普通代码优先直接属性访问",
+    "references/VisionMaster模块映射表.md": "模块中文名、工具箱英文名和模块英文名映射",
+    "references/module-param-workflow.md": "模块参数查询、XML 定位、范围检查和降级策略",
+    "references/csharp_api.md": "脚本开放 API 和兼容性接口速查",
+    "references/csharp_debug.md": "导出工程、VS Build、附加 VM 主进程和断点验证步骤"
+  },
+  "exampleRoles": {
+    "examples/01-basic-template.cs": "直接赋值、全局变量、模块结果和参数访问的综合模板；通信段仅在用户明确允许且目标范围支持时使用",
+    "examples/02-canny-edge-detection.cs": "OpenCvSharp 图像处理、ImageData/Mat 转换和 Mat 释放",
+    "examples/03-roi.cs": "RoiboxData 网格分割、空值检查和版本高度字段提示",
+    "examples/04-trans-CAD-file.cs": "CAD/Bitmap 处理和外部程序集依赖示例；不能替代项目确定性 dxfRender",
+    "examples/05-halcon-image-conversion.cs": "Halcon HObject 与 ImageData 的 MONO8/RGB24 转换、非托管内存释放",
+    "examples/code-patterns.md": "基础透传、数组、OpenCV、Bitmap、ROI、错误处理和资源生命周期模式",
+    "examples/interface-quickref.md": "变量类型、数据结构、图像转换、模块参数、调试和生命周期速查"
+  },
+  "uiReport": {
+    "template": "knowledge/vm-script-tutor/output_report_template.md",
+    "mustInclude": [
+      "生成文件绝对路径和交付方式",
+      "VM 版本和 2D 产品形态",
+      "输入输出变量名、VM 类型、订阅来源和用途",
+      "非默认程序集、第三方依赖和 csproj 状态",
+      "预编译、执行、保存、重开和 VS 调试提醒"
+    ]
+  },
+  "syncNotes": {
+    "addedFromSkill": [
+      "C# 5.0 与 .NET Framework 4.6.1 语法/运行时约束",
+      "VM 4.3/4.4 ImageData 与 RoiboxData 高度字段兼容规则",
+      "UserProperty.cs、UserScript.cs、csproj 的职责边界",
+      "直接赋值优先、errorStatus 标准异常处理和调试输出默认关闭",
+      "程序集盘点、零依赖几何实现和缺失引用时中断生成策略",
+      "模块映射表到 AlgorithmTab.xml 的参数 Key 和范围查询工作流",
+      "多候选变量消歧、需求可行性分析、实施大纲确认和静态审查清单",
+      "脚本覆盖交付、备份和 UI 手动配置清单要求",
+      "VS 断点调试和 Mat/Bitmap/Halcon 资源生命周期规则"
+    ],
+    "existingAuthoritativeResourcesRetained": [
+      "type-system.json",
+      "api-catalog.json",
+      "shell-reference-catalog.json",
+      "module-parameter-catalog.json",
+      "secondary-development-knowledge.json",
+      "community-articles-knowledge.json"
+    ]
+  }
+}

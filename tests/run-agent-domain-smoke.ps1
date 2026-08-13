@@ -44,11 +44,11 @@ $previous = @{
 
 try {
     $serverArguments = @(
-        (Join-Path $root 'tests\fake-agent-responses-server.mjs')
+        "`"$(Join-Path $root 'tests\fake-agent-responses-server.mjs')`""
         $port
-        ([IO.Path]::GetFullPath($FixtureFile))
-        (Join-Path $temp 'outputs')
-        $ready
+        "`"$([IO.Path]::GetFullPath($FixtureFile))`""
+        "`"$(Join-Path $temp 'outputs')`""
+        "`"$ready`""
     )
     $server = Start-Process $node -WindowStyle Hidden -PassThru -ArgumentList $serverArguments -RedirectStandardOutput $serverOut -RedirectStandardError $serverError
     $deadline = [DateTime]::UtcNow.AddSeconds(15)
@@ -194,3 +194,5 @@ finally {
     if ($server -and -not $server.HasExited) { $server.Kill() }
     if (Test-Path -LiteralPath $temp) { Remove-Item -LiteralPath $temp -Recurse -Force }
 }
+
+exit 0

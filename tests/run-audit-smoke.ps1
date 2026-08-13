@@ -100,6 +100,8 @@ try {
     if ($untracked.Count -ne 0) { throw 'Resource manifest has untracked files: ' + ($untracked -join ', ') }
     if ((Get-ChildItem (Join-Path $root 'dist') -Recurse -File -Filter *.sol -ErrorAction SilentlyContinue | Measure-Object).Count -ne 0) { throw 'Published products contain SOL files.' }
 
-    [pscustomobject]@{ok=$true; accuratePlan=$true; stableInvalidJson=$true; explicitSourceBoolGuard=$true; patchReplace=$true; patchInputProtected=$true; patchBaseMismatchGuard=$true; completeReport=$true; validateParseInspectArchive=$true; resourceManifestComplete=$true; distContainsNoSol=$true} | ConvertTo-Json
+    $scriptTutor = Get-Content -Raw -Encoding UTF8 (Join-Path $resourceRoot 'script-tutor-knowledge.json') | ConvertFrom-Json
+    if ($scriptTutor.scope.skillName -ne 'vm-script-tutor' -or $scriptTutor.scope.skillVersion -ne '1.2') { throw 'Synchronized vm-script-tutor knowledge is invalid.' }
+    [pscustomobject]@{ok=$true; accuratePlan=$true; stableInvalidJson=$true; explicitSourceBoolGuard=$true; patchReplace=$true; patchInputProtected=$true; patchBaseMismatchGuard=$true; completeReport=$true; validateParseInspectArchive=$true; resourceManifestComplete=$true; scriptTutorKnowledge=$true; distContainsNoSol=$true} | ConvertTo-Json
 }
 finally { if (Test-Path $temp) { Remove-Item $temp -Recurse -Force } }

@@ -45,6 +45,13 @@ test("VM system prompt contains authoritative schema and all carrier Create exam
   assert.match(prompt, /OpenCvSharp/);
   assert.match(prompt, /背景图写入只表示执行了一个状态修改工作流/);
   assert.match(prompt, /community-articles-knowledge/);
+  assert.match(prompt, /vm-script-tutor C# 脚本开发知识/);
+  assert.match(prompt, /"skillVersion": "1\.2"/);
+  assert.match(prompt, /UserProperty\.cs.*只读/s);
+  assert.match(prompt, /C# 5\.0/);
+  assert.match(prompt, /AlgorithmTab\.xml/);
+  assert.match(prompt, /errorStatus/);
+  assert.match(prompt, /UI 手动配置清单/);
   assert.match(prompt, /状态机需求优先拆成显式状态/);
   assert.match(prompt, /原生 C\+\+ 类需要托管包装或 C ABI/);
   assert.match(prompt, /Python 模型和图像库不得在脚本中自动安装或下载/);

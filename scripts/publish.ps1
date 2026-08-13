@@ -22,7 +22,7 @@ if (-not $SkipTests) {
         'run-full-smoke.ps1','run-m2-smoke.ps1','run-m6-smoke.ps1','run-m8-smoke.ps1',
         'run-m9-smoke.ps1','run-agent-interrupt-smoke.ps1','run-m10-smoke.ps1','run-m11-smoke.ps1','run-m12-smoke.ps1','run-m13-smoke.ps1',
         'run-audit-smoke.ps1','run-domain-worker-smoke.ps1','run-agent-domain-smoke.ps1',
-        'run-agent-point-sort-smoke.ps1','run-desktop-agent-smoke.ps1','run-community-knowledge-smoke.ps1'
+        'run-agent-point-sort-smoke.ps1','run-desktop-agent-smoke.ps1','run-community-knowledge-smoke.ps1','run-script-tutor-knowledge-smoke.ps1'
     )) {
         & (Join-Path $root ('tests\' + $test)) -SkipBuild
         if ($LASTEXITCODE -ne 0) { throw "Test failed: $test" }
@@ -94,7 +94,14 @@ foreach ($product in $products) {
             if (-not $unusedProvider.FullName.StartsWith($nodeModules + '\', [StringComparison]::OrdinalIgnoreCase)) {
                 throw "Unexpected provider directory outside Agent payload: $($unusedProvider.FullName)"
             }
-            Remove-Item -LiteralPath $unusedProvider.FullName -Recurse -Force
+            $longPath = if ($unusedProvider.FullName.StartsWith('\\?\', [StringComparison]::Ordinal)) {
+                $unusedProvider.FullName
+            } elseif ($unusedProvider.FullName.StartsWith('\\', [StringComparison]::Ordinal)) {
+                '\\?\UNC\' + $unusedProvider.FullName.TrimStart('\')
+            } else {
+                '\\?\' + $unusedProvider.FullName
+            }
+            [IO.Directory]::Delete($longPath, $true)
         }
         foreach ($developmentFile in Get-ChildItem -LiteralPath $nodeModules -Recurse -File -ErrorAction SilentlyContinue |
             Where-Object { $_.Name.EndsWith('.map', [StringComparison]::OrdinalIgnoreCase) -or

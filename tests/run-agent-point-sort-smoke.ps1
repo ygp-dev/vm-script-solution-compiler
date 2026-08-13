@@ -26,3 +26,5 @@ if ($result.carrier -ne 'python-module' -or -not $result.generatedSourceVerified
     sessionBytes = $result.sessionBytes
     tools = $result.tools
 } | ConvertTo-Json -Depth 5 -Compress
+
+exit 0
