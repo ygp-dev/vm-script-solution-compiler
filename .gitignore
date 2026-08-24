@@ -35,3 +35,6 @@ docs/VM Script Compiler/
 **/desktop-settings.json
 **/artifact-index.json
 **/agent/sessions/
+
+# Local reference and customer documentation; keep it outside the GitHub repository.
+docs/
