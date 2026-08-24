@@ -2,6 +2,20 @@
 
 面向 VisionMaster 4.4 的确定性脚本方案编译器。自然语言由 Agent 转换为 Requirement IR；只有 Compiler Core 可以生成或 Patch SOL，AI 不直接修改二进制。
 
+当前 Windows x64 正式版为 **1.0.7**：[GitHub Release v1.0.7](https://github.com/ygp-dev/vm-script-solution-compiler/releases/tag/v1.0.7)。该版本修正了 1.0.6 安装后只显示 Desktop 的问题，安装包会同时安装 Desktop、CLI、MCP，并创建对应的开始菜单入口。
+
+## 安装最新版
+
+下载 `VM-Script-Solution-Compiler-Setup-1.0.7-x64.exe` 后按向导安装即可。安装程序默认使用当前用户目录 `%LOCALAPPDATA%\VMSC`，不需要管理员权限。
+
+安装完成后，开始菜单和桌面快捷方式分别指向：
+
+- Desktop：`%LOCALAPPDATA%\VMSC\Desktop\vm-script-compiler-desktop.exe`
+- CLI：`%LOCALAPPDATA%\VMSC\Cli\VmScriptCompiler.Cli.exe`
+- MCP：`%LOCALAPPDATA%\VMSC\Mcp\vm-script-compiler-mcp.exe`
+
+如果旧版本仍显示在桌面或任务栏，请关闭旧进程后从“VM Script Solution Compiler”开始菜单文件夹重新启动；1.0.7 安装器会在安装阶段检查 CLI 和 MCP 入口是否完整。
+
 ## 项目
 
 - `VmScriptCompiler.Core`：环境、schema/语义验证、任务目录、资源校验、三类脚本生成、SOL Create/Patch、parse/inspect 和报告。
@@ -64,6 +78,8 @@ dotnet run --project src\VmScriptCompiler.Desktop -c Release
 - API Key。
 
 API Key 只以 Windows 当前用户 DPAPI 密文保存，不写入会话、Requirement、报告或发布包。Agent 只维护 Requirement IR 和任务状态，SOL 始终由 Domain Worker 中的 Core 生成。
+
+首次打开 Desktop 不代表 Agent 已经连接。若界面显示 Agent 未连接，需要先在“配置”中保存 Provider、API 基础地址、模型 ID 和 API Key。另需确保目标机安装的是完整 VisionMaster 4.4，并让环境检测能够定位包含 `Development`、`MVDAlgorithmSDK` 和 `Applications` 的根目录；可通过 `VISIONMASTER_HOME` 或 `VM_HOME` 指定该目录，然后运行 CLI 的 `env` 命令检查 `found` 是否为 `true`。`VM_HOME_NOT_FOUND` 表示 VM 路径或安装内容不完整，不是 Desktop、CLI、MCP 安装包缺失。
 
 `vm_update_requirement` 直接向模型暴露与项目 Schema 对齐的强类型参数，System Prompt 同时加载当前 `requirement.schema.json` 和 Python Create 示例。单个用户回合最多自动校验 3 次、同一错误最多连续 2 次；同一个任务跨回合累计最多 6 个 Requirement 版本，避免无效 IR 和 API 猜测循环。
 
