@@ -14,10 +14,10 @@ SetCompressorDictSize 32
 !include "FileFunc.nsh"
 
 !ifndef VERSION
-  !define VERSION "1.0.6"
+  !define VERSION "1.0.7"
 !endif
 !ifndef VERSION4
-  !define VERSION4 "1.0.6.0"
+  !define VERSION4 "1.0.7.0"
 !endif
 !ifndef DISTROOT
   !error "DISTROOT must point to the validated dist directory."
@@ -100,6 +100,16 @@ Section "完整产品" SEC_CORE
   SetOutPath "$INSTDIR\Mcp"
   File /r "${DISTROOT}\Mcp\*"
 
+  IfFileExists "$INSTDIR\Cli\VmScriptCompiler.Cli.exe" payload_cli_ok payload_missing
+payload_cli_ok:
+  IfFileExists "$INSTDIR\Mcp\vm-script-compiler-mcp.exe" payload_mcp_ok payload_missing
+payload_mcp_ok:
+  Goto payload_verified
+payload_missing:
+  MessageBox MB_ICONSTOP|MB_OK "安装包缺少 CLI 或 MCP 组件，安装已中止。请重新下载完整安装包。"
+  Abort
+payload_verified:
+
   SetOutPath "$INSTDIR"
   File "${DISTROOT}\release-manifest.json"
   WriteUninstaller "$INSTDIR\Uninstall.exe"
@@ -107,6 +117,10 @@ Section "完整产品" SEC_CORE
   CreateDirectory "$SMPROGRAMS\VM Script Solution Compiler"
   CreateShortcut "$SMPROGRAMS\VM Script Solution Compiler\VM Script Solution Compiler.lnk" \
     "$INSTDIR\Desktop\${PRODUCT_EXE}" "" "$INSTDIR\Desktop\${PRODUCT_EXE}" 0
+  CreateShortcut "$SMPROGRAMS\VM Script Solution Compiler\VM Script Solution Compiler CLI.lnk" \
+    "$INSTDIR\Cli\VmScriptCompiler.Cli.exe" "" "$INSTDIR\Cli\VmScriptCompiler.Cli.exe" 0
+  CreateShortcut "$SMPROGRAMS\VM Script Solution Compiler\VM Script Solution Compiler MCP.lnk" \
+    "$INSTDIR\Mcp\vm-script-compiler-mcp.exe" "" "$INSTDIR\Mcp\vm-script-compiler-mcp.exe" 0
   CreateShortcut "$SMPROGRAMS\VM Script Solution Compiler\安装目录.lnk" "$INSTDIR"
   CreateShortcut "$SMPROGRAMS\VM Script Solution Compiler\使用说明.lnk" "$INSTDIR\Desktop\USAGE.md"
   CreateShortcut "$SMPROGRAMS\VM Script Solution Compiler\卸载.lnk" "$INSTDIR\Uninstall.exe"
