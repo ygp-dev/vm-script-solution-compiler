@@ -69,9 +69,14 @@ public sealed class ParserClient(string parserPath)
     // The bundled parser derives its extraction directory from the input file name. Since builds
     // intentionally use working-input.sol, parser processes must not overlap across processes on this machine.
     private static readonly Mutex ProcessGate = new(false, @"Local\VmScriptCompiler_VMSolutionParser");
-    public ProcessResult Parse(string solutionFile, string outputJson)
+    public ProcessResult Parse(string solutionFile, string outputJson, bool includeRaw = false)
     {
-        var result = Run(["parse", "-f", solutionFile, "-o", outputJson]);
+        // The parser truncates its human-readable "parsed" preview. Callers that must read a parameter
+        // value in full (port declaration XML, for example) need the untruncated rawDataB64 payload.
+        string[] arguments = includeRaw
+            ? ["parse", "-f", solutionFile, "-o", outputJson, "--include-raw"]
+            : ["parse", "-f", solutionFile, "-o", outputJson];
+        var result = Run(arguments);
         if (result.ExitCode == 0 && File.Exists(outputJson))
         {
             var json = File.ReadAllText(outputJson);

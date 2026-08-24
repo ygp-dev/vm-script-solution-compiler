@@ -118,12 +118,21 @@ internal sealed class DomainWorker(CompilerFacade compiler, string outputRoot)
         var inspect = parser.Inspect(file);
         if (inspect.ExitCode != 0)
             throw new CompilerException("SOL_PARSE_FAILED", string.IsNullOrWhiteSpace(inspect.StandardError) ? inspect.StandardOutput : inspect.StandardError);
+        // The --list summary reports only module paths and parameter counts. Patch authors also need the
+        // script source and the defaults/bindings already saved in the SOL, or they overwrite user edits.
+        var digest = compiler.InspectSolution(file);
         return new
         {
             ok = true,
             file,
             sha256 = Hash(file),
-            inspect = inspect.StandardOutput
+            inspect = inspect.StandardOutput,
+            procedures = digest.Procedures,
+            modules = digest.Modules,
+            scripts = digest.Scripts,
+            globalScript = digest.GlobalScript,
+            warnings = digest.Warnings,
+            sourceTruncated = digest.SourceTruncated
         };
     }
 

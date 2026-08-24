@@ -1,0 +1,401 @@
+{
+  "formatVersion": 5,
+  "sourceFile": "<fixture>",
+  "parseTime": "<fixture>",
+  "parserVersion": "vm-sol-format v2.3.0",
+  "solution": {
+    "globalModules": [],
+    "procedures": [
+      {
+        "procedureId": 10000,
+        "displayName": "流程1",
+        "properties": {
+          "continueExecuteTimGap": 100,
+          "stopWhenNG": false,
+          "runTimeout": 0,
+          "shieldGlobalCtrl": false
+        },
+        "modules": [
+          {
+            "moduleId": 0,
+            "name": "IMVSHPFeatureMatchModu",
+            "displayName": "高精度匹配1",
+            "type": "Module",
+            "typeId": 0,
+            "isEnabled": true,
+            "fullPath": "流程1.高精度匹配1",
+            "frameNameSlot": "0-IMVSHPFeatureMatchModu.mdata",
+            "enableCallBack": true,
+            "guid": "C9F7CB4E25D4464EA0D300A3E3A19013",
+            "algoriParams": [],
+            "binaryParams": [
+              {
+                "name": "DrawImageSize",
+                "valueLen": 8,
+                "parsed": "w=0.000000, h=0.000000",
+                "rawDataLen": 8
+              },
+              {
+                "name": "RoiType",
+                "valueLen": 2,
+                "parsed": "flag=1",
+                "rawDataLen": 2
+              },
+              {
+                "name": "ExternRoiType",
+                "valueLen": 2,
+                "parsed": "0",
+                "rawDataLen": 2
+              },
+              {
+                "name": "DynamicInData",
+                "valueLen": 0,
+                "parsed": "(empty)",
+                "rawDataLen": 0
+              },
+              {
+                "name": "DynamicOutData",
+                "valueLen": 0,
+                "parsed": "(empty)",
+                "rawDataLen": 0
+              },
+              {
+                "name": "新建模板1",
+                "valueLen": 225664,
+                "parsed": "(binary, 225664 bytes)",
+                "rawDataLen": 225664,
+                "rawTruncated": true
+              },
+              {
+                "name": "select",
+                "valueLen": 400,
+                "parsed": "\u0001",
+                "rawDataLen": 400
+              }
+            ],
+            "connections": {
+              "frontModules": [
+                1
+              ],
+              "followModules": [
+                2
+              ]
+            },
+            "subscriptions": [
+              {
+                "paramName": "InImage",
+                "isBound": true,
+                "targetModuleId": 1,
+                "targetParamName": "Image",
+                "indexMode": "All",
+                "isIndexBind": false,
+                "indexTargetModuleId": 0,
+                "relationString": "0 . InImage . 1 . Image . 0 . 0 . All . 1"
+              },
+              {
+                "paramName": "InImageWidth",
+                "isBound": true,
+                "targetModuleId": 1,
+                "targetParamName": "Width",
+                "indexMode": "All",
+                "isIndexBind": false,
+                "indexTargetModuleId": 0,
+                "relationString": "0 . InImageWidth . 1 . Width . 0 . 0 . All . 1"
+              },
+              {
+                "paramName": "InImageHeight",
+                "isBound": true,
+                "targetModuleId": 1,
+                "targetParamName": "Height",
+                "indexMode": "All",
+                "isIndexBind": false,
+                "indexTargetModuleId": 0,
+                "relationString": "0 . InImageHeight . 1 . Height . 0 . 0 . All . 1"
+              },
+              {
+                "paramName": "InImagePixelFormat",
+                "isBound": true,
+                "targetModuleId": 1,
+                "targetParamName": "PixelFormat",
+                "indexMode": "All",
+                "isIndexBind": false,
+                "indexTargetModuleId": 0,
+                "relationString": "0 . InImagePixelFormat . 1 . PixelFormat . 0 . 0 . All . 1"
+              }
+            ],
+            "uiParams": [
+              {
+                "name": "GUID",
+                "inferredType": "guid",
+                "value": "B1A54632-863A-42BF-81B6-B5F84ADF81D5"
+              },
+              {
+                "name": "IsReady",
+                "inferredType": "bool",
+                "value": "True"
+              },
+              {
+                "name": "Position",
+                "inferredType": "position",
+                "value": "(230.0, 230.0)"
+              },
+              {
+                "name": "SourceIndex脚本1",
+                "inferredType": "int32",
+                "value": "50331648"
+              },
+              {
+                "name": "TargetIndex脚本1",
+                "inferredType": "int32",
+                "value": "16777216"
+              },
+              {
+                "name": "SolModelFile_0_BasicData",
+                "inferredType": "string",
+                "value": "<?xml version=\"1.0\" encoding=\"utf-8\" ?><Apps.XmlParser.ParamTab.HPFeaturepatMatchDialogData><_PyramidScaleMode>1</_PyramidScaleMode><_RoughPyramidScale>5</_RoughPyramidScale><_FinePyramidScale>2</_Fin..."
+              }
+            ]
+          },
+          {
+            "moduleId": 1,
+            "name": "ImageSourceModule",
+            "displayName": "图像源1",
+            "type": "Module",
+            "typeId": 0,
+            "isEnabled": true,
+            "fullPath": "流程1.图像源1",
+            "frameNameSlot": "1-ImageSourceModule.mdata",
+            "enableCallBack": true,
+            "guid": "2DB1A66DA6F140879B99F5D3C2D2099D",
+            "algoriParams": [],
+            "binaryParams": [
+              {
+                "name": "1189600-1.bmp",
+                "valueLen": 1,
+                "parsed": "0x5F",
+                "rawDataLen": 1
+              },
+              {
+                "name": "ImageNameList",
+                "valueLen": 15,
+                "parsed": "1189600-1.bmp|",
+                "rawDataLen": 15
+              },
+              {
+                "name": "SelectedImageList",
+                "valueLen": 1,
+                "parsed": "(empty)",
+                "rawDataLen": 1
+              },
+              {
+                "name": "DynamicInData",
+                "valueLen": 0,
+                "parsed": "(empty)",
+                "rawDataLen": 0
+              },
+              {
+                "name": "DynamicOutData",
+                "valueLen": 0,
+                "parsed": "(empty)",
+                "rawDataLen": 0
+              },
+              {
+                "name": "Version",
+                "valueLen": 4,
+                "parsed": "�\u0001",
+                "rawDataLen": 4
+              }
+            ],
+            "connections": {
+              "frontModules": [],
+              "followModules": [
+                0
+              ]
+            },
+            "subscriptions": [],
+            "uiParams": [
+              {
+                "name": "GUID",
+                "inferredType": "guid",
+                "value": "8DDA2620-A3DB-4D4D-8FCD-142AC6C8480E"
+              },
+              {
+                "name": "IsReady",
+                "inferredType": "bool",
+                "value": "True"
+              },
+              {
+                "name": "Position",
+                "inferredType": "position",
+                "value": "(230.0, 120.0)"
+              },
+              {
+                "name": "SourceIndex高精度匹配1",
+                "inferredType": "int32",
+                "value": "50331648"
+              },
+              {
+                "name": "TargetIndex高精度匹配1",
+                "inferredType": "int32",
+                "value": "16777216"
+              },
+              {
+                "name": "CheckItemParamReady",
+                "inferredType": "int32",
+                "value": "1953658213"
+              }
+            ]
+          },
+          {
+            "moduleId": 2,
+            "name": "ShellModule",
+            "displayName": "脚本1",
+            "type": "Module",
+            "typeId": 0,
+            "isEnabled": true,
+            "fullPath": "流程1.脚本1",
+            "frameNameSlot": "2-ShellModule.mdata",
+            "enableCallBack": true,
+            "guid": "17AD81C4B4C147ACB28FA4E56B856BB1",
+            "algoriParams": [],
+            "binaryParams": [
+              {
+                "name": "Version",
+                "valueLen": 6,
+                "parsed": "V3.2.0",
+                "rawDataLen": 6,
+                "rawDataB64": "VjMuMi4w"
+              },
+              {
+                "name": "Input",
+                "valueLen": 724,
+                "parsed": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ArrayOfModuleParamItem>\n    <ModuleParamItem>\n        <Name>%InX%</Name>\n        <StructName>%InX%</StructName>\n        <ValueType>float[]</ValueType>\n        <IsForce>true</IsForce>\n        <IsShow>true</IsShow>\n    </ModuleParamItem>\n    <ModuleParamItem>\n        <Name>%InY%</Name>\n        <StructName>%InY%</StructName>\n        <ValueType>float[]</ValueType>\n        <IsForce>true</IsForce>\n        <IsShow>true</IsShow>\n    </ModuleParamItem>\n    <ModuleP...",
+                "rawDataLen": 724,
+                "rawDataB64": "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPEFycmF5T2ZNb2R1bGVQYXJhbUl0ZW0+CiAgICA8TW9kdWxlUGFyYW1JdGVtPgogICAgICAgIDxOYW1lPiVJblglPC9OYW1lPgogICAgICAgIDxTdHJ1Y3ROYW1lPiVJblglPC9TdHJ1Y3ROYW1lPgogICAgICAgIDxWYWx1ZVR5cGU+ZmxvYXRbXTwvVmFsdWVUeXBlPgogICAgICAgIDxJc0ZvcmNlPnRydWU8L0lzRm9yY2U+CiAgICAgICAgPElzU2hvdz50cnVlPC9Jc1Nob3c+CiAgICA8L01vZHVsZVBhcmFtSXRlbT4KICAgIDxNb2R1bGVQYXJhbUl0ZW0+CiAgICAgICAgPE5hbWU+JUluWSU8L05hbWU+CiAgICAgICAgPFN0cnVjdE5hbWU+JUluWSU8L1N0cnVjdE5hbWU+CiAgICAgICAgPFZhbHVlVHlwZT5mbG9hdFtdPC9WYWx1ZVR5cGU+CiAgICAgICAgPElzRm9yY2U+dHJ1ZTwvSXNGb3JjZT4KICAgICAgICA8SXNTaG93PnRydWU8L0lzU2hvdz4KICAgIDwvTW9kdWxlUGFyYW1JdGVtPgogICAgPE1vZHVsZVBhcmFtSXRlbT4KICAgICAgICA8TmFtZT4lbnVtJTwvTmFtZT4KICAgICAgICA8U3RydWN0TmFtZT4lbnVtJTwvU3RydWN0TmFtZT4KICAgICAgICA8VmFsdWVUeXBlPmludDwvVmFsdWVUeXBlPgogICAgICAgIDxJc0ZvcmNlPnRydWU8L0lzRm9yY2U+CiAgICAgICAgPElzU2hvdz50cnVlPC9Jc1Nob3c+CiAgICA8L01vZHVsZVBhcmFtSXRlbT4KPC9BcnJheU9mTW9kdWxlUGFyYW1JdGVtPgoAAA=="
+              },
+              {
+                "name": "Output",
+                "valueLen": 1181,
+                "parsed": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ArrayOfModuleParamItem>\n    <ModuleParamItem>\n        <Name>ModuRunTime</Name>\n        <StructName>ModuRunTime</StructName>\n        <ValueType>float</ValueType>\n        <IsForce>true</IsForce>\n        <IsShow>true</IsShow>\n    </ModuleParamItem>\n    <ModuleParamItem>\n        <Name>ResultShow</Name>\n        <StructName>ResultShow</StructName>\n        <ValueType>string</ValueType>\n        <IsForce>true</IsForce>\n        <IsShow>true</IsShow>\n    </ModulePara...",
+                "rawDataLen": 1181,
+                "rawDataB64": "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPEFycmF5T2ZNb2R1bGVQYXJhbUl0ZW0+CiAgICA8TW9kdWxlUGFyYW1JdGVtPgogICAgICAgIDxOYW1lPk1vZHVSdW5UaW1lPC9OYW1lPgogICAgICAgIDxTdHJ1Y3ROYW1lPk1vZHVSdW5UaW1lPC9TdHJ1Y3ROYW1lPgogICAgICAgIDxWYWx1ZVR5cGU+ZmxvYXQ8L1ZhbHVlVHlwZT4KICAgICAgICA8SXNGb3JjZT50cnVlPC9Jc0ZvcmNlPgogICAgICAgIDxJc1Nob3c+dHJ1ZTwvSXNTaG93PgogICAgPC9Nb2R1bGVQYXJhbUl0ZW0+CiAgICA8TW9kdWxlUGFyYW1JdGVtPgogICAgICAgIDxOYW1lPlJlc3VsdFNob3c8L05hbWU+CiAgICAgICAgPFN0cnVjdE5hbWU+UmVzdWx0U2hvdzwvU3RydWN0TmFtZT4KICAgICAgICA8VmFsdWVUeXBlPnN0cmluZzwvVmFsdWVUeXBlPgogICAgICAgIDxJc0ZvcmNlPnRydWU8L0lzRm9yY2U+CiAgICAgICAgPElzU2hvdz50cnVlPC9Jc1Nob3c+CiAgICA8L01vZHVsZVBhcmFtSXRlbT4KICAgIDxNb2R1bGVQYXJhbUl0ZW0+CiAgICAgICAgPE5hbWU+TW9kdVN0YXR1czwvTmFtZT4KICAgICAgICA8U3RydWN0TmFtZT5Nb2R1U3RhdHVzPC9TdHJ1Y3ROYW1lPgogICAgICAgIDxWYWx1ZVR5cGU+aW50PC9WYWx1ZVR5cGU+CiAgICAgICAgPElzRm9yY2U+dHJ1ZTwvSXNGb3JjZT4KICAgICAgICA8SXNTaG93PnRydWU8L0lzU2hvdz4KICAgIDwvTW9kdWxlUGFyYW1JdGVtPgogICAgPE1vZHVsZVBhcmFtSXRlbT4KICAgICAgICA8TmFtZT4lT3V0WCU8L05hbWU+CiAgICAgICAgPFN0cnVjdE5hbWU+JU91dFglPC9TdHJ1Y3ROYW1lPgogICAgICAgIDxWYWx1ZVR5cGU+ZmxvYXRbXTwvVmFsdWVUeXBlPgogICAgICAgIDxJc0ZvcmNlPnRydWU8L0lzRm9yY2U+CiAgICAgICAgPElzU2hvdz50cnVlPC9Jc1Nob3c+CiAgICA8L01vZHVsZVBhcmFtSXRlbT4KICAgIDxNb2R1bGVQYXJhbUl0ZW0+CiAgICAgICAgPE5hbWU+JU91dFklPC9OYW1lPgogICAgICAgIDxTdHJ1Y3ROYW1lPiVPdXRZJTwvU3RydWN0TmFtZT4KICAgICAgICA8VmFsdWVUeXBlPmZsb2F0W108L1ZhbHVlVHlwZT4KICAgICAgICA8SXNGb3JjZT50cnVlPC9Jc0ZvcmNlPgogICAgICAgIDxJc1Nob3c+dHJ1ZTwvSXNTaG93PgogICAgPC9Nb2R1bGVQYXJhbUl0ZW0+CjwvQXJyYXlPZk1vZHVsZVBhcmFtSXRlbT4KAAA="
+              },
+              {
+                "name": "ShellContent",
+                "valueLen": 2177,
+                "parsed": "﻿using System;\nusing System.Text;\nusing System.Windows.Forms;\nusing Script.Methods;\n/************************************\nShell Module default code: using .NET Framwwork 4.6.1\n*************************************/\npublic partial class UserScript:ScriptMethods,IProcessMethods\n{\n    //the count of process\n\t//执行次数计数\n    int processCount ;  \n\n    /// <summary>\n    /// Initialize the field's value when compiling\n\t/// 预编译时变量初始化\n    /// </summary>\n    public void Init()\n    {\n        //You can add oth...",
+                "rawDataLen": 2177,
+                "rawDataB64": "77u/dXNpbmcgU3lzdGVtOwp1c2luZyBTeXN0ZW0uVGV4dDsKdXNpbmcgU3lzdGVtLldpbmRvd3MuRm9ybXM7CnVzaW5nIFNjcmlwdC5NZXRob2RzOwovKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqClNoZWxsIE1vZHVsZSBkZWZhdWx0IGNvZGU6IHVzaW5nIC5ORVQgRnJhbXd3b3JrIDQuNi4xCioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKiovCnB1YmxpYyBwYXJ0aWFsIGNsYXNzIFVzZXJTY3JpcHQ6U2NyaXB0TWV0aG9kcyxJUHJvY2Vzc01ldGhvZHMKewogICAgLy90aGUgY291bnQgb2YgcHJvY2VzcwoJLy/miafooYzmrKHmlbDorqHmlbAKICAgIGludCBwcm9jZXNzQ291bnQgOyAgCgogICAgLy8vIDxzdW1tYXJ5PgogICAgLy8vIEluaXRpYWxpemUgdGhlIGZpZWxkJ3MgdmFsdWUgd2hlbiBjb21waWxpbmcKCS8vLyDpooTnvJbor5Hml7blj5jph4/liJ3lp4vljJYKICAgIC8vLyA8L3N1bW1hcnk+CiAgICBwdWJsaWMgdm9pZCBJbml0KCkKICAgIHsKICAgICAgICAvL1lvdSBjYW4gYWRkIG90aGVyIGdsb2JhbCBmaWVsZHMgaGVyZQoJCS8v5Y+Y6YeP5Yid5aeL5YyW77yM5YW25L2Z5Y+Y6YeP5Y+v5Zyo6K+l5Ye95pWw5Lit5re75YqgCiAgICAgICAgcHJvY2Vzc0NvdW50ID0gMDsKICAgICAgIAogICAgfQoKICAgIC8vLyA8c3VtbWFyeT4KICAgIC8vLyBFbnRlciB0aGUgcHJvY2VzcyBmdW5jdGlvbiB3aGVuIHJ1bm5pbmcgY29kZSBvbmNlCgkvLy8g5rWB56iL5omn6KGM5LiA5qyh6L+b5YWlUHJvY2Vzc+WHveaVsAogICAgLy8vIDwvc3VtbWFyeT4KICAgIC8vLyA8cmV0dXJucz48L3JldHVybnM+CiAgICBwdWJsaWMgYm9vbCBQcm9jZXNzKCkKICAgIHsKICAgICAgICAvL1lvdSBjYW4gYWRkIHlvdXIgY29kZXMgaGVyZSwgZm9yIHJlYWxpemluZyB5b3VyIGRlc2lyZWQgZnVuY3Rpb24KCQkvL+avj+asoeaJp+ihjOWwhui/m+WFpeivpeWHveaVsO+8jOatpOWkhOa3u+WKoOaJgOmcgOeahOmAu+i+kea1geeoi+WkhOeQhgogICAgICAgIAoJCS8v6I635Y+W6K6+572uaW50CiAgICAgICAgaW50IGEgPSAwOwogICAgICAgIEdldEludFZhbHVlKCJudW0iLHJlZiBhKTsKICAgICAgICAKCQkKCQkvL+iOt+WPluW5tumAhuW6j1jmlbDnu4QKCQlpbnQgY291bnQ9MDsKICAgICAgICBmbG9hdFtdIGFycmF5ID0gbmV3IGZsb2F0W2FdOwogICAgICAgIEdldEZsb2F0QXJyYXlWYWx1ZSgiSW5YIixyZWYgYXJyYXksb3V0IGNvdW50KTsKICAgICAgICAKICAgICAgICBpbnQgc3RhcnQgPSAwOwogICAgICAgIGludCBlbmQgPSBhcnJheS5MZW5ndGggLSAxOwoKICAgICAgICB3aGlsZSAoc3RhcnQgPCBlbmQpCiAgICAgICAgewogICAgICAgICAgICAvLyDkuqTmjaLlhYPntKAKICAgICAgICAgICAgZmxvYXQgdGVtcCA9IGFycmF5W3N0YXJ0XTsKICAgICAgICAgICAgYXJyYXlbc3RhcnRdID0gYXJyYXlbZW5kXTsKICAgICAgICAgICAgYXJyYXlbZW5kXSA9IHRlbXA7CgogICAgICAgICAgICBzdGFydCsrOwogICAgICAgICAgICBlbmQtLTsKICAgICAgICB9CiAgICAgICAgLy/ovpPlh7pY5pWw57uECiAgICAgICAgU2V0RmxvYXRBcnJheVZhbHVlKCJPdXRYIixhcnJheSwwLGFycmF5Lkxlbmd0aCk7CiAgICAgICAgCiAgICAgICAgLy/ojrflj5blubbpgIbluo9Z5pWw57uECiAgICAgICAgR2V0RmxvYXRBcnJheVZhbHVlKCJJblkiLHJlZiBhcnJheSxvdXQgY291bnQpOwogICAgICAgIAogICAgICAgIHN0YXJ0ID0gMDsKICAgICAgICBlbmQgPSBhcnJheS5MZW5ndGggLSAxOwoKICAgICAgICB3aGlsZSAoc3RhcnQgPCBlbmQpCiAgICAgICAgewogICAgICAgICAgICAvLyDkuqTmjaLlhYPntKAKICAgICAgICAgICAgZmxvYXQgdGVtcCA9IGFycmF5W3N0YXJ0XTsKICAgICAgICAgICAgYXJyYXlbc3RhcnRdID0gYXJyYXlbZW5kXTsKICAgICAgICAgICAgYXJyYXlbZW5kXSA9IHRlbXA7CgogICAgICAgICAgICBzdGFydCsrOwogICAgICAgICAgICBlbmQtLTsKICAgICAgICB9CiAgICAgICAgCiAgICAgICAgLy/ovpPlh7pZ5pWw57uECiAgICAgICAgU2V0RmxvYXRBcnJheVY=",
+                "rawTruncated": true
+              },
+              {
+                "name": "AssemblyGuid",
+                "valueLen": 36,
+                "parsed": "e358f539-2dd3-4dd3-a482-07125d31b32e",
+                "rawDataLen": 36,
+                "rawDataB64": "ZTM1OGY1MzktMmRkMy00ZGQzLWE0ODItMDcxMjVkMzFiMzJl"
+              },
+              {
+                "name": "DynamicInData",
+                "valueLen": 1086,
+                "parsed": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ParamRoot>\n    <Categorys>\n        <Category Name=\"Input\">\n            <Items>\n                <Filter Name=\"%InX%\" ValueType=\"float\" Others=\"CustomVisible=True;IsForce=False;CanSubscribe=True;IsPrefer=False;Visible=True;VisibleInResultTree=True;IsPrivate=False;IsReturnRelateValue=True;AllowAutoSubscribe=True;AutoSubscribeByOther=True;IsResultShow=False;AutoSubscribeName=\"/>\n                <Filter Name=\"%InY%\" ValueType=\"float\" Others=\"CustomVisible=True;...",
+                "rawDataLen": 1086,
+                "rawDataB64": "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPFBhcmFtUm9vdD4KICAgIDxDYXRlZ29yeXM+CiAgICAgICAgPENhdGVnb3J5IE5hbWU9IklucHV0Ij4KICAgICAgICAgICAgPEl0ZW1zPgogICAgICAgICAgICAgICAgPEZpbHRlciBOYW1lPSIlSW5YJSIgVmFsdWVUeXBlPSJmbG9hdCIgT3RoZXJzPSJDdXN0b21WaXNpYmxlPVRydWU7SXNGb3JjZT1GYWxzZTtDYW5TdWJzY3JpYmU9VHJ1ZTtJc1ByZWZlcj1GYWxzZTtWaXNpYmxlPVRydWU7VmlzaWJsZUluUmVzdWx0VHJlZT1UcnVlO0lzUHJpdmF0ZT1GYWxzZTtJc1JldHVyblJlbGF0ZVZhbHVlPVRydWU7QWxsb3dBdXRvU3Vic2NyaWJlPVRydWU7QXV0b1N1YnNjcmliZUJ5T3RoZXI9VHJ1ZTtJc1Jlc3VsdFNob3c9RmFsc2U7QXV0b1N1YnNjcmliZU5hbWU9Ii8+CiAgICAgICAgICAgICAgICA8RmlsdGVyIE5hbWU9IiVJblklIiBWYWx1ZVR5cGU9ImZsb2F0IiBPdGhlcnM9IkN1c3RvbVZpc2libGU9VHJ1ZTtJc0ZvcmNlPUZhbHNlO0NhblN1YnNjcmliZT1UcnVlO0lzUHJlZmVyPUZhbHNlO1Zpc2libGU9VHJ1ZTtWaXNpYmxlSW5SZXN1bHRUcmVlPVRydWU7SXNQcml2YXRlPUZhbHNlO0lzUmV0dXJuUmVsYXRlVmFsdWU9VHJ1ZTtBbGxvd0F1dG9TdWJzY3JpYmU9VHJ1ZTtBdXRvU3Vic2NyaWJlQnlPdGhlcj1UcnVlO0lzUmVzdWx0U2hvdz1GYWxzZTtBdXRvU3Vic2NyaWJlTmFtZT0iLz4KICAgICAgICAgICAgICAgIDxGaWx0ZXIgTmFtZT0iJW51bSUiIFZhbHVlVHlwZT0iaW50IiBPdGhlcnM9IkN1c3RvbVZpc2libGU9VHJ1ZTtJc0ZvcmNlPUZhbHNlO0NhblN1YnNjcmliZT1UcnVlO0lzUHJlZmVyPUZhbHNlO1Zpc2libGU9VHJ1ZTtWaXNpYmxlSW5SZXN1bHRUcmVlPVRydWU7SXNQcml2YXRlPUZhbHNlO0lzUmV0dXJuUmVsYXRlVmFsdWU9VHJ1ZTtBbGxvd0F1dG9TdWJzY3JpYmU9VHJ1ZTtBdXRvU3Vic2NyaWJlQnlPdGhlcj1UcnVlO0lzUmVzdWx0U2hvdz1GYWxzZTtBdXRvU3Vic2NyaWJlTmFtZT0iLz4KICAgICAgICAgICAgPC9JdGVtcz4KICAgICAgICA8L0NhdGVnb3J5PgogICAgPC9DYXRlZ29yeXM+CjwvUGFyYW1Sb290PgoA"
+              },
+              {
+                "name": "DynamicOutData",
+                "valueLen": 2062,
+                "parsed": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ParamRoot>\n    <Categorys>\n        <Category Name=\"Output\">\n            <Items>\n                <Filter Name=\"fArrivalTimeStampLow\" ValueType=\"float\" Others=\"CustomVisible=False;IsForce=False;CanSubscribe=False;IsPrefer=False;Visible=False;VisibleInResultTree=False;IsPrivate=False;IsReturnRelateValue=True;AllowAutoSubscribe=True;AutoSubscribeByOther=True;IsResultShow=False;AutoSubscribeName=\"/>\n                <Filter Name=\"fArrivalTimeStampHigh\" ValueType...",
+                "rawDataLen": 2062,
+                "rawDataB64": "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPFBhcmFtUm9vdD4KICAgIDxDYXRlZ29yeXM+CiAgICAgICAgPENhdGVnb3J5IE5hbWU9Ik91dHB1dCI+CiAgICAgICAgICAgIDxJdGVtcz4KICAgICAgICAgICAgICAgIDxGaWx0ZXIgTmFtZT0iZkFycml2YWxUaW1lU3RhbXBMb3ciIFZhbHVlVHlwZT0iZmxvYXQiIE90aGVycz0iQ3VzdG9tVmlzaWJsZT1GYWxzZTtJc0ZvcmNlPUZhbHNlO0NhblN1YnNjcmliZT1GYWxzZTtJc1ByZWZlcj1GYWxzZTtWaXNpYmxlPUZhbHNlO1Zpc2libGVJblJlc3VsdFRyZWU9RmFsc2U7SXNQcml2YXRlPUZhbHNlO0lzUmV0dXJuUmVsYXRlVmFsdWU9VHJ1ZTtBbGxvd0F1dG9TdWJzY3JpYmU9VHJ1ZTtBdXRvU3Vic2NyaWJlQnlPdGhlcj1UcnVlO0lzUmVzdWx0U2hvdz1GYWxzZTtBdXRvU3Vic2NyaWJlTmFtZT0iLz4KICAgICAgICAgICAgICAgIDxGaWx0ZXIgTmFtZT0iZkFycml2YWxUaW1lU3RhbXBIaWdoIiBWYWx1ZVR5cGU9ImZsb2F0IiBPdGhlcnM9IkN1c3RvbVZpc2libGU9RmFsc2U7SXNGb3JjZT1GYWxzZTtDYW5TdWJzY3JpYmU9RmFsc2U7SXNQcmVmZXI9RmFsc2U7VmlzaWJsZT1GYWxzZTtWaXNpYmxlSW5SZXN1bHRUcmVlPUZhbHNlO0lzUHJpdmF0ZT1GYWxzZTtJc1JldHVyblJlbGF0ZVZhbHVlPVRydWU7QWxsb3dBdXRvU3Vic2NyaWJlPVRydWU7QXV0b1N1YnNjcmliZUJ5T3RoZXI9VHJ1ZTtJc1Jlc3VsdFNob3c9RmFsc2U7QXV0b1N1YnNjcmliZU5hbWU9Ii8+CiAgICAgICAgICAgICAgICA8RmlsdGVyIE5hbWU9ImZMZWF2ZVRpbWVTdGFtcExvdyIgVmFsdWVUeXBlPSJmbG9hdCIgT3RoZXJzPSJDdXN0b21WaXNpYmxlPUZhbHNlO0lzRm9yY2U9RmFsc2U7Q2FuU3Vic2NyaWJlPUZhbHNlO0lzUHJlZmVyPUZhbHNlO1Zpc2libGU9RmFsc2U7VmlzaWJsZUluUmVzdWx0VHJlZT1GYWxzZTtJc1ByaXZhdGU9RmFsc2U7SXNSZXR1cm5SZWxhdGVWYWx1ZT1UcnVlO0FsbG93QXV0b1N1YnNjcmliZT1UcnVlO0F1dG9TdWJzY3JpYmVCeU90aGVyPVRydWU7SXNSZXN1bHRTaG93PUZhbHNlO0F1dG9TdWJzY3JpYmVOYW1lPSIvPgogICAgICAgICAgICAgICAgPEZpbHRlciBOYW1lPSJmTGVhdmVUaW1lU3RhbXBIaWdoIiBWYWx1ZVR5cGU9ImZsb2F0IiBPdGhlcnM9IkN1c3RvbVZpc2libGU9RmFsc2U7SXNGb3JjZT1GYWxzZTtDYW5TdWJzY3JpYmU9RmFsc2U7SXNQcmVmZXI9RmFsc2U7VmlzaWJsZT1GYWxzZTtWaXNpYmxlSW5SZXN1bHRUcmVlPUZhbHNlO0lzUHJpdmF0ZT1GYWxzZTtJc1JldHVyblJlbGF0ZVZhbHVlPVRydWU7QWxsb3dBdXRvU3Vic2NyaWJlPVRydWU7QXV0b1N1YnNjcmliZUJ5T3RoZXI9VHJ1ZTtJc1Jlc3VsdFNob3c9RmFsc2U7QXV0b1N1YnNjcmliZU5hbWU9Ii8+CiAgICAgICAgICAgICAgICA8RmlsdGVyIE5hbWU9IiVPdXRYJSIgVmFsdWVUeXBlPSJmbG9hdCIgT3RoZXJzPSJDdXN0b21WaXNpYmxlPVRydWU7SXNGb3JjZT1GYWxzZTtDYW5TdWJzY3JpYmU9VHJ1ZTtJc1ByZWZlcj1GYWxzZTtWaXNpYmxlPVRydWU7VmlzaWJsZUluUmVzdWx0VHJlZT1UcnVlO0lzUHJpdmF0ZT1GYWxzZTtJc1JldHVyblJlbGF0ZVZhbHVlPVRydWU7QWxsb3dBdXRvU3Vic2NyaWJlPVRydWU7QXV0b1N1YnNjcmliZUJ5T3RoZXI9VHJ1ZTtJc1Jlc3VsdFNob3c9RmFsc2U7QXV0b1N1YnNjcmliZU5hbWU9Ii8+CiAgICAgICAgICAgICAgICA8RmlsdGVyIE5hbWU9IiVPdXRZJSIgVmFsdWVUeXBlPSJmbG9hdCIgT3RoZXJzPSJDdXN0b21WaXNpYmxlPVRydWU7SXNGb3JjZT1GYWxzZTtDYW5TdWJzY3JpYmU9VHJ1ZTtJc1ByZWZlcj1GYWxzZTtWaXNpYmxlPVRydWU7VmlzaWJsZUluUmVzdWx0VHJlZT1UcnVlO0lzUHJpdmF0ZT1GYWxzZTtJc1JldHVyblJlbGF0ZVZhbHVlPVRydWU7QWxsb3dBdXRvU3Vic2NyaWJlPVRydWU7QXV0b1N1YnNjcmliZUJ5T3RoZXI9VHJ1ZTtJc1Jlc3VsdFNob3c9RmFsc2U7QXV0b1N1YnNjcmliZU5hbWU9Ii8+CiAgICAgICAgICAgIDwvSXRlbXM+CiAgICAgICAgPC9DYXRlZ29yeT4KICAgIDwvQ2F0ZWdvcnlzPgo=",
+                "rawTruncated": true
+              }
+            ],
+            "connections": {
+              "frontModules": [
+                0
+              ],
+              "followModules": []
+            },
+            "subscriptions": [
+              {
+                "paramName": "%num%",
+                "isBound": true,
+                "targetModuleId": 0,
+                "targetParamName": "MatchNum",
+                "indexMode": "All",
+                "isIndexBind": false,
+                "indexTargetModuleId": 0,
+                "relationString": "2 . %num% . 0 . MatchNum . 0 . 0 . All . 1"
+              },
+              {
+                "paramName": "%InX%",
+                "isBound": true,
+                "targetModuleId": 0,
+                "targetParamName": "MatchPointX",
+                "indexMode": "All",
+                "isIndexBind": false,
+                "indexTargetModuleId": 0,
+                "relationString": "2 . %InX% . 0 . MatchPointX . 0 . 0 . All . 1"
+              },
+              {
+                "paramName": "%InY%",
+                "isBound": true,
+                "targetModuleId": 0,
+                "targetParamName": "MatchPointY",
+                "indexMode": "All",
+                "isIndexBind": false,
+                "indexTargetModuleId": 0,
+                "relationString": "2 . %InY% . 0 . MatchPointY . 0 . 0 . All . 1"
+              }
+            ],
+            "uiParams": [
+              {
+                "name": "GUID",
+                "inferredType": "guid",
+                "value": "1B639DA2-9BDC-48C5-B7AC-D8B7ABF4CABE"
+              },
+              {
+                "name": "IsReady",
+                "inferredType": "bool",
+                "value": "True"
+              },
+              {
+                "name": "Position",
+                "inferredType": "position",
+                "value": "(230.0, 300.0)"
+              },
+              {
+                "name": "DynamicObject",
+                "inferredType": "bool",
+                "value": "False"
+              },
+              {
+                "name": "OutputValueTypes",
+                "inferredType": "string",
+                "value": "%OutX%:float[],%OutY%:float[]"
+              },
+              {
+                "name": "InputValueTypes",
+                "inferredType": "string",
+                "value": "%InX%:float[],%InY%:float[]"
+              }
+            ],
+            "scriptText": "﻿using System;\nusing System.Text;\nusing System.Windows.Forms;\nusing Script.Methods;\n/************************************\nShell Module default code: using .NET Framwwork 4.6.1\n*************************************/\npublic partial class UserScript:ScriptMethods,IProcessMethods\n{\n    //the count of process\n\t//执行次数计数\n    int processCount ;  \n\n    /// <summary>\n    /// Initialize the field's value when compiling\n\t/// 预编译时变量初始化\n    /// </summary>\n    public void Init()\n    {\n        //You can add other global fields here\n\t\t//变量初始化，其余变量可在该函数中添加\n        processCount = 0;\n       \n    }\n\n    /// <summary>\n    /// Enter the process function when running code once\n\t/// 流程执行一次进入Process函数\n    /// </summary>\n    /// <returns></returns>\n    public bool Process()\n    {\n        //You can add your codes here, for realizing your desired function\n\t\t//每次执行将进入该函数，此处添加所需的逻辑流程处理\n        \n\t\t//获取设置int\n        int a = 0;\n        GetIntValue(\"num\",ref a);\n        \n\t\t\n\t\t//获取并逆序X数组\n\t\tint count=0;\n        float[] array = new float[a];\n        GetFloatArrayValue(\"InX\",ref array,out count);\n        \n        int start = 0;\n        int end = array.Length - 1;\n\n        while (start < end)\n        {\n            // 交换元素\n            float temp = array[start];\n            array[start] = array[end];\n            array[end] = temp;\n\n            start++;\n            end--;\n        }\n        //输出X数组\n        SetFloatArrayValue(\"OutX\",array,0,array.Length);\n        \n        //获取并逆序Y数组\n        GetFloatArrayValue(\"InY\",ref array,out count);\n        \n        start = 0;\n        end = array.Length - 1;\n\n        while (start < end)\n        {\n            // 交换元素\n            float temp = array[start];\n            array[start] = array[end];\n            array[end] = temp;\n\n            start++;\n            end--;\n        }\n        \n        //输出Y数组\n        SetFloatArrayValue(\"OutY\",array,0,array.Length);\n        \n        \n        \n        \n        return true;\n    }\n}\n                            ",
+            "assemblyGuid": "e358f539-2dd3-4dd3-a482-07125d31b32e"
+          }
+        ]
+      }
+    ],
+    "globalScript": {
+      "version": "V3.4.0",
+      "scriptLength": 3187,
+      "hasPassword": false,
+      "references": []
+    },
+    "moduleParamBindings": [],
+    "warnings": [
+      "未知的 ModuleFrame 版本 5，可能无法正确解析名称槽位"
+    ]
+  }
+}

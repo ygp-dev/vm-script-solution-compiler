@@ -32,7 +32,7 @@ tests\run-agent-domain-smoke.ps1 -SkipBuild
 tests\run-agent-point-sort-smoke.ps1 -SkipBuild
 tests\run-agent-interrupt-smoke.ps1 -SkipBuild
 tests\run-desktop-agent-smoke.ps1 -SkipBuild
-tests\run-script-tutor-knowledge-smoke.ps1 -SkipBuild
+tests\run-agent-knowledge-smoke.ps1 -SkipBuild
 tests\run-release-smoke.ps1
 ```
 
@@ -45,7 +45,7 @@ dotnet src\VmScriptCompiler.Cli\bin\Release\net8.0\VmScriptCompiler.Cli.dll buil
 dotnet src\VmScriptCompiler.Cli\bin\Release\net8.0\VmScriptCompiler.Cli.dll patch --base business.sol --spec requirement.json --output outputs\patch
 ```
 
-Requirement schema 位于 `schemas/requirement.schema.json`，类型和 API 证据位于 `resources/vm/4.4.0/type-system.json` 与 `api-catalog.json`。`knowledge/vm-script-tutor` skill 1.2 的人工 VM 2D C# 脚本规则已同步到 `resources/vm/4.4.0/script-tutor-knowledge.json`，并同时加载到新版 Pi Agent 与旧版兼容 Agent 的提示词中。
+Requirement schema 位于 `schemas/requirement.schema.json`，类型和 API 证据位于 `resources/vm/4.4.0/type-system.json` 与 `api-catalog.json`。`knowledge/vm-script-tutor` skill 1.2 的高置信度 2D C# 规则已整理到紧凑提示知识 `resources/vm/4.4.0/agent-prompt-knowledge.json`；FAQ、参考方案和选定示例位于 `agent-knowledge.json`，由 `vm_search_project_knowledge` 按需检索。运行时不再把完整 skill 原文注入 Agent 提示词。
 
 ## 桌面领域 Agent
 

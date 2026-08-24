@@ -3,17 +3,21 @@ ManifestDPIAware True
 ManifestSupportedOS all
 RequestExecutionLevel user
 SetCompressor /SOLID lzma
-SetCompressorDictSize 64
+; makensis is a 32-bit process. A solid LZMA pass over the ~365 MB payload (self-contained .NET for
+; three products, the pinned Node runtime and the agent node_modules) exhausts its address space at a
+; 64 MB dictionary and aborts with "deflateInit() failed". 32 MB compresses this payload nearly as well
+; and leaves headroom as the agent dependency tree grows.
+SetCompressorDictSize 32
 
 !include "MUI2.nsh"
 !include "LogicLib.nsh"
 !include "FileFunc.nsh"
 
 !ifndef VERSION
-  !define VERSION "1.0.5"
+  !define VERSION "1.0.6"
 !endif
 !ifndef VERSION4
-  !define VERSION4 "1.0.5.0"
+  !define VERSION4 "1.0.6.0"
 !endif
 !ifndef DISTROOT
   !error "DISTROOT must point to the validated dist directory."

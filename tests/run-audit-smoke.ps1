@@ -100,8 +100,11 @@ try {
     if ($untracked.Count -ne 0) { throw 'Resource manifest has untracked files: ' + ($untracked -join ', ') }
     if ((Get-ChildItem (Join-Path $root 'dist') -Recurse -File -Filter *.sol -ErrorAction SilentlyContinue | Measure-Object).Count -ne 0) { throw 'Published products contain SOL files.' }
 
-    $scriptTutor = Get-Content -Raw -Encoding UTF8 (Join-Path $resourceRoot 'script-tutor-knowledge.json') | ConvertFrom-Json
-    if ($scriptTutor.scope.skillName -ne 'vm-script-tutor' -or $scriptTutor.scope.skillVersion -ne '1.2') { throw 'Synchronized vm-script-tutor knowledge is invalid.' }
-    [pscustomobject]@{ok=$true; accuratePlan=$true; stableInvalidJson=$true; explicitSourceBoolGuard=$true; patchReplace=$true; patchInputProtected=$true; patchBaseMismatchGuard=$true; completeReport=$true; validateParseInspectArchive=$true; resourceManifestComplete=$true; scriptTutorKnowledge=$true; distContainsNoSol=$true} | ConvertTo-Json
+    $agentPromptKnowledge = Get-Content -Raw -Encoding UTF8 (Join-Path $resourceRoot 'agent-prompt-knowledge.json') | ConvertFrom-Json
+    $agentKnowledge = Get-Content -Raw -Encoding UTF8 (Join-Path $resourceRoot 'agent-knowledge.json') | ConvertFrom-Json
+    if ($agentPromptKnowledge.source.skillName -ne 'vm-script-tutor' -or $agentPromptKnowledge.source.skillVersion -ne '1.2') { throw 'Compact vm-script-tutor prompt knowledge is invalid.' }
+    if ($agentPromptKnowledge.source.rawSkillEmbedded -ne $false) { throw 'The raw vm-script-tutor skill must not be embedded in the system prompt.' }
+    if (@($agentKnowledge.entries | Where-Object { $_.kind -eq 'faq' }).Count -lt 29) { throw 'FAQ knowledge corpus is incomplete.' }
+    [pscustomobject]@{ok=$true; accuratePlan=$true; stableInvalidJson=$true; explicitSourceBoolGuard=$true; patchReplace=$true; patchInputProtected=$true; patchBaseMismatchGuard=$true; completeReport=$true; validateParseInspectArchive=$true; resourceManifestComplete=$true; agentPromptKnowledge=$true; agentKnowledge=$true; distContainsNoSol=$true} | ConvertTo-Json
 }
 finally { if (Test-Path $temp) { Remove-Item $temp -Recurse -Force } }

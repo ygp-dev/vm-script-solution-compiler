@@ -43,6 +43,28 @@ public sealed class CompilerFacade(string repositoryRoot)
     public BuildResult Build(string specificationFile, string outputDirectory) => new BuildService(RepositoryRoot).Build(Path.GetFullPath(specificationFile), Path.GetFullPath(outputDirectory));
     public BuildResult Patch(string baseSolution, string specificationFile, string outputDirectory) => new BuildService(RepositoryRoot).Patch(Path.GetFullPath(baseSolution), Path.GetFullPath(specificationFile), Path.GetFullPath(outputDirectory));
 
+    /// <summary>
+    /// Reads what a SOL already contains — existing script source, declared ports and the defaults or
+    /// bindings VM saved for them. Patch callers must consult this before authoring a Requirement;
+    /// the <c>inspect --list</c> summary alone cannot show a user's saved values.
+    /// </summary>
+    public SolutionDigest InspectSolution(string solutionFile, int sourceLimit = SolutionInspector.DefaultSourceLimit)
+    {
+        solutionFile = Path.GetFullPath(solutionFile);
+        if (!File.Exists(solutionFile)) throw new CompilerException("SOLUTION_FILE_NOT_FOUND", "SOL file does not exist: " + solutionFile);
+        SolArchiveValidator.ValidateVm44EntryNames(solutionFile);
+        var temporary = Path.Combine(Path.GetTempPath(), "vm-script-compiler-inspect-" + Guid.NewGuid().ToString("N") + ".json");
+        try
+        {
+            var parser = new ParserClient(Path.Combine(RepositoryRoot, "tools", "vm-solution-parser", "VMSolutionParser.Cli.exe"));
+            var result = parser.Parse(solutionFile, temporary, includeRaw: true);
+            if (result.ExitCode != 0) throw new CompilerException("SOL_PARSE_FAILED", string.IsNullOrWhiteSpace(result.StandardError) ? result.StandardOutput : result.StandardError);
+            using var document = JsonDocument.Parse(File.ReadAllText(temporary));
+            return SolutionInspector.FromParseResult(document.RootElement, sourceLimit);
+        }
+        finally { if (File.Exists(temporary)) File.Delete(temporary); }
+    }
+
     public SolutionValidationResult ValidateSolution(string solutionFile)
     {
         solutionFile = Path.GetFullPath(solutionFile);

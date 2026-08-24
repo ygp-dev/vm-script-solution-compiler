@@ -10,6 +10,9 @@ foreach ($required in @($node, $npm, (Join-Path $root 'agent\package-lock.json')
     if (-not (Test-Path -LiteralPath $required -PathType Leaf)) { throw "Release prerequisite is missing: $required" }
 }
 
+& $node (Join-Path $root 'scripts\build_agent_knowledge.mjs')
+if ($LASTEXITCODE -ne 0) { throw 'Agent knowledge generation failed.' }
+
 & dotnet restore (Join-Path $root 'VmScriptCompiler.sln') -r win-x64
 if ($LASTEXITCODE -ne 0) { throw 'win-x64 restore failed.' }
 & dotnet build (Join-Path $root 'VmScriptCompiler.sln') -c Release --no-restore
@@ -22,7 +25,7 @@ if (-not $SkipTests) {
         'run-full-smoke.ps1','run-m2-smoke.ps1','run-m6-smoke.ps1','run-m8-smoke.ps1',
         'run-m9-smoke.ps1','run-agent-interrupt-smoke.ps1','run-m10-smoke.ps1','run-m11-smoke.ps1','run-m12-smoke.ps1','run-m13-smoke.ps1',
         'run-audit-smoke.ps1','run-domain-worker-smoke.ps1','run-agent-domain-smoke.ps1',
-        'run-agent-point-sort-smoke.ps1','run-desktop-agent-smoke.ps1','run-community-knowledge-smoke.ps1','run-script-tutor-knowledge-smoke.ps1'
+        'run-agent-point-sort-smoke.ps1','run-desktop-agent-smoke.ps1','run-community-knowledge-smoke.ps1','run-agent-knowledge-smoke.ps1'
     )) {
         & (Join-Path $root ('tests\' + $test)) -SkipBuild
         if ($LASTEXITCODE -ne 0) { throw "Test failed: $test" }

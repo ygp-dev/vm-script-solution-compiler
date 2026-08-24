@@ -163,6 +163,11 @@ try {
         if (-not $desktop.Contains($label)) { throw "Codex-style Desktop workspace is missing: $label" }
     }
     $desktopCode = Get-Content -Raw (Join-Path $root 'src\VmScriptCompiler.Desktop\MainWindow.xaml.cs') -Encoding UTF8
+    # Behaviour checks scan every Desktop source: the window delegates chrome and search to dedicated
+    # classes, so pinning these fragments to MainWindow.xaml.cs would fail on any further extraction.
+    $desktopSources = (Get-ChildItem -LiteralPath (Join-Path $root 'src\VmScriptCompiler.Desktop') -Filter *.cs -Recurse |
+        Where-Object { $_.FullName -notmatch '\\(bin|obj)\\' } |
+        ForEach-Object { Get-Content -Raw -LiteralPath $_.FullName -Encoding UTF8 }) -join "`n"
     foreach ($fragment in @('AgentProcessClient','_agent.PromptAsync(','_agent.ContinueAsync(','new AgentConnectionOptions(','_lastDependencyDirectory','Path.Combine(path, "dependencies")','agent.Terminate()')) {
         if (-not $desktopCode.Contains($fragment)) { throw "Desktop UI snapshot/provider flow is missing: $fragment" }
     }
@@ -192,7 +197,7 @@ try {
         if (-not $desktop.Contains($fragment)) { throw "Codex-aligned Desktop interaction is missing: $fragment" }
     }
     foreach ($fragment in @('ToolCardVisual', 'FriendlyPhase(', 'PrepareUiSnapshot(', 'Continue_Click', 'UpdateContinueAvailability', 'ApplyDarkTitleBar()', 'SetDwmWindowAttributeInt', 'DwmwaCaptionColor', 'WmGetMinMaxInfo', 'MonitorFromWindow', 'WindowMessageHook', 'RefreshGlobalSearch()', 'SearchResult')) {
-        if (-not $desktopCode.Contains($fragment)) { throw "Codex-aligned Desktop runtime behavior is missing: $fragment" }
+        if (-not $desktopSources.Contains($fragment)) { throw "Codex-aligned Desktop runtime behavior is missing: $fragment" }
     }
     if (-not (Test-Path -LiteralPath (Join-Path $root 'tests\run-agent-interrupt-smoke.ps1'))) { throw 'Agent interrupt smoke test is missing.' }
 

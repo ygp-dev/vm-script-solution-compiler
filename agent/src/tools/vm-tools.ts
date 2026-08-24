@@ -1,9 +1,10 @@
 import {
   defineTool,
   type ToolDefinition,
-} from "../../node_modules/@earendil-works/pi-coding-agent/dist/core/extensions/types.js";
+} from "../pi.js";
 import { Type } from "typebox";
 import { VmDomainState } from "../domain/state.js";
+import { searchProjectKnowledge, type ProjectKnowledgeKind } from "../knowledge.js";
 import { DomainWorkerClient, DomainWorkerError } from "./domain-worker-client.js";
 import { RequirementToolSchema } from "./requirement-tool-schema.js";
 
@@ -144,6 +145,7 @@ async function executeDomainTool(
 export function createVmTools(
   state: VmDomainState,
   worker: DomainWorkerClient,
+  repositoryRoot = process.cwd(),
 ): ToolDefinition[] {
   const capabilityCache = new Map<string, unknown>();
   return [
@@ -221,6 +223,34 @@ export function createVmTools(
             state.recordCapability(query, result);
           },
         );
+      },
+    }),
+    defineTool({
+      name: "vm_search_project_knowledge",
+      label: "检索项目知识",
+      description: "只读检索项目内 FAQ、经典 SOL 脚本、vm-script-tutor 参考文件和社区模式。结果是辅助证据，不是 VM API 契约；生成前仍需检查目标 SOL、依赖和预编译证据。",
+      promptSnippet: "按需检索项目内脚本知识和参考案例。",
+      parameters: Type.Object({
+        query: Type.String({ description: "要检索的具体主题，例如 ImageData Height、ROI、OpenCvSharp、LoopIndex 或模块参数 XML" }),
+        kind: Type.Optional(Type.String({ description: "可选：faq、reference-solution、tutor-reference、tutor-example、community-pattern 等" })),
+        limit: Type.Optional(Type.Integer({ minimum: 1, maximum: 8, description: "最多返回 8 条，默认 5 条" })),
+      }, { additionalProperties: false }),
+      executionMode: "parallel",
+      execute: async (_id, params) => {
+        try {
+          const kind = typeof params.kind === "string" && params.kind.trim()
+            ? params.kind.trim() as ProjectKnowledgeKind
+            : undefined;
+          const result = searchProjectKnowledge(repositoryRoot, params.query, kind, params.limit ?? 5);
+          return output({ ok: true, result, state: compactState(state.snapshot()) });
+        } catch (error) {
+          const message = compactErrorMessage(error instanceof Error ? error.message : String(error));
+          return output({
+            ok: false,
+            error: { code: "PROJECT_KNOWLEDGE_SEARCH_FAILED", message },
+            state: compactState(state.snapshot()),
+          });
+        }
       },
     }),
     defineTool({

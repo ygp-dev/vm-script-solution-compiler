@@ -28,3 +28,10 @@ ImageTemp/
 AwakenGPUToolLog.txt
 images_v2.db
 *.log
+
+# Desktop runtime state copied in for debugging. Holds the DPAPI-encrypted API key and session
+# transcripts with customer paths, so it must never be committed even from inside docs/.
+docs/VM Script Compiler/
+**/desktop-settings.json
+**/artifact-index.json
+**/agent/sessions/

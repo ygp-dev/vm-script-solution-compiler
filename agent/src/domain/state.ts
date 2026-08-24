@@ -1,4 +1,4 @@
-import type { SessionManager } from "../../node_modules/@earendil-works/pi-coding-agent/dist/core/session-manager.js";
+import type { SessionManager } from "../pi.js";
 import type {
   CapabilityEvidence,
   DomainError,

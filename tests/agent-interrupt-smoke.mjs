@@ -19,6 +19,11 @@ fs.mkdirSync(output, { recursive: true });
 
 function wait(ms) { return new Promise((resolve) => setTimeout(resolve, ms)); }
 
+// Loading Pi's ESM graph costs 25-40s on a cold Windows profile, and considerably more right after a
+// publish rewrites agent/dist and every file is re-scanned before first execution. The agent emits
+// nothing at all until that finishes, so the first wait needs a budget far above steady-state startup.
+const STARTUP_TIMEOUT_MS = Number(process.env.VM_SCRIPT_AGENT_STARTUP_TIMEOUT_MS ?? 180_000);
+
 function listenPort() {
   return new Promise((resolve, reject) => {
     const server = http.createServer();
@@ -34,7 +39,9 @@ function send(process, request) {
   process.stdin.write(`${JSON.stringify(request)}\n`);
 }
 
-function waitFor(messages, predicate, timeoutMs = 20_000) {
+// Waits after startup are short: by then the agent is loaded and a stall means the interrupt/continue
+// logic really is broken. Only the first wait absorbs process startup — see STARTUP_TIMEOUT_MS.
+function waitFor(messages, predicate, timeoutMs = 30_000) {
   const existing = messages.find(predicate);
   if (existing) return Promise.resolve(existing);
   return new Promise((resolve, reject) => {
@@ -94,7 +101,7 @@ globalThis.__interruptDiagnostics.serverErrors = serverErrors;
 
 try {
   send(agent, { id: "init", command: "initialize", arguments: {} });
-  const init = await waitFor(messages, (message) => message.type === "response" && message.id === "init");
+  const init = await waitFor(messages, (message) => message.type === "response" && message.id === "init", STARTUP_TIMEOUT_MS);
   assert.equal(init.ok, true, JSON.stringify(init));
 
   send(agent, {

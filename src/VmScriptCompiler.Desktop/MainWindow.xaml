@@ -252,6 +252,75 @@
             <Setter Property="CornerRadius" Value="10" />
             <Setter Property="Padding" Value="9,4" />
         </Style>
+
+        <!-- WPF ships a light-grey scrollbar that reads as a bright seam in this dark shell.
+             Applied implicitly so every ScrollViewer in the window picks it up. -->
+        <Style x:Key="ScrollThumb" TargetType="Thumb">
+            <Setter Property="IsTabStop" Value="False" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Thumb">
+                        <Border x:Name="ThumbShape" Background="#FF33475C" CornerRadius="4" Margin="3,2" />
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ThumbShape" Property="Background" Value="#FF47617D" />
+                            </Trigger>
+                            <Trigger Property="IsDragging" Value="True">
+                                <Setter TargetName="ThumbShape" Property="Background" Value="#FF5E96F5" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="ScrollBar">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Width" Value="11" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ScrollBar">
+                        <Grid Background="Transparent">
+                            <Track x:Name="PART_Track" IsDirectionReversed="True">
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Command="ScrollBar.PageUpCommand" Opacity="0" IsTabStop="False" />
+                                </Track.DecreaseRepeatButton>
+                                <Track.Thumb>
+                                    <Thumb Style="{StaticResource ScrollThumb}" />
+                                </Track.Thumb>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Command="ScrollBar.PageDownCommand" Opacity="0" IsTabStop="False" />
+                                </Track.IncreaseRepeatButton>
+                            </Track>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="Orientation" Value="Horizontal">
+                    <Setter Property="Width" Value="Auto" />
+                    <Setter Property="Height" Value="11" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ScrollBar">
+                                <Grid Background="Transparent">
+                                    <Track x:Name="PART_Track" IsDirectionReversed="False">
+                                        <Track.DecreaseRepeatButton>
+                                            <RepeatButton Command="ScrollBar.PageLeftCommand" Opacity="0" IsTabStop="False" />
+                                        </Track.DecreaseRepeatButton>
+                                        <Track.Thumb>
+                                            <Thumb Style="{StaticResource ScrollThumb}" />
+                                        </Track.Thumb>
+                                        <Track.IncreaseRepeatButton>
+                                            <RepeatButton Command="ScrollBar.PageRightCommand" Opacity="0" IsTabStop="False" />
+                                        </Track.IncreaseRepeatButton>
+                                    </Track>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
 
     <Grid Background="{StaticResource AppBackgroundBrush}">
@@ -335,25 +404,24 @@
 
                 <StackPanel Grid.Row="2">
                     <Button x:Name="ChatNavButton" Style="{StaticResource NavButton}"
-                            Content="⌂   Home" Click="ShowComposer_Click" />
+                            Content="⌂   对话" Click="ShowComposer_Click" />
                     <Button x:Name="ArtifactsNavButton" Style="{StaticResource NavButton}"
-                            Content="▣   My work" Click="ShowArtifacts_Click" />
+                            Content="▣   结果产物" Click="ShowArtifacts_Click" />
                     <Button x:Name="AutomationNavButton" Style="{StaticResource NavButton}"
-                            Content="◌   Automations" Click="ShowAutomations_Click" />
+                            Content="◌   自动化" Click="ShowAutomations_Click" />
                     <Button x:Name="SearchNavButton" Style="{StaticResource NavButton}"
-                            Content="⌕   Search" Click="ShowSearch_Click" />
+                            Content="⌕   搜索" Click="ShowSearch_Click" />
                     <Button x:Name="SettingsNavButton" Style="{StaticResource NavButton}"
                             Content="⚙   设置" Click="ShowSettings_Click" />
                 </StackPanel>
 
                 <Grid Grid.Row="3" Margin="12,21,2,8">
-                    <TextBlock Style="{StaticResource SectionLabel}" VerticalAlignment="Center" Text="Sessions" />
+                    <TextBlock Style="{StaticResource SectionLabel}" VerticalAlignment="Center" Text="历史任务" />
                     <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                         <Button Style="{StaticResource IconButton}" Width="28" Height="28" Margin="0,0,3,0"
-                                FontSize="12" Foreground="{StaticResource Danger}" Content="清"
-                                ToolTip="清理全部历史对话" Click="ClearHistory_Click" />
+                                FontSize="13" Content="🗑" ToolTip="清理全部历史对话" Click="ClearHistory_Click" />
                         <Button Style="{StaticResource IconButton}" Width="28" Height="28"
-                                FontSize="13" Content="↻" ToolTip="刷新" Click="RefreshHistory_Click" />
+                                FontSize="13" Content="↻" ToolTip="刷新历史任务" Click="RefreshHistory_Click" />
                     </StackPanel>
                 </Grid>
 
@@ -446,7 +514,8 @@
                         <Border Style="{StaticResource StatusPill}" Margin="0,0,12,0" Padding="9,4">
                             <TextBlock x:Name="EnvironmentText" MaxWidth="270"
                                    VerticalAlignment="Center" FontSize="11.5" Foreground="{StaticResource TextMuted}"
-                                   TextTrimming="CharacterEllipsis" Text="正在检测 VisionMaster…" />
+                                   TextTrimming="CharacterEllipsis" Text="正在检测 VisionMaster…"
+                                   ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}" />
                         </Border>
                         <Button Style="{StaticResource IconButton}" Content="↻" ToolTip="重新连接 Agent"
                                 Click="ReconnectAgent_Click" />
@@ -694,6 +763,20 @@
                             <Grid>
                                 <TextBlock Margin="13,0,0,0" VerticalAlignment="Center"
                                            Foreground="{StaticResource TextMuted}" Text="⌕" />
+                                <TextBlock Margin="37,0,12,0" VerticalAlignment="Center" IsHitTestVisible="False"
+                                           Foreground="{StaticResource TextMuted}"
+                                           Text="按文件名、类型或任务目录筛选…">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Text, ElementName=ArtifactSearchText}" Value="">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
                                 <TextBox x:Name="ArtifactSearchText" Height="42" Padding="37,10,12,8"
                                          Background="Transparent" BorderThickness="0"
                                          TextChanged="ArtifactSearch_Changed" />
@@ -745,7 +828,31 @@
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
                                             <Border Padding="8,4" Margin="0,0,14,0" VerticalAlignment="Center"
-                                                    Background="#FF242424" CornerRadius="6">
+                                                    CornerRadius="6">
+                                                <!-- Colour by artifact kind so a long index can be scanned
+                                                     without reading every filename. -->
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="Background" Value="#FF242424" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Kind}" Value="SOL 方案">
+                                                                <Setter Property="Background" Value="#FF1F3A2E" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Kind}" Value="构建报告">
+                                                                <Setter Property="Background" Value="#FF1B2E45" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Kind}" Value="生成脚本">
+                                                                <Setter Property="Background" Value="#FF2C2740" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Kind}" Value="Requirement">
+                                                                <Setter Property="Background" Value="#FF3A3320" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Kind}" Value="DLL 部署">
+                                                                <Setter Property="Background" Value="#FF3A2733" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
                                                 <TextBlock HorizontalAlignment="Center" FontSize="11"
                                                            Foreground="{StaticResource TextSecondary}" Text="{Binding Kind}" />
                                             </Border>
@@ -753,7 +860,8 @@
                                                 <TextBlock FontSize="13" FontWeight="SemiBold" Text="{Binding FileName}" />
                                                 <TextBlock Margin="0,4,0,0" FontSize="11"
                                                            Foreground="{StaticResource TextMuted}"
-                                                           Text="{Binding TaskDirectory}" TextTrimming="CharacterEllipsis" />
+                                                           Text="{Binding TaskDirectory}" TextTrimming="CharacterEllipsis"
+                                                           ToolTip="{Binding FilePath}" />
                                             </StackPanel>
                                             <TextBlock Grid.Column="2" Margin="16,0,0,0" VerticalAlignment="Center"
                                                        FontSize="11" Foreground="{StaticResource TextMuted}"

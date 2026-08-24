@@ -45,14 +45,50 @@ test("VM system prompt contains authoritative schema and all carrier Create exam
   assert.match(prompt, /OpenCvSharp/);
   assert.match(prompt, /背景图写入只表示执行了一个状态修改工作流/);
   assert.match(prompt, /community-articles-knowledge/);
-  assert.match(prompt, /vm-script-tutor C# 脚本开发知识/);
-  assert.match(prompt, /"skillVersion": "1\.2"/);
-  assert.match(prompt, /UserProperty\.cs.*只读/s);
+  assert.match(prompt, /agent-prompt-knowledge\.json/);
+  assert.match(prompt, /vm_search_project_knowledge/);
+  assert.match(prompt, /UserProperty\.cs/);
+  assert.match(prompt, /Do not modify UserProperty\.cs/);
   assert.match(prompt, /C# 5\.0/);
   assert.match(prompt, /AlgorithmTab\.xml/);
   assert.match(prompt, /errorStatus/);
-  assert.match(prompt, /UI 手动配置清单/);
+  assert.match(prompt, /UI configuration/);
+  assert.doesNotMatch(prompt, /script-tutor-knowledge\.json/);
+  assert.doesNotMatch(prompt, /sourceInventory/);
   assert.match(prompt, /状态机需求优先拆成显式状态/);
   assert.match(prompt, /原生 C\+\+ 类需要托管包装或 C ABI/);
   assert.match(prompt, /Python 模型和图像库不得在脚本中自动安装或下载/);
+});
+
+test("VM system prompt carries AS script authoring rules", () => {
+  const config = {
+    repositoryRoot,
+    agentRoot: path.join(repositoryRoot, "agent"),
+  } as AgentConfiguration;
+  const prompt = buildVmSystemPrompt(config);
+  assert.match(prompt, /AS（AngelScript）脚本能力/);
+  assert.match(prompt, /class MyAlgorithm:BaseAlgorithm/);
+  assert.match(prompt, /AS 不是 Requirement 载体/);
+  assert.match(prompt, /helper\.SetFloatArray/);
+  assert.match(prompt, /数组和复合数组的输出必须走/);
+  assert.match(prompt, /禁止 `string\(数值\)`/);
+  assert.match(prompt, /No matching signatures/);
+  assert.match(prompt, /100f` 非法/);
+  assert.match(prompt, /getExceptionInfo\(\)/);
+  assert.match(prompt, /OpenCvSharp.*不支持/s);
+  assert.match(prompt, /array<ROIBOX>/);
+});
+
+test("VM system prompt requires angle normalization and patch inheritance", () => {
+  const config = {
+    repositoryRoot,
+    agentRoot: path.join(repositoryRoot, "agent"),
+  } as AgentConfiguration;
+  const prompt = buildVmSystemPrompt(config);
+  assert.match(prompt, /角度统一归一化到 \[-180, 180\]/);
+  assert.match(prompt, /NormalizeAngle/);
+  assert.match(prompt, /Patch 必须继承基底已有内容/);
+  assert.match(prompt, /persistedDefault/);
+  assert.match(prompt, /一律沿用 `persistedDefault`/);
+  assert.match(prompt, /不要凭需求描述整段重写/);
 });

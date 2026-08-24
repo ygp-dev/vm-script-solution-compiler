@@ -3,15 +3,13 @@ import path from "node:path";
 import {
   type AgentSession,
   type AgentSessionEvent,
-} from "../node_modules/@earendil-works/pi-coding-agent/dist/core/agent-session.js";
-import { DefaultResourceLoader } from "../node_modules/@earendil-works/pi-coding-agent/dist/core/resource-loader.js";
-import {
+  DefaultResourceLoader,
   SessionManager,
   type SessionInfo,
-} from "../node_modules/@earendil-works/pi-coding-agent/dist/core/session-manager.js";
-import { createAgentSession } from "../node_modules/@earendil-works/pi-coding-agent/dist/core/sdk.js";
+  createAgentSession,
+  type ModelRuntime,
+} from "./pi.js";
 import type { Model } from "@earendil-works/pi-ai";
-import type { ModelRuntime } from "../node_modules/@earendil-works/pi-coding-agent/dist/core/model-runtime.js";
 import type { AgentConfiguration } from "./config.js";
 import { VmDomainState } from "./domain/state.js";
 import type { TaskContextInput, VmTaskState } from "./domain/types.js";
@@ -236,13 +234,14 @@ export class VmAgentRuntime {
     this.session?.dispose();
 
     const domain = new VmDomainState(sessionManager);
-    const tools = createVmTools(domain, this.worker);
+    const tools = createVmTools(domain, this.worker, this.config.repositoryRoot);
     const primaryToolNames = new Set([
       "vm_inspect_solution",
       "vm_update_requirement",
       "vm_compile_solution",
       "vm_read_build_report",
       "vm_record_user_validation",
+      "vm_search_project_knowledge",
     ]);
     const primaryTools = tools.filter((tool) => primaryToolNames.has(tool.name));
     const systemPrompt = buildVmSystemPrompt(this.config);

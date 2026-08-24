@@ -18,69 +18,15 @@ namespace VmScriptCompiler.Desktop;
 
 public partial class MainWindow : Window
 {
-    private const int DwmwaUseImmersiveDarkMode = 20;
-    private const int DwmwaUseImmersiveDarkModeLegacy = 19;
-    private const int DwmwaCaptionColor = 35;
-    private const int DwmwaTextColor = 36;
-    private const int WmGetMinMaxInfo = 0x0024;
-    private const uint MonitorDefaultToNearest = 0x00000002;
-
-    [StructLayout(LayoutKind.Sequential)]
-    private struct NativePoint
-    {
-        public int X;
-        public int Y;
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    private struct NativeRect
-    {
-        public int Left;
-        public int Top;
-        public int Right;
-        public int Bottom;
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    private struct NativeMinMaxInfo
-    {
-        public NativePoint Reserved;
-        public NativePoint MaxSize;
-        public NativePoint MaxPosition;
-        public NativePoint MinTrackSize;
-        public NativePoint MaxTrackSize;
-    }
-
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-    private struct NativeMonitorInfo
-    {
-        public int Size;
-        public NativeRect Monitor;
-        public NativeRect Work;
-        public uint Flags;
-    }
-
-    [DllImport("dwmapi.dll", EntryPoint = "DwmSetWindowAttribute", PreserveSig = true)]
-    private static extern int SetDwmWindowAttributeInt(nint hwnd, int attribute, ref int value, int valueSize);
-
-    [DllImport("dwmapi.dll", EntryPoint = "DwmSetWindowAttribute", PreserveSig = true)]
-    private static extern int SetDwmWindowAttributeColor(nint hwnd, int attribute, ref uint value, int valueSize);
-
-    [DllImport("user32.dll", SetLastError = true)]
-    private static extern nint MonitorFromWindow(nint hwnd, uint flags);
-
-    [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-    private static extern bool GetMonitorInfo(nint monitor, ref NativeMonitorInfo info);
-
     private readonly CompilerFacade _compiler;
     private readonly DesktopStateStore _stateStore;
+    private readonly WindowChromeController _chrome;
     private DesktopSettings _settings;
     private AgentProcessClient? _agent;
     private CancellationTokenSource? _runCancellation;
     private IReadOnlyList<ArtifactRecord> _artifacts = [];
     private System.Windows.Controls.TextBox? _streamingAssistant;
     private readonly Dictionary<string, ToolCardVisual> _activeTools = new(StringComparer.Ordinal);
-    private HwndSource? _windowSource;
     private string? _lastSolution;
     private string? _lastReport;
     private string? _lastDependencyDirectory;
@@ -90,6 +36,7 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        _chrome = new WindowChromeController(this);
         _compiler = new CompilerFacade(RepositoryLocator.Find());
         _stateStore = new DesktopStateStore();
         var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
@@ -135,7 +82,7 @@ public partial class MainWindow : Window
 
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
-        ApplyDarkTitleBar();
+        _chrome.ApplyDarkTitleBar();
         var agentTask = StartAgentAsync();
         await Task.Yield();
         var secondaryStartupTasks = Task.WhenAll(
@@ -145,87 +92,18 @@ public partial class MainWindow : Window
         await secondaryStartupTasks;
     }
 
-    private void Window_SourceInitialized(object? sender, EventArgs e)
-    {
-        ApplyDarkTitleBar();
-        _windowSource = PresentationSource.FromVisual(this) as HwndSource;
-        _windowSource?.AddHook(WindowMessageHook);
-    }
+    private void Window_SourceInitialized(object? sender, EventArgs e) => _chrome.AttachSource();
 
-    private static nint WindowMessageHook(nint hwnd, int message, nint wParam, nint lParam, ref bool handled)
-    {
-        if (message != WmGetMinMaxInfo || lParam == IntPtr.Zero) return IntPtr.Zero;
+    private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => _chrome.HandleTitleBarClick(e);
 
-        var monitor = MonitorFromWindow(hwnd, MonitorDefaultToNearest);
-        if (monitor == IntPtr.Zero) return IntPtr.Zero;
+    private void MinimizeWindow_Click(object sender, RoutedEventArgs e) => _chrome.Minimize();
 
-        var info = new NativeMonitorInfo { Size = Marshal.SizeOf<NativeMonitorInfo>() };
-        if (!GetMonitorInfo(monitor, ref info)) return IntPtr.Zero;
+    private void MaximizeWindow_Click(object sender, RoutedEventArgs e) => _chrome.Toggle();
 
-        var minMax = Marshal.PtrToStructure<NativeMinMaxInfo>(lParam);
-        minMax.MaxPosition.X = info.Work.Left - info.Monitor.Left;
-        minMax.MaxPosition.Y = info.Work.Top - info.Monitor.Top;
-        minMax.MaxSize.X = info.Work.Right - info.Work.Left;
-        minMax.MaxSize.Y = info.Work.Bottom - info.Work.Top;
-        Marshal.StructureToPtr(minMax, lParam, false);
-        handled = true;
-        return IntPtr.Zero;
-    }
-
-    private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-        if (e.ChangedButton != MouseButton.Left) return;
-        if (e.ClickCount == 2)
-        {
-            ToggleWindowState();
-            return;
-        }
-        if (WindowState != WindowState.Maximized)
-        {
-            try { DragMove(); }
-            catch (InvalidOperationException) { }
-        }
-    }
-
-    private void MinimizeWindow_Click(object sender, RoutedEventArgs e) => WindowState = WindowState.Minimized;
-
-    private void MaximizeWindow_Click(object sender, RoutedEventArgs e) => ToggleWindowState();
-
-    private void CloseWindow_Click(object sender, RoutedEventArgs e) => Close();
+    private void CloseWindow_Click(object sender, RoutedEventArgs e) => _chrome.Close();
 
     private void Window_StateChanged(object? sender, EventArgs e)
-        => MaximizeWindowButton.Content = WindowState == WindowState.Maximized ? "❐" : "□";
-
-    private void ToggleWindowState()
-        => WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
-
-    private void ApplyDarkTitleBar()
-    {
-        if (!OperatingSystem.IsWindows()) return;
-        var hwnd = new WindowInteropHelper(this).Handle;
-        if (hwnd == IntPtr.Zero) return;
-
-        try
-        {
-            var darkMode = 1;
-            if (SetDwmWindowAttributeInt(hwnd, DwmwaUseImmersiveDarkMode,
-                    ref darkMode, Marshal.SizeOf<int>()) != 0)
-            {
-                _ = SetDwmWindowAttributeInt(hwnd, DwmwaUseImmersiveDarkModeLegacy,
-                    ref darkMode, Marshal.SizeOf<int>());
-            }
-
-            // DWM COLORREF is stored as 0x00BBGGRR, matching the app's #0B1118 palette.
-            var captionColor = 0x0018110Bu;
-            var textColor = 0x00FBF7F4u;
-            _ = SetDwmWindowAttributeColor(hwnd, DwmwaCaptionColor,
-                ref captionColor, Marshal.SizeOf<uint>());
-            _ = SetDwmWindowAttributeColor(hwnd, DwmwaTextColor,
-                ref textColor, Marshal.SizeOf<uint>());
-        }
-        catch (DllNotFoundException) { }
-        catch (EntryPointNotFoundException) { }
-    }
+        => MaximizeWindowButton.Content = _chrome.StateGlyph;
 
     private async Task StartAgentAsync()
     {
@@ -1013,11 +891,10 @@ public partial class MainWindow : Window
     private void ApplyArtifactFilter()
     {
         if (ArtifactList is null) return;
-        var query = ArtifactSearchText.Text.Trim();
-        var filtered = string.IsNullOrWhiteSpace(query) ? _artifacts : _artifacts.Where(x => x.SearchText.Contains(query, StringComparison.OrdinalIgnoreCase)).ToArray();
+        var filtered = ArtifactSearch.FilterArtifacts(_artifacts, ArtifactSearchText.Text);
         ArtifactList.ItemsSource = filtered;
-        ArtifactEmptyPanel.Visibility = filtered.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
-        ArtifactSummaryText.Text = $"已索引 {_artifacts.Count} 个产物，当前显示 {filtered.Count} 个";
+        ArtifactEmptyPanel.Visibility = ArtifactSearch.EmptyPanelVisibility(filtered.Count);
+        ArtifactSummaryText.Text = ArtifactSearch.DescribeArtifactFilter(_artifacts.Count, filtered.Count);
     }
 
     private void GlobalSearch_Changed(object sender, TextChangedEventArgs e) => RefreshGlobalSearch();
@@ -1025,32 +902,11 @@ public partial class MainWindow : Window
     private void RefreshGlobalSearch()
     {
         if (GlobalSearchList is null) return;
-        var query = GlobalSearchText.Text.Trim();
-        var sessions = _stateStore.LoadConversations().Select(session => new SearchResult(
-            "Session",
-            session.DisplayTitle,
-            session.Prompt,
-            session.TimestampUtc,
-            string.Join(" ", session.DisplayTitle, session.Prompt, session.TaskDirectory ?? ""),
-            null,
-            session.TaskDirectory));
-        var artifacts = _artifacts.Select(artifact => new SearchResult(
-            artifact.Kind,
-            artifact.DisplayTitle,
-            artifact.DisplayDetail,
-            artifact.ModifiedUtc,
-            artifact.SearchText,
-            artifact.FilePath,
-            null));
-        var all = sessions.Concat(artifacts).OrderByDescending(result => result.TimestampUtc).ToArray();
-        var filtered = string.IsNullOrWhiteSpace(query)
-            ? all
-            : all.Where(result => result.SearchText.Contains(query, StringComparison.OrdinalIgnoreCase)).Take(200).ToArray();
+        var query = GlobalSearchText.Text;
+        var (filtered, total) = ArtifactSearch.SearchEverything(_stateStore.LoadConversations(), _artifacts, query);
         GlobalSearchList.ItemsSource = filtered;
-        GlobalSearchEmptyPanel.Visibility = filtered.Length == 0 ? Visibility.Visible : Visibility.Collapsed;
-        GlobalSearchSummaryText.Text = string.IsNullOrWhiteSpace(query)
-            ? $"搜索 Sessions、提示词、SOL、报告和生成脚本；共 {all.Length} 条"
-            : $"搜索“{query}”：找到 {filtered.Length} 条结果";
+        GlobalSearchEmptyPanel.Visibility = ArtifactSearch.EmptyPanelVisibility(filtered.Count);
+        GlobalSearchSummaryText.Text = ArtifactSearch.DescribeGlobalSearch(query, total, filtered.Count);
     }
 
     private void GlobalSearchList_DoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -1167,7 +1023,7 @@ public partial class MainWindow : Window
     {
         try
         {
-            _windowSource?.RemoveHook(WindowMessageHook);
+            _chrome.DetachSource();
             _stateStore.SaveSettings(_settings);
             _runCancellation?.Cancel();
             var agent = Interlocked.Exchange(ref _agent, null);
@@ -1266,18 +1122,6 @@ public partial class MainWindow : Window
     {
         var dependency = Path.Combine(result.TaskDirectory, "dependencies");
         return new BuildPresentation(result.TaskDirectory, result.SolutionFile, result.ReportFile, Directory.Exists(dependency) ? dependency : null);
-    }
-
-    private sealed record SearchResult(
-        string Kind,
-        string Title,
-        string Detail,
-        DateTime TimestampUtc,
-        string SearchText,
-        string? FilePath,
-        string? DirectoryPath)
-    {
-        public string DisplayTime => TimestampUtc.ToLocalTime().ToString("yyyy-MM-dd HH:mm");
     }
 
     private sealed record ToolCardVisual(Border Card, TextBlock Icon, TextBlock Status);
