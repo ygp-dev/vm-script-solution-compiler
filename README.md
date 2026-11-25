@@ -2,11 +2,11 @@
 
 面向 VisionMaster 4.4 的确定性脚本方案编译器。自然语言由 Agent 转换为 Requirement IR；只有 Compiler Core 可以生成或 Patch SOL，AI 不直接修改二进制。
 
-当前 Windows x64 正式版为 **1.0.7**：[GitHub Release v1.0.7](https://github.com/ygp-dev/vm-script-solution-compiler/releases/tag/v1.0.7)。该版本修正了 1.0.6 安装后只显示 Desktop 的问题，安装包会同时安装 Desktop、CLI、MCP，并创建对应的开始菜单入口。
+当前 Windows x64 正式版为 **1.0.8**：[GitHub Release v1.0.8](https://github.com/ygp-dev/vm-script-solution-compiler/releases/tag/v1.0.8)。该版本加入可选的 VisionMaster 4.4 Lite 顶栏入口，并修复 SOL 翻译封装及前端运行界面漏译。安装包同时包含 Desktop、CLI 和 MCP。
 
 ## 安装最新版
 
-下载 `VM-Script-Solution-Compiler-Setup-1.0.7-x64.exe` 后按向导安装即可。安装程序默认使用当前用户目录 `%LOCALAPPDATA%\VMSC`，不需要管理员权限。
+下载 `VM-Script-Solution-Compiler-Setup-1.0.8-x64.exe` 后按向导安装即可。安装程序默认使用当前用户目录 `%LOCALAPPDATA%\VMSC`。勾选 VisionMaster 内安装选项时，安装程序会请求修改 VM 安装目录的权限。
 
 安装完成后，开始菜单和桌面快捷方式分别指向：
 
@@ -14,7 +14,7 @@
 - CLI：`%LOCALAPPDATA%\VMSC\Cli\VmScriptCompiler.Cli.exe`
 - MCP：`%LOCALAPPDATA%\VMSC\Mcp\vm-script-compiler-mcp.exe`
 
-如果旧版本仍显示在桌面或任务栏，请关闭旧进程后从“VM Script Solution Compiler”开始菜单文件夹重新启动；1.0.7 安装器会在安装阶段检查 CLI 和 MCP 入口是否完整。
+如果旧版本仍显示在桌面或任务栏，请关闭旧进程后从“VM Script Solution Compiler”开始菜单文件夹重新启动。
 
 ## 项目
 

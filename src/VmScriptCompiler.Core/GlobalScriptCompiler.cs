@@ -96,7 +96,7 @@ public sealed class GlobalScriptCompiler(string repositoryRoot)
 
     private static void WriteCarrier(string solutionFile, JsonObject payload)
     {
-        using var archive = ZipFile.Open(solutionFile, ZipArchiveMode.Update);
+        using var archive = SolArchiveAccess.OpenForUpdate(solutionFile);
         var entry = archive.Entries.FirstOrDefault(x => Normalize(x.FullName) == "SolutionFile/GlobalScript_0")
             ?? throw new CompilerException("GLOBAL_SCRIPT_ENTRY_MISSING", "SOL 中缺少 SolutionFile/GlobalScript_0。");
         var entryName = entry.FullName;

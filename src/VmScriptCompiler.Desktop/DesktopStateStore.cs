@@ -197,6 +197,7 @@ internal sealed class DesktopStateStore
         var name = Path.GetFileName(file);
         var extension = Path.GetExtension(file);
         if (extension.Equals(".sol", StringComparison.OrdinalIgnoreCase)) return "SOL 方案";
+        if (name.EndsWith(".translation.csv", StringComparison.OrdinalIgnoreCase)) return "翻译对照表";
         if (name.Equals("build-report.md", StringComparison.OrdinalIgnoreCase)) return "构建报告";
         if (name.Equals("script-contract.json", StringComparison.OrdinalIgnoreCase)) return "脚本契约";
         if (name.Equals("requirement.json", StringComparison.OrdinalIgnoreCase) ||
@@ -216,6 +217,7 @@ internal sealed class DesktopStateStore
         while (directory is not null && directory.FullName.StartsWith(root, StringComparison.OrdinalIgnoreCase))
         {
             if (File.Exists(Path.Combine(directory.FullName, "result.sol")) ||
+                File.Exists(Path.Combine(directory.FullName, "translated.sol")) ||
                 File.Exists(Path.Combine(directory.FullName, "build-report.md")) ||
                 Directory.Exists(Path.Combine(directory.FullName, "generated")))
                 return directory.FullName;

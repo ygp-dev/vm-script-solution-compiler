@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using Microsoft.Win32;
 
 namespace VmScriptCompiler.Core;
 
@@ -26,19 +27,68 @@ public sealed class EnvironmentDetector
         if (!string.IsNullOrWhiteSpace(sdk)) candidates.Add(Directory.GetParent(sdk)?.FullName);
         foreach (var part in (Environment.GetEnvironmentVariable("PATH") ?? "").Split(';', StringSplitOptions.RemoveEmptyEntries))
         {
-            var match = Regex.Match(part, "^(.*?VisionMaster\\d+(?:\\.\\d+){1,3})(?:\\\\.*)?$", RegexOptions.IgnoreCase);
+            var match = Regex.Match(part, "^(.*?VisionMaster(?:\\d+(?:\\.\\d+){0,3})?)(?:\\\\.*)?$", RegexOptions.IgnoreCase);
             if (match.Success) candidates.Add(match.Groups[1].Value);
         }
+        foreach (var parent in new[] { Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) }
+            .Where(Directory.Exists).Distinct(StringComparer.OrdinalIgnoreCase))
+        {
+            try
+            {
+                candidates.AddRange(Directory.EnumerateDirectories(parent, "VisionMaster*", SearchOption.TopDirectoryOnly));
+            }
+            catch (UnauthorizedAccessException) { }
+            catch (IOException) { }
+        }
+        candidates.AddRange(RegistryInstallLocations());
         foreach (var candidate in candidates.Where(x => !string.IsNullOrWhiteSpace(x)).Distinct(StringComparer.OrdinalIgnoreCase))
         {
             string root;
             try { root = Path.GetFullPath(candidate!.Trim().Trim('"').TrimEnd('\\')); } catch { continue; }
-            if (!Directory.Exists(Path.Combine(root, "Development")) || !Directory.Exists(Path.Combine(root, "MVDAlgorithmSDK")) || !Directory.Exists(Path.Combine(root, "Applications"))) continue;
+            var applications = Path.Combine(root, "Applications");
+            if (!Directory.Exists(applications) && !File.Exists(Path.Combine(root, "VisionMaster.exe"))) continue;
             var globalScript = Path.Combine(root, "Applications", "GlobalScript");
             var version = Regex.Match(Path.GetFileName(root), "VisionMaster(.+)$", RegexOptions.IgnoreCase).Groups[1].Value;
             return new(true, null, root, string.IsNullOrEmpty(version) ? null : version, Path.Combine(root, "Development"), Path.Combine(root, "MVDAlgorithmSDK"), Path.Combine(root, "Applications"), globalScript, Directory.Exists(globalScript));
         }
         return new(false, "VM_HOME_NOT_FOUND", null, null, null, null, null, null, false);
+    }
+
+    private static IEnumerable<string> RegistryInstallLocations()
+    {
+        if (!OperatingSystem.IsWindows()) yield break;
+        foreach (var hive in new[] { RegistryHive.LocalMachine, RegistryHive.CurrentUser })
+        foreach (var view in new[] { RegistryView.Registry64, RegistryView.Registry32 })
+        {
+            RegistryKey? root = null;
+            try
+            {
+                using var baseKey = RegistryKey.OpenBaseKey(hive, view);
+                root = baseKey.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall");
+            }
+            catch (System.Security.SecurityException) { }
+            catch (UnauthorizedAccessException) { }
+            if (root is null) continue;
+            using (root)
+            {
+                string[] names;
+                try { names = root.GetSubKeyNames(); }
+                catch (System.Security.SecurityException) { continue; }
+                catch (UnauthorizedAccessException) { continue; }
+                foreach (var name in names)
+                {
+                    RegistryKey? entry;
+                    try { entry = root.OpenSubKey(name); }
+                    catch (System.Security.SecurityException) { continue; }
+                    catch (UnauthorizedAccessException) { continue; }
+                    using (entry)
+                    {
+                        if (entry?.GetValue("DisplayName") is not string displayName || !displayName.Contains("VisionMaster", StringComparison.OrdinalIgnoreCase)) continue;
+                        if (entry.GetValue("InstallLocation") is string location && !string.IsNullOrWhiteSpace(location)) yield return location;
+                    }
+                }
+            }
+        }
     }
 
     /// <summary>

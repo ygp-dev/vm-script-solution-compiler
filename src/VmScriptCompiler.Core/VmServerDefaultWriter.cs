@@ -26,7 +26,7 @@ public static class VmServerDefaultWriter
         }
         if (modules.Length == 0) return notices;
 
-        using var archive = ZipFile.Open(solutionFile, ZipArchiveMode.Update);
+        using var archive = SolArchiveAccess.OpenForUpdate(solutionFile);
         var entry = archive.Entries.FirstOrDefault(x => Normalize(x.FullName) == VmServerEntry)
             ?? throw new CompilerException("VM_SERVER_ENTRY_MISSING", "SOL 中缺少 SolutionFile/VmServer.xml。");
         var entryName = entry.FullName;

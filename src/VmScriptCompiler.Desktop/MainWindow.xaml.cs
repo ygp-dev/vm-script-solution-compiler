@@ -107,6 +107,21 @@ public partial class MainWindow : Window
 
     private async Task StartAgentAsync()
     {
+        var apiKey = _stateStore.UnprotectSecret(_settings.EncryptedApiKey);
+        if (string.IsNullOrWhiteSpace(apiKey))
+        {
+            if (_agent is not null)
+            {
+                await _agent.DisposeAsync();
+                _agent = null;
+            }
+            AgentStatusText.Text = "未配置 API Key";
+            AgentStatusDot.Fill = new SolidColorBrush(Color.FromRgb(206, 155, 69));
+            AiStatusText.Text = "请在“设置”中填写 API Key";
+            FriendlyStatus.Text = "尚未配置 API Key，请先在“设置”中填写。";
+            FriendlyStatus.Visibility = Visibility.Visible;
+            return;
+        }
         AgentStatusText.Text = "Agent 正在启动…";
         AgentStatusDot.Fill = new SolidColorBrush(Color.FromRgb(206, 155, 69));
         AiStatusText.Text = "正在初始化 Pi Runtime…";
@@ -120,7 +135,7 @@ public partial class MainWindow : Window
                 _settings.AiProvider,
                 _settings.AiEndpoint,
                 _settings.AiModel,
-                _stateStore.UnprotectSecret(_settings.EncryptedApiKey),
+                apiKey,
                 _settings.ThinkingLevel,
                 _settings.OutputDirectory,
                 Path.Combine(_stateStore.StateDirectory, "agent")));
@@ -582,6 +597,8 @@ public partial class MainWindow : Window
     {
         "vm_detect_environment" => "检测 VM 环境",
         "vm_inspect_solution" => "检查基底 SOL",
+        "vm_translation_inventory" => "提取方案文字",
+        "vm_translate_solution" => "翻译并验证方案",
         "vm_query_capability" => "查询 VM 能力",
         "vm_update_requirement" => "更新 Requirement",
         "vm_compile_solution" => "生成并验证 SOL",
@@ -953,10 +970,15 @@ public partial class MainWindow : Window
 
     private async void SaveSettings_Click(object sender, RoutedEventArgs e)
     {
+        if (string.IsNullOrWhiteSpace(SettingsApiKeyBox.Password))
+        {
+            SettingsStatusText.Text = "没有 API Key，请先填写 API Key。";
+            SettingsStatusText.Foreground = (Brush)FindResource("Danger");
+            return;
+        }
         if (string.IsNullOrWhiteSpace(SettingsOutputPathText.Text) ||
             string.IsNullOrWhiteSpace(SettingsEndpointText.Text) ||
-            string.IsNullOrWhiteSpace(SettingsModelText.Text) ||
-            string.IsNullOrWhiteSpace(SettingsApiKeyBox.Password))
+            string.IsNullOrWhiteSpace(SettingsModelText.Text))
         {
             SettingsStatusText.Text = "输出目录、API 地址、模型和 API Key 都必须填写。";
             SettingsStatusText.Foreground = (Brush)FindResource("Danger");

@@ -1,6 +1,7 @@
 using System.Buffers.Binary;
 using System.IO.Compression;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml;
 
 namespace VmScriptCompiler.Core;
@@ -11,10 +12,55 @@ public static class ModuleFrameCompatibility
 {
     private const string EntryName = "SolutionFile/MoudleFrame";
 
+    public static IReadOnlyList<string> ReadTranslatableTerms(byte[] frame)
+    {
+        var version = BinaryPrimitives.ReadInt32BigEndian(frame.AsSpan(0, 4));
+        var terms = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var record in ReadRecords(frame, version))
+        {
+            var payload = record.Data;
+            if (payload.Length < 12) continue;
+            var algorithmCount = BinaryPrimitives.ReadInt32BigEndian(payload.AsSpan(0, 4));
+            var parameterOffset = 4L + algorithmCount * 1284L;
+            if (algorithmCount < 0 || parameterOffset + 8 > payload.Length) continue;
+            var count = BinaryPrimitives.ReadInt32BigEndian(payload.AsSpan((int)parameterOffset + 4, 4));
+            var offset = (int)parameterOffset + 8;
+            for (var index = 0; index < count; index++)
+            {
+                if (offset + 264 > payload.Length) break;
+                var name = Encoding.UTF8.GetString(payload, offset, 260).TrimEnd('\0');
+                offset += 260;
+                var length = BinaryPrimitives.ReadInt32BigEndian(payload.AsSpan(offset, 4));
+                offset += 4;
+                if (length < 0 || offset + length > payload.Length) break;
+                var text = Encoding.UTF8.GetString(payload, offset, length);
+                offset += length;
+                if (name == "VarData")
+                    foreach (Match match in Regex.Matches(text, "Name=\"%([^%]+)%\""))
+                        AddChinese(terms, match.Groups[1].Value);
+                if (name != "ShellContent") continue;
+                foreach (Match match in Regex.Matches(text, "(?m)//[^\\r\\n]*"))
+                {
+                    var comment = match.Value[2..].TrimStart('/', ' ').Trim();
+                    if (!comment.StartsWith("errorMessages", StringComparison.Ordinal)) AddChinese(terms, comment);
+                }
+                foreach (Match match in Regex.Matches(text, "\"(?:\\\\.|[^\"\\\\])*\""))
+                    AddChinese(terms, match.Value[1..^1]);
+            }
+        }
+        return terms.Order(StringComparer.Ordinal).ToArray();
+    }
+
+    private static void AddChinese(HashSet<string> terms, string value)
+    {
+        if (!string.IsNullOrWhiteSpace(value) && Regex.IsMatch(value, "[\\u4e00-\\u9fff]"))
+            terms.Add(value);
+    }
+
     public static void RepairVersion4WriterOutput(string baseSolution, string outputSolution)
     {
         if (ReadVersion(baseSolution) != 4) return;
-        using var archive = ZipFile.Open(outputSolution, ZipArchiveMode.Update);
+        using var archive = SolArchiveAccess.OpenForUpdate(outputSolution);
         var entry = archive.Entries.Single(x => Normalize(x.FullName) == EntryName);
         byte[] malformed;
         using (var stream = entry.Open())
@@ -31,7 +77,7 @@ public static class ModuleFrameCompatibility
     public static void AddOrReplaceBinaryParameters(string solution, IReadOnlyList<ModuleBinaryParameterWrite> writes)
     {
         if (writes.Count == 0) return;
-        using var archive = ZipFile.Open(solution, ZipArchiveMode.Update);
+        using var archive = SolArchiveAccess.OpenForUpdate(solution);
         var frameEntry = archive.Entries.Single(x => Normalize(x.FullName) == EntryName);
         var serverEntry = archive.Entries.Single(x => Normalize(x.FullName) == "SolutionFile/VmServer.xml");
         var document = new XmlDocument();
@@ -61,6 +107,103 @@ public static class ModuleFrameCompatibility
         output.Write(rebuilt);
     }
 
+    public static void RewriteTextParameters(string solution, IReadOnlyDictionary<string, string> replacements)
+    {
+        if (replacements.Count == 0) return;
+        using var archive = SolArchiveAccess.OpenForUpdate(solution);
+        var entry = archive.Entries.Single(x => Normalize(x.FullName) == EntryName);
+        byte[] frame;
+        using (var input = entry.Open())
+        using (var memory = new MemoryStream()) { input.CopyTo(memory); frame = memory.ToArray(); }
+        var version = BinaryPrimitives.ReadInt32BigEndian(frame.AsSpan(0, 4));
+        var records = ReadRecords(frame, version);
+        var changed = false;
+        var strictUtf8 = new UTF8Encoding(false, true);
+        for (var index = 0; index < records.Count; index++)
+        {
+            var payload = records[index].Data;
+            if (records[index].Name is "GlobalVarBinding" or "ModuleParamBinding")
+            {
+                var rewritten = RewriteFixedWidthBindings(payload, replacements);
+                if (!ReferenceEquals(rewritten, payload))
+                {
+                    records[index] = (records[index].Name, rewritten);
+                    changed = true;
+                }
+                continue;
+            }
+            if (payload.Length < 12) continue;
+            var algorithmCount = BinaryPrimitives.ReadInt32BigEndian(payload.AsSpan(0, 4));
+            var parameterOffset = 4L + algorithmCount * 1284L;
+            if (algorithmCount < 0 || parameterOffset + 8 > payload.Length) continue;
+            var count = BinaryPrimitives.ReadInt32BigEndian(payload.AsSpan((int)parameterOffset + 4, 4));
+            var offset = (int)parameterOffset + 8;
+            var updates = new List<(string Name, byte[] Value)>();
+            for (var parameter = 0; parameter < count; parameter++)
+            {
+                if (offset + 264 > payload.Length) break;
+                var name = Encoding.UTF8.GetString(payload, offset, 260).TrimEnd('\0');
+                offset += 260;
+                var length = BinaryPrimitives.ReadInt32BigEndian(payload.AsSpan(offset, 4));
+                offset += 4;
+                if (length < 0 || offset + length > payload.Length) break;
+                var value = payload.AsSpan(offset, length);
+                offset += length;
+                string text;
+                try { text = strictUtf8.GetString(value); }
+                catch (DecoderFallbackException) { continue; }
+                var translated = ReplaceTerms(text, replacements);
+                if (translated != text) updates.Add((name, Encoding.UTF8.GetBytes(translated)));
+            }
+            foreach (var update in updates) payload = SetBinaryParameter(payload, update.Name, update.Value);
+            if (updates.Count == 0) continue;
+            records[index] = (records[index].Name, payload);
+            changed = true;
+        }
+        if (!changed) return;
+        var rebuilt = WriteRecords(records, version);
+        var entryName = entry.FullName;
+        entry.Delete();
+        using var output = archive.CreateEntry(entryName, CompressionLevel.Optimal).Open();
+        output.Write(rebuilt);
+    }
+
+    private static byte[] RewriteFixedWidthBindings(byte[] payload, IReadOnlyDictionary<string, string> replacements)
+    {
+        byte[]? result = null;
+        foreach (var item in replacements.OrderByDescending(x => x.Key.Length))
+        {
+            var original = Encoding.UTF8.GetBytes("%" + item.Key + "%");
+            var translated = Encoding.UTF8.GetBytes("%" + item.Value + "%");
+            if (original.AsSpan().SequenceEqual(translated)) continue;
+            var search = 0;
+            while (search <= payload.Length - original.Length)
+            {
+                var bytes = result ?? payload;
+                var relative = bytes.AsSpan(search).IndexOf(original);
+                if (relative < 0) break;
+                var offset = search + relative;
+                var zeroCount = 0;
+                while (offset + original.Length + zeroCount < bytes.Length && bytes[offset + original.Length + zeroCount] == 0)
+                    zeroCount++;
+                if (translated.Length > original.Length + zeroCount)
+                    throw new CompilerException("TRANSLATION_BINDING_TOO_LONG", "Binding field is too short for translated name: " + item.Key);
+                result ??= payload.ToArray();
+                Array.Clear(result, offset, Math.Max(original.Length, translated.Length));
+                translated.CopyTo(result, offset);
+                search = offset + translated.Length;
+            }
+        }
+        return result ?? payload;
+    }
+
+    internal static string ReplaceTerms(string text, IReadOnlyDictionary<string, string> replacements)
+    {
+        foreach (var item in replacements.OrderByDescending(x => x.Key.Length).ThenBy(x => x.Key, StringComparer.Ordinal))
+            text = text.Replace(item.Key, item.Value, StringComparison.Ordinal);
+        return text;
+    }
+
     private static int ReadVersion(string solution)
     {
         using var archive = ZipFile.OpenRead(solution);
@@ -70,6 +213,7 @@ public static class ModuleFrameCompatibility
         if (stream.Read(header) != 4) throw new CompilerException("MODULE_FRAME_INVALID", "MoudleFrame header is incomplete.");
         return BinaryPrimitives.ReadInt32BigEndian(header);
     }
+
 
     private static List<(string Name, byte[] Data)> ReadWriterRecords(byte[] bytes)
     {

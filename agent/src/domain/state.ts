@@ -250,6 +250,28 @@ export class VmDomainState {
     return this.commit();
   }
 
+  recordTranslationInventory(file: string, result: unknown): VmTaskState {
+    this.state.baseSolution = file;
+    this.addEvidence({ kind: "solution", summary: `已提取方案待翻译文字：${file}`, data: result, timestampUtc: now() });
+    return this.commit();
+  }
+
+  recordTranslation(result: unknown): VmTaskState {
+    const record = isRecord(result) ? result : {};
+    const solution = stringValue(record.solutionFile);
+    const table = stringValue(record.tableFile);
+    if (!solution || !table || record.offlineValidation !== true)
+      throw new Error("翻译结果缺少 SOL、对照表或离线验证未通过。");
+    this.state.phase = "offline-validated";
+    this.state.completion.solutionBuilt = true;
+    this.state.completion.offlineValidationPassed = true;
+    this.state.completion.userValidated = false;
+    this.addArtifact("solution", solution);
+    this.addArtifact("other", table);
+    this.addEvidence({ kind: "validation", summary: `翻译后的 SOL 已通过离线验证：${solution}`, data: result, timestampUtc: now() });
+    return this.commit();
+  }
+
   recordCapability(query: string | undefined, result: unknown): VmTaskState {
     this.addEvidence({
       kind: "capability",

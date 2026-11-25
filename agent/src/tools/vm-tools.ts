@@ -186,6 +186,38 @@ export function createVmTools(
       },
     }),
     defineTool({
+      name: "vm_translation_inventory",
+      label: "提取方案待翻译文字",
+      description: "读取 SOL 的流程、模块、界面文字、全局变量和脚本中的中文术语，返回稳定 ID 和原文。翻译前先调用。",
+      parameters: Type.Object({ file: Type.String() }, { additionalProperties: false }),
+      executionMode: "parallel",
+      execute: async (_id, params, signal) => {
+        state.beginTool("vm_translation_inventory");
+        return executeDomainTool("vm_translation_inventory", state,
+          () => worker.call("translation_inventory", { file: params.file }, signal),
+          (result) => state.recordTranslationInventory(params.file, result));
+      },
+    }),
+    defineTool({
+      name: "vm_translate_solution",
+      label: "翻译方案并输出对照表",
+      description: "提交清单中每个 ID 的目标语言译文，生成新 SOL 和 CSV 对照表；保留 {0} 等占位符。",
+      parameters: Type.Object({
+        file: Type.String(),
+        language: Type.String(),
+        translations: Type.Record(Type.String(), Type.String()),
+      }, { additionalProperties: false }),
+      executionMode: "sequential",
+      execute: async (_id, params, signal) => {
+        state.beginTool("vm_translate_solution");
+        const outputDirectory = state.snapshot().outputDirectory;
+        if (!outputDirectory) throw new Error("翻译任务缺少输出目录。");
+        return executeDomainTool("vm_translate_solution", state,
+          () => worker.call("translate_solution", { ...params, output: outputDirectory }, signal),
+          (result) => state.recordTranslation(result));
+      },
+    }),
+    defineTool({
       name: "vm_query_capability",
       label: "查询 VM 能力",
       description: "查询项目内已验证的端口类型、载体、操作、DLL 或 VM API 证据。不能从常识猜测 VM 能力。",

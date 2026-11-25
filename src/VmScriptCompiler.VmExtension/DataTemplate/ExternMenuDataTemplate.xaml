@@ -1,0 +1,15 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework">
+  <DataTemplate x:Key="vmscAssistantTemplate">
+    <Button Height="24" Margin="6,0" Padding="6,0" VerticalAlignment="Center"
+            shell:WindowChrome.IsHitTestVisibleInChrome="True"
+            Command="{Binding ItemClickCommand}" ToolTip="VM Script Compiler AI 助手">
+      <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+        <Image Width="18" Height="18" Source="/VmScriptCompiler.VmExtension;component/Resources/vmsc.png" />
+        <TextBlock Margin="6,0,0,0" VerticalAlignment="Center" FontSize="13"
+                   Text="AI 助手" />
+      </StackPanel>
+    </Button>
+  </DataTemplate>
+</ResourceDictionary>

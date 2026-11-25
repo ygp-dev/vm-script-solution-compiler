@@ -36,5 +36,6 @@ docs/VM Script Compiler/
 **/artifact-index.json
 **/agent/sessions/
 
-# Local reference and customer documentation; keep it outside the GitHub repository.
-docs/
+# Local reference and customer documentation; only publish the installer guide.
+docs/*
+!docs/14-发布包使用说明.md

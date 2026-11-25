@@ -27,6 +27,22 @@ if (-not $SkipPublish) {
     if ($LASTEXITCODE -ne 0) { throw 'Release publishing failed before installer creation.' }
 }
 
+$integration = Join-Path $dist 'VmIntegration'
+$vmApplications = @($env:VISIONMASTER_HOME, $env:VM_HOME,
+    (Join-Path ${env:ProgramFiles} 'VisionMaster4.4.0\Applications')) |
+    Where-Object { $_ -and (Test-Path -LiteralPath (Join-Path $_ 'VisionMaster.exe') -PathType Leaf) } |
+    Select-Object -First 1
+if (-not $vmApplications) { throw 'Building the VM extension requires a local VisionMaster 4.4 installation.' }
+& dotnet build (Join-Path $root 'src\VmScriptCompiler.VmLauncher\VmScriptCompiler.VmLauncher.csproj') `
+    -c Release -o $integration
+if ($LASTEXITCODE -ne 0) { throw 'VM launcher build failed.' }
+& dotnet build (Join-Path $root 'src\VmScriptCompiler.VmExtension\VmScriptCompiler.VmExtension.csproj') `
+    -c Release -o $integration "-p:VisionMasterExe=$(Join-Path $vmApplications 'VisionMaster.exe')" `
+    "-p:VisionMasterDirectory=$vmApplications"
+if ($LASTEXITCODE -ne 0) { throw 'VM extension build failed.' }
+Copy-Item -LiteralPath (Join-Path $root 'assets\branding\vm-script-compiler-icon.png') -Destination (Join-Path $integration 'vm-script-compiler-icon.png') -Force
+Copy-Item -LiteralPath (Join-Path $root 'installer\vm-integration.ps1') -Destination (Join-Path $integration 'vm-integration.ps1') -Force
+
 $required = @(
     (Join-Path $dist 'Desktop\vm-script-compiler-desktop.exe'),
     (Join-Path $dist 'Desktop\runtime\node.exe'),
@@ -35,6 +51,10 @@ $required = @(
     (Join-Path $dist 'Cli\VmScriptCompiler.Cli.exe'),
     (Join-Path $dist 'Mcp\vm-script-compiler-mcp.exe'),
     (Join-Path $dist 'release-manifest.json')
+    (Join-Path $integration 'vm-script-compiler-vm-launcher.exe')
+    (Join-Path $integration 'vm-script-compiler-icon.png')
+    (Join-Path $integration 'VmScriptCompiler.VmExtension.dll')
+    (Join-Path $integration 'vm-integration.ps1')
 )
 foreach ($file in $required) {
     if (-not (Test-Path -LiteralPath $file -PathType Leaf)) {
@@ -53,7 +73,8 @@ $products = @($manifest.products.name)
 foreach ($name in @('Desktop', 'Cli', 'Mcp')) {
     if ($products -notcontains $name) { throw "Release manifest does not contain $name." }
 }
-$solFiles = @(Get-ChildItem -LiteralPath $dist -Recurse -File -Filter '*.sol')
+$packagedRoots = @('Desktop', 'Cli', 'Mcp', 'VmIntegration') | ForEach-Object { Join-Path $dist $_ }
+$solFiles = @($packagedRoots | ForEach-Object { Get-ChildItem -LiteralPath $_ -Recurse -File -Filter '*.sol' })
 if ($solFiles.Count -ne 0) { throw 'Installer payload contains forbidden SOL files.' }
 
 $makensis = @(
@@ -71,7 +92,8 @@ if (-not $makensis) {
 New-Item -ItemType Directory -Force -Path $output | Out-Null
 $installerName = "VM-Script-Solution-Compiler-Setup-$Version-x64.exe"
 $installer = Join-Path $output $installerName
-$payloadBytes = (Get-ChildItem -LiteralPath $dist -Recurse -File | Measure-Object -Property Length -Sum).Sum
+$payloadBytes = ($packagedRoots | ForEach-Object { Get-ChildItem -LiteralPath $_ -Recurse -File } |
+    Measure-Object -Property Length -Sum).Sum + (Get-Item -LiteralPath (Join-Path $dist 'release-manifest.json')).Length
 $installSizeKb = [Math]::Ceiling($payloadBytes / 1KB)
 $script = Join-Path $root 'installer\vm-script-solution-compiler.nsi'
 

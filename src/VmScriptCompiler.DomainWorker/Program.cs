@@ -75,6 +75,8 @@ internal sealed class DomainWorker(CompilerFacade compiler, string outputRoot)
             "initialize" => Initialize(),
             "detect_environment" => compiler.DetectEnvironment(),
             "inspect_solution" => InspectSolution(RequiredString(arguments, "file")),
+            "translation_inventory" => SolutionTranslationInventory.Read(ExistingFile(RequiredString(arguments, "file"), "SOLUTION_FILE_NOT_FOUND", allowExternalSolution: true)),
+            "translate_solution" => TranslateSolution(arguments),
             "query_capability" => QueryCapability(OptionalString(arguments, "query"), OptionalString(arguments, "vmVersion") ?? "4.4.0"),
             "validate_requirement" => WithRequirement(arguments, compiler.Plan),
             "plan_solution" => WithRequirement(arguments, compiler.Plan),
@@ -98,7 +100,7 @@ internal sealed class DomainWorker(CompilerFacade compiler, string outputRoot)
         compilerRoot = compiler.RepositoryRoot,
         commands = new[]
         {
-            "detect_environment", "inspect_solution", "query_capability",
+            "detect_environment", "inspect_solution", "translation_inventory", "translate_solution", "query_capability",
             "validate_requirement", "plan_solution", "build_solution",
             "patch_solution", "validate_solution", "read_build_report", "shutdown"
         },
@@ -134,6 +136,39 @@ internal sealed class DomainWorker(CompilerFacade compiler, string outputRoot)
             warnings = digest.Warnings,
             sourceTruncated = digest.SourceTruncated
         };
+    }
+
+    private object TranslateSolution(JsonElement arguments)
+    {
+        var source = ExistingFile(RequiredString(arguments, "file"), "SOLUTION_FILE_NOT_FOUND", allowExternalSolution: true);
+        var outputDirectory = FullDirectory(RequiredString(arguments, "output"));
+        if (!arguments.TryGetProperty("translations", out var translations) || translations.ValueKind != JsonValueKind.Object)
+            throw new CompilerException("INVALID_ARGUMENT", "Missing object argument: translations");
+        var before = Hash(source);
+        var taskDirectory = Path.Combine(outputDirectory, "translation-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(taskDirectory);
+        var mappingFile = Path.Combine(taskDirectory, "translation-map.json");
+        File.WriteAllText(mappingFile, JsonSerializer.Serialize(new { language = RequiredString(arguments, "language"), translations }, ProtocolJson), new UTF8Encoding(false));
+        var result = SolutionTranslationWriter.Write(source, mappingFile, Path.Combine(taskDirectory, "translated.sol"));
+        var validation = compiler.ValidateSolution(result.Solution);
+        var originalStructure = compiler.InspectSolution(source, sourceLimit: 0);
+        var translatedStructure = compiler.InspectSolution(result.Solution, sourceLimit: 0);
+        var originalModules = originalStructure.Modules
+            .Select(module => (module.ModuleId, module.Name, module.IsEnabled, module.ParameterCount)).OrderBy(module => module.ModuleId).ToArray();
+        var translatedModules = translatedStructure.Modules
+            .Select(module => (module.ModuleId, module.Name, module.IsEnabled, module.ParameterCount)).OrderBy(module => module.ModuleId).ToArray();
+        var originalScripts = originalStructure.Scripts
+            .Select(script => (script.ModuleId, script.ModuleType, Inputs: script.Inputs.Count, Outputs: script.Outputs.Count)).OrderBy(script => script.ModuleId).ToArray();
+        var translatedScripts = translatedStructure.Scripts
+            .Select(script => (script.ModuleId, script.ModuleType, Inputs: script.Inputs.Count, Outputs: script.Outputs.Count)).OrderBy(script => script.ModuleId).ToArray();
+        if (originalStructure.Procedures.Count != translatedStructure.Procedures.Count
+            || !originalModules.SequenceEqual(translatedModules)
+            || !originalScripts.SequenceEqual(translatedScripts)
+            || originalStructure.GlobalScript?.ScriptLength != translatedStructure.GlobalScript?.ScriptLength
+            || originalStructure.Warnings.Count != translatedStructure.Warnings.Count)
+            throw new CompilerException("TRANSLATION_STRUCTURE_CHANGED", "翻译后 SOL 的流程、模块、脚本端口或解析警告与原方案不一致。");
+        if (Hash(source) != before) throw new CompilerException("BASE_SOLUTION_MODIFIED", "Translation modified the source SOL.");
+        return new { ok = true, result.Language, solutionFile = result.Solution, tableFile = result.Table, result.Rows, translatedItems = result.Rows.Count, offlineValidation = validation.Ok, inputPreserved = true, structurePreserved = true };
     }
 
     private object QueryCapability(string? query, string vmVersion)

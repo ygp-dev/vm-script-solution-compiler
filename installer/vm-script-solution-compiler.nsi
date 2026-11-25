@@ -14,10 +14,10 @@ SetCompressorDictSize 32
 !include "FileFunc.nsh"
 
 !ifndef VERSION
-  !define VERSION "1.0.7"
+  !define VERSION "1.0.8"
 !endif
 !ifndef VERSION4
-  !define VERSION4 "1.0.7.0"
+  !define VERSION4 "1.0.8.0"
 !endif
 !ifndef DISTROOT
   !error "DISTROOT must point to the validated dist directory."
@@ -63,6 +63,7 @@ VIAddVersionKey /LANG=2052 "LegalCopyright" "Copyright (c) ${PRODUCT_PUBLISHER}"
 
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_DIRECTORY
+!insertmacro MUI_PAGE_COMPONENTS
 !insertmacro MUI_PAGE_INSTFILES
 !insertmacro MUI_PAGE_FINISH
 
@@ -150,8 +151,49 @@ payload_verified:
   WriteRegDWORD HKCU "${UNINSTALL_KEY}" "EstimatedSize" ${INSTALLSIZEKB}
 SectionEnd
 
+Section /o "安装到 VisionMaster 4.4 Lite（添加 AI 助手按钮）" SEC_VM
+  SetOutPath "$INSTDIR\VmIntegration"
+  File "${DISTROOT}\VmIntegration\vm-script-compiler-vm-launcher.exe"
+  File "${DISTROOT}\VmIntegration\vm-script-compiler-icon.png"
+  File "${DISTROOT}\VmIntegration\VmScriptCompiler.VmExtension.dll"
+  File "${DISTROOT}\VmIntegration\vm-integration.ps1"
+  nsExec::ExecToLog '"$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -File "$INSTDIR\VmIntegration\vm-integration.ps1" -Action Install -LauncherSource "$INSTDIR\VmIntegration\vm-script-compiler-vm-launcher.exe" -IconSource "$INSTDIR\VmIntegration\vm-script-compiler-icon.png" -ExtensionSource "$INSTDIR\VmIntegration\VmScriptCompiler.VmExtension.dll" -StateFile "$INSTDIR\VmIntegration\vm-applications.txt"'
+  Pop $0
+  ${If} $0 != 0
+    MessageBox MB_ICONSTOP|MB_OK "VisionMaster 集成失败。请确认已安装 VM 4.4 Lite、关闭 VM，并同意管理员权限请求。"
+    Abort
+  ${EndIf}
+  WriteRegDWORD HKCU "Software\ygp-dev\VM Script Solution Compiler" "VmIntegrationInstalled" 1
+SectionEnd
+
+Section "-同步 VM 安装选项" SEC_VM_SYNC
+  SectionGetFlags ${SEC_VM} $0
+  IntOp $0 $0 & 1
+  ${If} $0 == 0
+    ReadRegDWORD $0 HKCU "Software\ygp-dev\VM Script Solution Compiler" "VmIntegrationInstalled"
+    ${If} $0 == 1
+      nsExec::ExecToLog '"$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -File "$INSTDIR\VmIntegration\vm-integration.ps1" -Action Uninstall -StateFile "$INSTDIR\VmIntegration\vm-applications.txt"'
+      Pop $0
+      ${If} $0 != 0
+        MessageBox MB_ICONSTOP|MB_OK "移除已有 VisionMaster 按钮失败。请关闭 VM 后重新安装。"
+        Abort
+      ${EndIf}
+      DeleteRegValue HKCU "Software\ygp-dev\VM Script Solution Compiler" "VmIntegrationInstalled"
+    ${EndIf}
+  ${EndIf}
+SectionEnd
+
 Section "Uninstall"
   SetShellVarContext current
+  ReadRegDWORD $0 HKCU "Software\ygp-dev\VM Script Solution Compiler" "VmIntegrationInstalled"
+  ${If} $0 == 1
+    nsExec::ExecToLog '"$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -File "$INSTDIR\VmIntegration\vm-integration.ps1" -Action Uninstall -StateFile "$INSTDIR\VmIntegration\vm-applications.txt"'
+    Pop $0
+    ${If} $0 != 0
+      MessageBox MB_ICONSTOP|MB_OK "移除 VisionMaster 按钮失败。请先关闭 VM，再重新卸载。"
+      Abort
+    ${EndIf}
+  ${EndIf}
   Delete "$DESKTOP\VM Script Solution Compiler.lnk"
   RMDir /r "$SMPROGRAMS\VM Script Solution Compiler"
 

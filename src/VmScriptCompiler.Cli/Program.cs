@@ -18,6 +18,8 @@ static class Cli
                 "build" => Build(root, RequiredOption(args, "--spec"), RequiredOption(args, "--output")),
                 "patch" => Patch(root, RequiredOption(args, "--base"), RequiredOption(args, "--spec"), RequiredOption(args, "--output")),
                 "inspect" => Inspect(root, RequiredOption(args, "--file")),
+                "translation-inventory" => SolutionTranslationInventory.Read(Path.GetFullPath(RequiredOption(args, "--file"))),
+                "translate" => SolutionTranslationWriter.Write(RequiredOption(args, "--file"), RequiredOption(args, "--map"), RequiredOption(args, "--output")),
                 "validate" => Validate(root, RequiredOption(args, "--file")),
                 _ => throw new CompilerException("USAGE", Usage())
             };
@@ -56,5 +58,5 @@ static class Cli
     }
     private static string RequiredOption(string[] args, string name) => args.SkipWhile(x => x != name).Skip(1).FirstOrDefault() ?? throw new CompilerException("USAGE", "缺少参数 " + name);
     private static int Fail(string code, string message, object? details = null) { Console.Error.WriteLine(JsonSerializer.Serialize(new { ok = false, error = code, message, details }, JsonDefaults.Options)); return 2; }
-    private static string Usage() => "用法: vm-script-compiler env|plan --spec <file>|build --spec <file> --output <dir>|patch --base <sol> --spec <file> --output <dir>|inspect --file <sol>|validate --file <sol>";
+    private static string Usage() => "用法: vm-script-compiler env|plan --spec <file>|build --spec <file> --output <dir>|patch --base <sol> --spec <file> --output <dir>|inspect --file <sol>|translation-inventory --file <sol>|translate --file <sol> --map <json> --output <sol>|validate --file <sol>";
 }

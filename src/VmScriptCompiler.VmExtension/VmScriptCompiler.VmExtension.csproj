@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net461</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>VmScriptCompiler.VmExtension</AssemblyName>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="VisionMaster">
+      <HintPath>$(VisionMasterExe)</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Apps.Data">
+      <HintPath>$(VisionMasterDirectory)/myLibs/Apps.Data.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="VM.Xml">
+      <HintPath>$(VisionMasterDirectory)/myLibs/VM.XML.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Resource Include="../../assets/branding/vm-script-compiler-icon.png" Link="Resources/vmsc.png" />
+  </ItemGroup>
+</Project>

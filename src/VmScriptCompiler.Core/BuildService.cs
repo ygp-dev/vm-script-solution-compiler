@@ -32,7 +32,6 @@ public sealed class BuildService(string repositoryRoot)
         var manifest = resources.LoadAndValidate(requirement.Task.VmVersion);
         var environment = new EnvironmentDetector().Detect();
         if (!environment.Found) throw new CompilerException(environment.ErrorCode!, "VisionMaster installation was not detected.");
-        if (!string.Equals(environment.Version, requirement.Task.VmVersion, StringComparison.Ordinal)) throw new CompilerException("VM_VERSION_MISMATCH", $"Detected VM {environment.Version}; Requirement requests {requirement.Task.VmVersion}.");
 
         var taskId = MakeTaskId(requirement.Task.Name);
         var taskDirectory = Path.Combine(Path.GetFullPath(outputDirectory), taskId);

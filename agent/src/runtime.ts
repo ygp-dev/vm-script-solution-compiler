@@ -17,6 +17,17 @@ import { DomainWorkerClient } from "./tools/domain-worker-client.js";
 import { createVmTools } from "./tools/vm-tools.js";
 import { buildVmSystemPrompt } from "./system-prompt.js";
 
+export const PRIMARY_VM_TOOL_NAMES = [
+  "vm_inspect_solution",
+  "vm_translation_inventory",
+  "vm_translate_solution",
+  "vm_update_requirement",
+  "vm_compile_solution",
+  "vm_read_build_report",
+  "vm_record_user_validation",
+  "vm_search_project_knowledge",
+] as const;
+
 export interface AgentRuntimeEvent {
   type: "pi" | "domain" | "diagnostic";
   sessionId?: string;
@@ -235,14 +246,7 @@ export class VmAgentRuntime {
 
     const domain = new VmDomainState(sessionManager);
     const tools = createVmTools(domain, this.worker, this.config.repositoryRoot);
-    const primaryToolNames = new Set([
-      "vm_inspect_solution",
-      "vm_update_requirement",
-      "vm_compile_solution",
-      "vm_read_build_report",
-      "vm_record_user_validation",
-      "vm_search_project_knowledge",
-    ]);
+    const primaryToolNames = new Set<string>(PRIMARY_VM_TOOL_NAMES);
     const primaryTools = tools.filter((tool) => primaryToolNames.has(tool.name));
     const systemPrompt = buildVmSystemPrompt(this.config);
     const resourceLoader = new DefaultResourceLoader({
